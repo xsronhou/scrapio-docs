@@ -1,0 +1,53 @@
+---
+title: Introduction
+description: Turn any URL into structured data. One API for fetch, crawl, extract, interact, search, and YouTube.
+---
+
+## What is Scrapio?
+
+Scrapio lets AI agents, automation pipelines, and developers extract structured content from the web through a single HTTP API. You don't manage browsers, proxies, or rendering infrastructure — we do.
+
+### Surfaces
+
+<CardGroup cols={2}>
+  <Card title="Fetch" icon="arrow-down-to-line" href="/api-reference/fetch">
+    Fetch and render a single URL. Returns HTML, Markdown, JSON, or a screenshot.
+  </Card>
+  <Card title="Crawl" icon="spider" href="/api-reference/crawl">
+    Crawl a site starting from one or more seed URLs. Controls depth, domain scope, and page budget.
+  </Card>
+  <Card title="Extract" icon="table" href="/guides/extract-structured-data">
+    Pull structured data from any page using CSS selectors, a JSON schema, or a natural-language instruction.
+  </Card>
+  <Card title="Interact" icon="hand-pointer" href="/api-reference/interact">
+    Drive a real browser: click, type, scroll, wait for elements, take screenshots.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/api-reference/search">
+    Run a Google search and optionally fetch each result page in the same call.
+  </Card>
+  <Card title="YouTube" icon="youtube" href="/api-reference/youtube">
+    Search YouTube, retrieve video metadata, and download subtitles/transcripts.
+  </Card>
+</CardGroup>
+
+### MCP Server
+
+Use the Scrapio directly from Claude, Cursor, Windsurf, and any MCP-compatible agent runtime — no HTTP calls required.
+
+<Card title="MCP Server" icon="robot" href="/mcp">
+  One-line install for Claude Desktop, Cursor, and Windsurf. Nine tools covering fetch, search, crawl, and browser automation.
+</Card>
+
+### Async jobs
+
+Every surface supports async execution. Submit a job, get back a `job_id`, and poll `/v1/jobs/{id}` for the result. Long crawls and multi-step interactions use this path automatically.
+
+## Before you start
+
+You need an API key. Get one at [scrapio.dev](https://scrapio.dev#pricing) — the free tier includes 1,000 credits per day.
+
+All requests are authenticated with `Authorization: Bearer <api-key>`.
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Make your first API call in under 60 seconds.
+</Card>

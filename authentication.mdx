@@ -1,0 +1,38 @@
+---
+title: Authentication
+description: Authenticate every request with an API key passed as a Bearer token.
+---
+
+## API key
+
+Every request must include your API key in the `Authorization` header:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+Get your key at [scrapio.dev](https://scrapio.dev#pricing). The free tier includes 1,000 credits per day with no credit card required.
+
+## Example
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/fetch \
+  -H "Authorization: Bearer sk_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com", "output": ["markdown"]}'
+```
+
+## Error responses
+
+| Status | Code | Cause |
+|--------|------|-------|
+| `401` | `missing_api_key` | No `Authorization` header was sent. |
+| `401` | `invalid_api_key` | The key was not recognised. |
+| `402` | `credits_exhausted` | Your credit balance is zero. |
+| `429` | `daily_credit_cap_exceeded` | You've hit the daily cap for your plan. |
+
+## Security
+
+- Store your API key in an environment variable — never commit it to source control.
+- Each API key is scoped to a single tenant. Creating multiple tenants for isolation is not supported at this time.
+- There is no key rotation endpoint in the current release; contact support to rotate a compromised key.

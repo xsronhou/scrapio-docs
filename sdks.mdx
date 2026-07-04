@@ -1,0 +1,412 @@
+---
+title: SDKs & Client Libraries
+description: Official SDKs for the Scrapio — TypeScript, Python, Go, Ruby, PHP, and Java.
+---
+
+## Official SDKs
+
+Scrapio ships official SDKs for six languages. All are generated from the OpenAPI spec and published to their respective package registries.
+
+| Language | Package | Registry |
+|----------|---------|----------|
+| TypeScript / Node.js | `@scrapio/api` | [npm](https://www.npmjs.com/package/@scrapio/api) |
+| Python | `scrapio-py` | [PyPI](https://pypi.org/project/scrapio-py/) |
+| Go | `github.com/xsronhou/scrapio-go` | [pkg.go.dev](https://pkg.go.dev/github.com/xsronhou/scrapio-go) |
+| Ruby | `scrapio` | [RubyGems](https://rubygems.org/gems/scrapio) |
+| PHP | `scrapio/scrapio` | [Packagist](https://packagist.org/packages/scrapio/scrapio) |
+| Java | `dev.scrapio:scrapio-java` | [Maven Central](https://central.sonatype.com/artifact/dev.scrapio/scrapio-java) |
+
+---
+
+## TypeScript SDK
+
+### Install
+
+```bash
+npm install @scrapio/api
+```
+
+Requires Node.js 18 or later. Ships with ESM and CJS builds and full TypeScript types.
+
+### Initialize
+
+```typescript
+import { ApiClient } from "@scrapio/api";
+
+const client = new ApiClient({ apiKey: process.env.SCRAPIO_API_KEY! });
+```
+
+Available options:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `apiKey` | `string` | required | Your API key |
+| `baseUrl` | `string` | `https://api.scrapio.dev` | Override for local/staging |
+| `timeoutMs` | `number` | `30000` | Per-request timeout |
+| `maxRetries` | `number` | `3` | Max retries on 429/503 |
+
+### Usage
+
+```typescript
+// Fetch a page
+const page = await client.fetch.fetch({ url: "https://example.com", output: ["markdown"] });
+
+// Google search
+const results = await client.google.search({ search: "web scraping tools" });
+
+// Amazon product
+const product = await client.amazon.getProduct({ asin: "B08N5WRWNW" });
+
+// Walmart search
+const items = await client.walmart.search({ query: "headphones" });
+
+// YouTube video
+const video = await client.youtube.getVideo({ video_id: "dQw4w9WgXcQ" });
+
+// Async job with polling helper
+const job = await client.jobs.create({
+  job_type: "fetch",
+  payload: { url: "https://example.com", output: ["markdown"] },
+});
+const result = await client.jobs.waitForCompletion(job.job_id, {
+  pollIntervalMs: 2000,
+  timeoutMs: 120_000,
+});
+```
+
+### Error handling
+
+```typescript
+import {
+  ApiClient,
+  AuthError,
+  RateLimitError,
+  CreditsExhaustedError,
+  ApiError,
+} from "@scrapio/api";
+
+try {
+  await client.fetch.fetch({ url: "https://example.com" });
+} catch (err) {
+  if (err instanceof AuthError) {
+    console.error("Invalid API key");
+  } else if (err instanceof CreditsExhaustedError) {
+    console.error("No credits remaining");
+  } else if (err instanceof RateLimitError) {
+    console.error("Rate limited — back off and retry");
+  } else if (err instanceof ApiError) {
+    console.error(`API error ${err.statusCode}: ${err.message}`);
+  }
+}
+```
+
+---
+
+## Python SDK
+
+### Install
+
+```bash
+pip install scrapio-py
+```
+
+Requires Python 3.9 or later. Uses `httpx` for HTTP and `pydantic` v2 for types.
+
+### Initialize (sync)
+
+```python
+from scrapio import ApiClient
+
+client = ApiClient(api_key=os.environ["SCRAPIO_API_KEY"])
+```
+
+### Initialize (async)
+
+```python
+from scrapio import AsyncApiClient
+
+async with AsyncApiClient(api_key=os.environ["SCRAPIO_API_KEY"]) as client:
+    ...
+```
+
+Available options:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `api_key` | `str` | required | Your API key |
+| `base_url` | `str` | `https://api.scrapio.dev` | Override for local/staging |
+| `timeout` | `float` | `30.0` | Per-request timeout (seconds) |
+| `max_retries` | `int` | `3` | Max retries on 429/503 |
+
+### Usage (sync)
+
+```python
+from scrapio import ApiClient, FetchRequest, GoogleSearchParams
+
+client = ApiClient(api_key="sk-...")
+
+# Fetch a page
+page = client.fetch.fetch(FetchRequest(url="https://example.com", output=["markdown"]))
+
+# Google search
+results = client.google.search(GoogleSearchParams(search="web scraping tools"))
+
+# Amazon product
+product = client.amazon.get_product("B08N5WRWNW")
+
+# Walmart search
+items = client.walmart.search("headphones")
+
+# YouTube video
+video = client.youtube.get_video("dQw4w9WgXcQ")
+
+# Async job with polling helper
+from scrapio import CreateJobRequest
+
+job = client.jobs.create(CreateJobRequest(
+    job_type="fetch",
+    payload={"url": "https://example.com", "output": ["markdown"]},
+))
+result = client.jobs.wait_for_completion(job.job_id, poll_interval=2.0, timeout=120.0)
+```
+
+### Usage (async)
+
+```python
+import asyncio
+from scrapio import AsyncApiClient, FetchRequest, CreateJobRequest
+
+async def main():
+    async with AsyncApiClient(api_key="sk-...") as client:
+        page = await client.fetch.fetch(FetchRequest(url="https://example.com", output=["markdown"]))
+        job = await client.jobs.create(CreateJobRequest(
+            job_type="fetch",
+            payload={"url": "https://example.com", "output": ["markdown"]},
+        ))
+        result = await client.jobs.wait_for_completion(job.job_id, poll_interval=2.0, timeout=120.0)
+
+asyncio.run(main())
+```
+
+### Error handling
+
+```python
+from scrapio import (
+    ApiClient, FetchRequest,
+    AuthError, RateLimitError, CreditsExhaustedError, ApiError,
+)
+
+try:
+    client.fetch.fetch(FetchRequest(url="https://example.com"))
+except AuthError:
+    print("Invalid API key")
+except CreditsExhaustedError:
+    print("No credits remaining")
+except RateLimitError:
+    print("Rate limited — back off and retry")
+except ApiError as e:
+    print(f"API error {e.status_code}: {e}")
+```
+
+---
+
+---
+
+## Go SDK
+
+### Install
+
+```bash
+go get github.com/xsronhou/scrapio-go
+```
+
+Requires Go 1.21 or later.
+
+### Initialize
+
+```go
+import scrapio "github.com/xsronhou/scrapio-go"
+
+client := scrapio.NewClient("YOUR_API_KEY")
+// or from env:
+client := scrapio.NewClient(os.Getenv("SCRAPIO_API_KEY"))
+```
+
+### Usage
+
+```go
+// Fetch a page
+result, err := client.Fetch.Fetch(ctx, &scrapio.FetchRequest{
+    URL:    "https://example.com",
+    Output: []string{"markdown"},
+})
+fmt.Println(*result.Outputs.Markdown)
+
+// Google search
+results, err := client.Google.Search(ctx, &scrapio.GoogleSearchRequest{
+    Search: "web scraping tools",
+})
+
+// Async job
+job, err := client.Jobs.Create(ctx, &scrapio.CreateJobRequest{
+    JobType: "fetch",
+    Payload: map[string]any{"url": "https://example.com", "output": []string{"markdown"}},
+})
+result, err := client.Jobs.WaitForCompletion(ctx, job.JobID, nil)
+```
+
+---
+
+## Ruby SDK
+
+### Install
+
+```bash
+gem install scrapio
+```
+
+Requires Ruby 2.7 or later.
+
+### Initialize
+
+```ruby
+require "scrapio"
+
+client = Scrapio::Client.new(api_key: ENV["SCRAPIO_API_KEY"])
+```
+
+### Usage
+
+```ruby
+# Fetch a page
+result = client.fetch.fetch(url: "https://example.com", output: ["markdown"])
+puts result.outputs["markdown"]
+
+# Google search
+results = client.google.search(search: "web scraping tools")
+
+# Amazon product
+product = client.amazon.get_product(asin: "B08N5WRWNW")
+
+# Async job
+job = client.jobs.create(job_type: "fetch", payload: { url: "https://example.com", output: ["markdown"] })
+result = client.jobs.wait_for_completion(job.job_id)
+```
+
+---
+
+## PHP SDK
+
+### Install
+
+```bash
+composer require scrapio/scrapio
+```
+
+Requires PHP 8.1 or later.
+
+### Initialize
+
+```php
+use Scrapio\ScrapioClient;
+
+$client = new ScrapioClient(apiKey: $_ENV["SCRAPIO_API_KEY"]);
+```
+
+### Usage
+
+```php
+// Fetch a page
+$result = $client->fetch->fetch([
+    "url"    => "https://example.com",
+    "output" => ["markdown"],
+]);
+echo $result->outputs["markdown"];
+
+// Google search
+$results = $client->google->search(["search" => "web scraping tools"]);
+
+// Amazon product
+$product = $client->amazon->getProduct(["asin" => "B08N5WRWNW"]);
+
+// Async job
+$job = $client->jobs->create([
+    "job_type" => "fetch",
+    "payload"  => ["url" => "https://example.com", "output" => ["markdown"]],
+]);
+$result = $client->jobs->waitForCompletion($job->jobId);
+```
+
+---
+
+## Java SDK
+
+### Install
+
+Add to your `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>dev.scrapio</groupId>
+    <artifactId>scrapio-java</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+Or Gradle:
+
+```gradle
+implementation 'dev.scrapio:scrapio-java:1.0.0'
+```
+
+Requires Java 11 or later.
+
+### Initialize
+
+```java
+import dev.scrapio.ScrapioClient;
+
+ScrapioClient client = ScrapioClient.builder()
+    .apiKey(System.getenv("SCRAPIO_API_KEY"))
+    .build();
+```
+
+### Usage
+
+```java
+// Fetch a page
+var result = client.fetch().fetch(
+    FetchRequest.builder()
+        .url("https://example.com")
+        .output(List.of("markdown"))
+        .build()
+);
+System.out.println(result.getOutputs().getMarkdown());
+
+// Google search
+var results = client.google().search(
+    GoogleSearchRequest.builder().search("web scraping tools").build()
+);
+
+// Async job
+var job = client.jobs().create(
+    CreateJobRequest.builder()
+        .jobType("fetch")
+        .payload(Map.of("url", "https://example.com", "output", List.of("markdown")))
+        .build()
+);
+var completed = client.jobs().waitForCompletion(job.getJobId());
+```
+
+---
+
+## Changelog
+
+Each SDK maintains a `CHANGELOG.md` in its package directory, updated on every release.
+
+- [TypeScript SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-typescript/CHANGELOG.md)
+- [Python SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-python/CHANGELOG.md)
+- [Go SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-go/CHANGELOG.md)
+- [Ruby SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-ruby/CHANGELOG.md)
+- [PHP SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-php/CHANGELOG.md)
+- [Java SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-java/CHANGELOG.md)

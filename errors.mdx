@@ -1,0 +1,67 @@
+---
+title: Errors
+description: Standard error envelope, HTTP status codes, and error code index.
+---
+
+## Error envelope
+
+All error responses share the same JSON shape:
+
+```json
+{
+  "request_id": "a1b2c3d4-e5f6-...",
+  "error": {
+    "code": "invalid_request",
+    "message": "url is required"
+  }
+}
+```
+
+Some errors include a `diagnostics` object with additional context (e.g. whether the error is retryable, or whether the target blocked the request).
+
+```json
+{
+  "request_id": "...",
+  "error": { "code": "target_blocked", "message": "The target site blocked the request." },
+  "diagnostics": {
+    "outcome": "failed",
+    "retryable": false,
+    "blocked": true
+  }
+}
+```
+
+## HTTP status codes
+
+| Status | Meaning |
+|--------|---------|
+| `200` | Success — inline result returned. |
+| `202` | Accepted — async job queued; poll `/v1/jobs/{id}` for the result. |
+| `400` | Bad request — malformed or invalid parameters. |
+| `401` | Unauthorized — missing or invalid API key. |
+| `402` | Payment required — credit balance is zero. |
+| `409` | Conflict — idempotency key already exists with a different request body. |
+| `422` | Unprocessable — extraction or validation logic failed on the fetched content. |
+| `429` | Too many requests — daily credit cap exceeded or upstream rate limit hit. |
+| `502` | Bad gateway — the target site blocked or rejected the request. |
+| `503` | Service unavailable — execution backend (browser, proxy) is unavailable. |
+| `500` | Internal server error — unexpected error; always retryable. |
+
+## Error code index
+
+| Code | Status | Description |
+|------|--------|-------------|
+| `invalid_request` | 400 | Request schema validation failed. |
+| `missing_api_key` | 401 | `Authorization` header is absent. |
+| `invalid_api_key` | 401 | API key not found or revoked. |
+| `credits_exhausted` | 402 | Tenant credit balance is zero. |
+| `idempotency_conflict` | 409 | Idempotency key reused with a different body. |
+| `extraction_failed` | 422 | LLM or selector extraction produced no usable output. |
+| `extraction_validation_error` | 422 | Extracted data failed schema validation. |
+| `target_blocked` | 502 | The target URL rejected or blocked the request. |
+| `blocked_by_amazon` | 502 | Amazon's bot-protection blocked the request. |
+| `timeout` | 504 | The fetch or interaction exceeded `timeout_ms`. |
+| `proxy_unavailable` | 503 | No usable proxy is available for this request. |
+| `daily_credit_cap_exceeded` | 429 | Per-tenant daily cap reached. |
+| `job_not_found` | 404 | The `job_id` does not exist or has expired. |
+| `job_not_ready` | 409 | The job has not finished; check status first. |

@@ -1,0 +1,99 @@
+---
+title: Identity & Sessions
+description: Persistent browser sessions for stateful scraping — cookies, auth tokens, and identity profiles.
+---
+
+## What is a session?
+
+A session is a persistent browser context. When you create or reuse a session, the browser retains cookies, local storage, IndexedDB, and authentication tokens between requests. This lets you:
+
+- Log into a site once and reuse that auth state across many fetches
+- Maintain a shopping cart or wizard state across multiple Interact calls
+- Avoid repeated CAPTCHA or bot-challenge flows on sites that remember prior visits
+
+## Creating a session
+
+Sessions are created implicitly on the first Fetch or Interact request that references a session ID:
+
+```json
+{
+  "url": "https://app.example.com/login",
+  "render_js": true,
+  "session": { "id": "my-session-1" },
+  "output": ["html"]
+}
+```
+
+If `my-session-1` does not exist, it is created. If it does exist, its state is loaded.
+
+## Reusing a session
+
+Pass the same `session.id` on subsequent requests:
+
+```json
+{
+  "url": "https://app.example.com/dashboard",
+  "render_js": true,
+  "session": { "id": "my-session-1" },
+  "output": ["markdown"]
+}
+```
+
+The session's cookies and storage are loaded before the page navigates, so auth-gated pages load correctly.
+
+## Login workflow example
+
+```json
+// Step 1: log in
+{
+  "url": "https://app.example.com/login",
+  "session": { "id": "user-session" },
+  "actions": [
+    { "type": "type", "selector": "#email", "value": "user@example.com" },
+    { "type": "type", "selector": "#password", "value": "secret" },
+    { "type": "click", "selector": "button[type=submit]" },
+    { "type": "wait_for", "selector": ".user-avatar" }
+  ],
+  "output": ["html"]
+}
+
+// Step 2: fetch a protected page using the same session
+{
+  "url": "https://app.example.com/account/orders",
+  "render_js": true,
+  "session": { "id": "user-session" },
+  "output": ["json"],
+  "extract": {
+    "mode": "schema",
+    "schema": { "orders": "array of recent order IDs and statuses" }
+  }
+}
+```
+
+## Session response field
+
+Every fetch and interact response includes a `session` field indicating whether the session was updated:
+
+```json
+{
+  "session": {
+    "id": "user-session",
+    "updated": true
+  }
+}
+```
+
+`updated: true` means cookies or storage changed during this request.
+
+## Identity profiles
+
+Identity profiles are named credential sets stored server-side and associated with a tenant. They let you inject pre-configured browser identities (user-agents, locale, timezone) without sending credentials in every request.
+
+Identity management endpoints are in the `Auth` reference section. This feature is available on Pro and Enterprise plans.
+
+## Session limits
+
+- Sessions are per-tenant and identified by the string ID you provide.
+- Session state is stored in Redis and survives API restarts.
+- Inactive sessions expire after 24 hours.
+- There is no explicit "delete session" endpoint in the current release; sessions expire naturally.

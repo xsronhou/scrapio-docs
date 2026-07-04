@@ -1,0 +1,144 @@
+---
+title: Async Jobs
+description: Submit long-running jobs, poll for status, retrieve results, and understand the job lifecycle.
+---
+
+## When to use async
+
+Inline requests (`POST /v1/fetch`, `POST /v1/crawl`, etc.) have a maximum execution time of 15 seconds. For operations that take longer — large crawls, multi-step interactions, YouTube crawl jobs — use the Jobs API.
+
+Any surface can be run as an async job by submitting to `POST /v1/jobs`.
+
+## Submitting a job
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/jobs \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "kind": "fetch",
+    "input": {
+      "url": "https://example.com",
+      "render_js": true,
+      "output": ["markdown"]
+    }
+  }'
+```
+
+Response (`202 Accepted`):
+
+```json
+{
+  "request_id": "...",
+  "mode": "async",
+  "status": "queued",
+  "job_id": "job_abc123"
+}
+```
+
+Supported `kind` values: `fetch`, `crawl`, `interact`, `search`, `map`.
+
+## Polling for status
+
+```bash
+curl https://api.scrapio.dev/v1/jobs/job_abc123 \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+Response:
+
+```json
+{
+  "request_id": "...",
+  "job_id": "job_abc123",
+  "job_type": "fetch",
+  "status": "completed",
+  "mode": "async",
+  "created_at": "2026-06-26T10:00:00Z",
+  "started_at": "2026-06-26T10:00:01Z",
+  "completed_at": "2026-06-26T10:00:08Z",
+  "result_available": true
+}
+```
+
+## Job lifecycle
+
+```
+queued → running → completed
+                 → partial    (some outputs succeeded, some failed)
+                 → failed
+       → cancelled
+```
+
+`result_available: true` means you can fetch the result. Poll until this is `true` or the status is `failed`/`cancelled`.
+
+## Retrieving the result
+
+Once `result_available` is `true`, fetch the result:
+
+```bash
+curl https://api.scrapio.dev/v1/jobs/job_abc123/result \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+For `fetch` jobs:
+
+```json
+{
+  "request_id": "...",
+  "job_id": "job_abc123",
+  "job_type": "fetch",
+  "status": "completed",
+  "mode": "async",
+  "outputs": {
+    "markdown": "# Example Domain\n\n..."
+  }
+}
+```
+
+## Idempotency
+
+Send an `Idempotency-Key` header to safely retry job submission without creating duplicate jobs:
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/jobs \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  -H "Idempotency-Key: my-unique-key-123" \
+  -H "Content-Type: application/json" \
+  -d '{"kind": "fetch", "input": {"url": "https://example.com", "output": ["markdown"]}}'
+```
+
+If you submit the same `Idempotency-Key` with the same body again, the original job is returned. A different body returns `409 Conflict`.
+
+## Polling strategy
+
+A reasonable polling interval is 2–5 seconds for short jobs, 15–30 seconds for crawls. Do not poll more than once per second.
+
+```python
+import time, requests, os
+
+headers = {"Authorization": f"Bearer {os.environ['SCRAPIO_API_KEY']}"}
+base = "https://api.scrapio.dev"
+
+# Submit
+resp = requests.post(f"{base}/v1/jobs", headers=headers, json={
+    "kind": "fetch",
+    "input": {"url": "https://example.com", "output": ["markdown"]}
+})
+job_id = resp.json()["job_id"]
+
+# Poll
+while True:
+    status = requests.get(f"{base}/v1/jobs/{job_id}", headers=headers).json()
+    if status["result_available"] or status["status"] in ("failed", "cancelled"):
+        break
+    time.sleep(3)
+
+# Fetch result
+result = requests.get(f"{base}/v1/jobs/{job_id}/result", headers=headers).json()
+print(result["outputs"]["markdown"])
+```
+
+## Result TTL
+
+Job results are retained for 24 hours after completion. After that, `/v1/jobs/{id}/result` returns `404`.

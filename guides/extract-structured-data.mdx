@@ -1,0 +1,111 @@
+---
+title: Extracting Structured Data
+description: Use CSS selectors, JSON schemas, or natural-language instructions to pull structured data from any page.
+---
+
+## Extraction modes
+
+The `extract` field is available on `Fetch`, `Crawl`, and `Interact`. Always pair it with `"output": ["json"]` — the extracted data is returned in `outputs.json`.
+
+### `mode: "schema"` — LLM-based extraction
+
+Describe the fields you want in plain English. The API uses an LLM to locate and extract them from the page.
+
+```json
+{
+  "url": "https://news.ycombinator.com",
+  "render_js": false,
+  "output": ["json"],
+  "extract": {
+    "mode": "schema",
+    "schema": {
+      "top_stories": "array of the top 10 story titles and their point counts",
+      "posting_date": "date of the front page"
+    }
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "outputs": {
+    "json": {
+      "top_stories": [
+        { "title": "Example Story", "points": 342 }
+      ],
+      "posting_date": "2026-06-26"
+    }
+  }
+}
+```
+
+### `mode: "selectors"` — CSS selector extraction
+
+Use CSS selectors when you know the DOM structure. This is deterministic and does not use an LLM.
+
+```json
+{
+  "url": "https://example.com/product",
+  "output": ["json"],
+  "extract": {
+    "mode": "selectors",
+    "fields": {
+      "title": {
+        "selector": "h1.product-title",
+        "type": "text"
+      },
+      "price": {
+        "selector": "span.price",
+        "type": "text"
+      },
+      "image_url": {
+        "selector": "img.product-image",
+        "type": "attr",
+        "attribute": "src"
+      }
+    }
+  }
+}
+```
+
+Field `type` options:
+- `"text"` — inner text content
+- `"html"` — inner HTML
+- `"attr"` — value of `attribute`
+
+### `mode: "instruction"` — free-form LLM instruction
+
+Give the LLM an open-ended instruction when the schema isn't predictable in advance.
+
+```json
+{
+  "url": "https://example.com/article",
+  "output": ["json"],
+  "extract": {
+    "mode": "instruction",
+    "instruction": "Extract the author name, publication date, and a 2-sentence summary of this article."
+  }
+}
+```
+
+### `mode: "page"` — raw page extraction
+
+Returns the full page as a single field without any structuring. Useful when you want the LLM in your own application to do the structuring.
+
+```json
+{
+  "url": "https://example.com",
+  "output": ["json"],
+  "extract": { "mode": "page" }
+}
+```
+
+## Extraction errors
+
+If extraction fails or the LLM can't find the requested fields, the API returns status `422` with code `extraction_validation_error`. The response includes a `diagnostics` object explaining which fields failed.
+
+## Cost
+
+LLM-based extraction (`schema`, `instruction`, `page`) adds 1–3 credits depending on page length. Selector-based extraction (`selectors`) adds 1 credit.

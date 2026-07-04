@@ -1,0 +1,109 @@
+---
+title: Browser Automation
+description: Use the Interact surface to click, fill forms, scroll, take screenshots, and extract data after multi-step interactions.
+---
+
+## Overview
+
+The Interact surface drives a real Chromium browser. You provide a starting URL and a sequence of actions; the API executes them in order and returns the page state after the last action.
+
+## Basic example: fill and submit a form
+
+```json
+{
+  "url": "https://example.com/login",
+  "actions": [
+    { "type": "type", "selector": "#email", "value": "user@example.com" },
+    { "type": "type", "selector": "#password", "value": "secret" },
+    { "type": "click", "selector": "button[type=submit]" },
+    { "type": "wait_for", "selector": ".dashboard-header" }
+  ],
+  "output": ["markdown"]
+}
+```
+
+## Action types
+
+| Type | Required fields | Description |
+|------|----------------|-------------|
+| `goto` | `url` (optional) | Navigate to a URL. Omit `url` to reload the current page. |
+| `click` | `selector` | Click an element matching the CSS selector. |
+| `type` | `selector`, `value` | Focus the element and type the value. |
+| `select` | `selector`, `value` | Set a `<select>` element's value. |
+| `press` | `key` | Press a keyboard key (e.g. `"Enter"`, `"Tab"`). |
+| `scroll` | `selector?`, `direction?`, `amount?` | Scroll the page or a specific element. |
+| `wait_for` | `selector` | Wait until an element matching the selector appears in the DOM. |
+| `wait_ms` | `duration_ms` | Pause for a fixed number of milliseconds. |
+
+## Taking a screenshot
+
+Include `"screenshot"` in `output` to capture the page after the last action:
+
+```json
+{
+  "url": "https://example.com",
+  "actions": [
+    { "type": "click", "selector": ".open-modal-btn" },
+    { "type": "wait_for", "selector": ".modal" }
+  ],
+  "output": ["screenshot"]
+}
+```
+
+The response includes `outputs.screenshot.url` — a signed URL valid for 24 hours.
+
+## Extracting data after interaction
+
+Combine actions with `extract` to pull structured data after the browser is in the right state:
+
+```json
+{
+  "url": "https://example.com/search",
+  "actions": [
+    { "type": "type", "selector": "input[name=q]", "value": "openai" },
+    { "type": "press", "key": "Enter" },
+    { "type": "wait_for", "selector": ".results-list" }
+  ],
+  "output": ["json"],
+  "extract": {
+    "mode": "schema",
+    "schema": {
+      "results": "array of search result titles and URLs"
+    }
+  }
+}
+```
+
+## Persistent sessions
+
+Reuse browser state across multiple Interact calls using sessions:
+
+```json
+{
+  "url": "https://app.example.com/step-2",
+  "session": { "id": "sess_abc123" },
+  "actions": [
+    { "type": "click", "selector": ".next-step-btn" }
+  ],
+  "output": ["html"]
+}
+```
+
+Cookies, local storage, and auth tokens persist between calls in the same session. See [Identity & Sessions](/guides/identity-and-sessions).
+
+## Async interactions
+
+Long interaction sequences should be run as async jobs:
+
+```json
+{
+  "kind": "interact",
+  "input": {
+    "url": "https://example.com",
+    "actions": [...],
+    "output": ["markdown"]
+  }
+}
+```
+
+Submit to `POST /v1/jobs` and poll `GET /v1/jobs/{id}`. See [Async Jobs](/guides/async-jobs).

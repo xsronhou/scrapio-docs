@@ -1,0 +1,53 @@
+---
+title: Credit Management
+description: Read your current usage, estimate costs for planned operations, and set up monitoring.
+---
+
+## Reading usage from responses
+
+Every successful inline response includes a `usage` field:
+
+```json
+{
+  "usage": { "credits": 2 }
+}
+```
+
+For async jobs, credits are reported in the job status response once the job completes.
+
+## Estimating costs
+
+Use the credit table in [Rate Limits & Credits](/rate-limits) to estimate costs before running large jobs.
+
+A quick formula for crawls:
+
+```
+estimated_credits = max_pages × credits_per_page
+```
+
+Where `credits_per_page` is 1 for static HTML or 2 for JS-rendered pages.
+
+For extraction jobs, add 1–3 credits per page depending on extraction mode.
+
+## Daily cap behaviour
+
+Free plan tenants have a daily credit cap (1,000 credits). When the cap is reached mid-crawl, the job stops and returns a `429` with `daily_credit_cap_exceeded`. Partial results are returned for whatever pages were fetched before the cap.
+
+## Monitoring usage
+
+You can monitor usage through:
+
+1. **Per-response `usage` field** — inspect credits in every API response.
+2. **Dashboard** — aggregate daily and monthly usage at [scrapio.dev](https://scrapio.dev).
+
+## Reducing credit usage
+
+- Use `render_js: false` when pages don't need JavaScript (saves 1 credit per fetch).
+- Use `mode: "selectors"` extraction instead of LLM-based extraction where the DOM is stable (saves 1–3 credits per page).
+- Set a tight `max_pages` on crawls to avoid over-crawling.
+- Use `same_domain_only: true` (the default) to prevent the crawler from following external links.
+- Cache results client-side when the same URL is fetched repeatedly.
+
+## Upgrading your plan
+
+Visit [scrapio.dev#pricing](https://scrapio.dev#pricing) to upgrade from Free to Pro. Pro plans include 50,000 daily credits with rollover, higher `timeout_ms` limits, and priority execution.

@@ -1,0 +1,156 @@
+---
+title: MCP Server
+description: Use the Scrapio from Claude, Cursor, Windsurf, and any MCP-compatible agent.
+---
+
+The Scrapio MCP server gives AI agents direct access to the full web data surface through a single registered server — fetch, crawl, Google search, YouTube transcripts, Amazon and Walmart product data, browser automation, and async jobs.
+
+## Install
+
+No installation required. Run it with `npx`:
+
+```bash
+SCRAPIO_API_KEY=sk-... npx @scrapio/mcp
+```
+
+The server starts on stdio by default and is ready to accept connections from your agent runtime.
+
+## Configure your agent
+
+<Tabs>
+  <Tab title="Claude Desktop">
+    Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+    ```json
+    {
+      "mcpServers": {
+        "scrapio": {
+          "command": "npx",
+          "args": ["-y", "@scrapio/mcp"],
+          "env": {
+            "SCRAPIO_API_KEY": "sk-..."
+          }
+        }
+      }
+    }
+    ```
+
+    Restart Claude Desktop. The tools appear automatically — no further setup needed.
+  </Tab>
+  <Tab title="Cursor">
+    Open **Cursor Settings → MCP** and add a new server, or edit `~/.cursor/mcp.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "scrapio": {
+          "command": "npx",
+          "args": ["-y", "@scrapio/mcp"],
+          "env": {
+            "SCRAPIO_API_KEY": "sk-..."
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Windsurf">
+    Edit `~/.codeium/windsurf/mcp_config.json`:
+
+    ```json
+    {
+      "mcpServers": {
+        "scrapio": {
+          "command": "npx",
+          "args": ["-y", "@scrapio/mcp"],
+          "env": {
+            "SCRAPIO_API_KEY": "sk-..."
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="HTTP (remote / self-hosted)">
+    For deployments where the MCP server runs as a persistent process rather than a child process:
+
+    ```bash
+    SCRAPIO_API_KEY=sk-... npx @scrapio/mcp --transport http --port 3010
+    ```
+
+    The server listens on `http://localhost:3010/mcp`. Configure your agent runtime to use this URL as the MCP endpoint. You are responsible for securing the HTTP endpoint at the network level (private VPC, reverse proxy with auth, etc.).
+  </Tab>
+</Tabs>
+
+## Available tools
+
+| Tool | What it does |
+|---|---|
+| `fetch` | Fetch a URL and return its content as markdown, HTML, JSON, or a screenshot |
+| `google_search` | Search Google and return structured results — organic, news, images, or shopping |
+| `youtube_transcript` | Get the full transcript for a YouTube video by URL or video ID |
+| `amazon_product` | Get structured product data from Amazon by URL, ASIN, or search query |
+| `walmart_search` | Search Walmart and return structured product listings |
+| `interact` | Drive a real browser through a multi-step workflow — click, type, scroll, wait |
+| `crawl` | Crawl one or more seed URLs and return content for every page visited |
+| `submit_job` | Submit a long-running job asynchronously and return a job ID |
+| `get_job` | Check job status and retrieve the result when complete |
+
+## Example prompts
+
+Once the server is connected, your agent can use natural language to call these tools:
+
+> "Fetch the content of https://news.ycombinator.com and summarize the top 5 stories."
+
+> "Search Google for 'best TypeScript ORM 2025' and give me the top 3 results."
+
+> "Get the transcript of this YouTube video: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+> "Find the current price of the Sony WH-1000XM5 headphones on Amazon."
+
+> "Crawl https://docs.example.com up to 20 pages and extract all the API endpoint descriptions."
+
+> "Go to https://app.example.com, click the login button, type my email and password, and return the dashboard content."
+
+## Async jobs
+
+Some operations — large crawls, slow pages, multi-step interactions — take longer than a single tool call can wait. Use `submit_job` to queue the work and `get_job` to poll for the result:
+
+```
+Agent: submit_job(kind="crawl", input={ seeds: ["https://docs.example.com"], max_pages: 50 })
+→ { job_id: "abc123", status: "queued" }
+
+Agent: get_job(job_id="abc123")
+→ { status: "running", ... }
+
+Agent: get_job(job_id="abc123")
+→ { status: "completed", result: { pages: [...] } }
+```
+
+## Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `SCRAPIO_API_KEY` | Yes | Your API key. Get one at [scrapio.dev](https://scrapio.dev#pricing). |
+| `SCRAPIO_BASE_URL` | No | Override the API base URL (for local development or staging). |
+| `MCP_PORT` | No | Port for HTTP transport mode. Defaults to `3010`. |
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="The server starts but no tools appear in my agent">
+    Restart your agent runtime after adding the server config — most runtimes only discover MCP servers on startup.
+  </Accordion>
+  <Accordion title="Error: SCRAPIO_API_KEY is not set">
+    The `env` block in your agent config is not being passed to the process. Double-check that your config file uses the correct format for your runtime and that the key name matches exactly.
+  </Accordion>
+  <Accordion title="Tool calls return 'Authentication failed'">
+    Your API key is set but invalid or revoked. Generate a new key in the [dashboard](https://app.scrapio.dev/settings/api-keys).
+  </Accordion>
+  <Accordion title="Tool calls return 'Credits exhausted'">
+    Your account has no remaining credits. Add credits at [app.scrapio.dev](https://app.scrapio.dev).
+  </Accordion>
+  <Accordion title="npx is slow to start">
+    The first run downloads the package. Subsequent calls use the npm cache and start in under a second. For production deployments, install globally with `npm install -g @scrapio/mcp` and reference the binary directly.
+  </Accordion>
+</AccordionGroup>

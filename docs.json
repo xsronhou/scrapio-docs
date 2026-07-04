@@ -1,0 +1,86 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Scrapio",
+  "colors": {
+    "primary": "#6366f1",
+    "light": "#818cf8",
+    "dark": "#4f46e5"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": [
+          "introduction",
+          "quickstart",
+          "authentication",
+          "errors",
+          "rate-limits",
+          "sdks",
+          "mcp"
+        ]
+      },
+      {
+        "group": "Guides",
+        "pages": [
+          "guides/fetch-javascript-pages",
+          "guides/crawl-large-sites",
+          "guides/extract-structured-data",
+          "guides/browser-automation",
+          "guides/async-jobs",
+          "guides/identity-and-sessions",
+          "guides/credit-management",
+          "guides/website-monitoring"
+        ]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          "api-reference/fetch",
+          "api-reference/crawl",
+          "api-reference/interact",
+          "api-reference/search",
+          "api-reference/google",
+          "api-reference/youtube",
+          "api-reference/jobs",
+          "api-reference/amazon",
+          "api-reference/walmart",
+          "api-reference/monitors"
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "api": {
+    "openapi": "openapi.json",
+    "mdx": {
+      "server": "https://api.scrapio.dev",
+      "auth": {
+        "method": "bearer"
+      }
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Dashboard",
+        "href": "https://scrapio.dev"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get API Key",
+      "href": "https://scrapio.dev#pricing"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/xsronhou/scrapping-tool"
+    }
+  }
+}

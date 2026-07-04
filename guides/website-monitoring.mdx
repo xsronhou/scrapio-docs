@@ -1,0 +1,119 @@
+---
+title: Website Monitoring
+description: Watch specific fields on a page and get notified only when one actually changes -- no polling, storage, or diffing code required.
+---
+
+## What a monitor is
+
+A monitor is a saved URL, an extraction schema, and a list of fields to watch. Scrapio runs it on a cron schedule, extracts the watched fields, and delivers a webhook only when one of them actually differs from the previous run.
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/monitors \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Headphones price watch",
+    "url": "https://example.com/products/headphones",
+    "extract": { "price": "number", "in_stock": "boolean" },
+    "cron": "0 9 * * *",
+    "watch": { "fields": ["price", "in_stock"], "on": "any" },
+    "webhook_endpoint_id": "whe_..."
+  }'
+```
+
+`extract` declares every field to pull off the page; `watch.fields` is the subset to actually compare between runs. Fields you extract but don't watch are still visible in run history, just not compared.
+
+## Numeric tolerance
+
+`number`-typed watched fields can set a threshold, so sub-cent rounding or normal price jitter doesn't fire a false alarm:
+
+```json
+"watch": {
+  "fields": ["price"],
+  "thresholds": { "price": { "abs": 1, "pct": 1 } }
+}
+```
+
+`abs` and `pct` are OR'd -- crossing either one counts as a change. Set only one if you want a single rule (e.g. `pct` alone for a percentage-only tolerance regardless of the item's price). A field with no threshold entry uses strict equality: any difference triggers.
+
+## Watching a list of items
+
+`string[]`-typed fields (e.g. a list of review snippets, tags, or headlines) compare as a set, not as an ordered value:
+
+```json
+"extract": { "headlines": "string[]" },
+"watch": { "fields": ["headlines"] }
+```
+
+Reordering the same items does not trigger a change; adding or removing an item does.
+
+## Watching a whole page (no schema)
+
+For pages where you don't want to define an extraction schema, `watch.mode: "content"` hashes the page's markdown output and compares the hash between runs:
+
+```json
+{
+  "name": "Terms of service watch",
+  "url": "https://example.com/terms",
+  "cron": "0 6 * * *",
+  "watch": {
+    "mode": "content",
+    "ignore_patterns": ["\\d{1,2}:\\d{2}\\s?(AM|PM)"]
+  }
+}
+```
+
+This is coarser than field-scoped monitoring: you learn *that* the page changed, not *what* changed. `extract` and `watch.fields`/`watch.thresholds` are not valid in this mode. `watch.ignore_patterns` is a list of regular expressions stripped from the markdown before hashing, so incidental content (timestamps, rotating widgets) doesn't cause false positives. Markdown is hashed rather than raw HTML deliberately -- the extraction pipeline already strips navigation and ad chrome down to main content, which does most of the noise-filtering work for free.
+
+## Digest delivery
+
+By default, every detected change fires its own webhook. To batch changes into a periodic summary instead, set `watch.digest_interval_minutes` (minimum 15):
+
+```json
+"watch": { "fields": ["price"], "digest_interval_minutes": 1440 }
+```
+
+Changes are still recorded immediately and retrievable via `GET /v1/monitors/{id}/changes` regardless of this setting -- only webhook *delivery* is batched. A digest-mode monitor delivers a `monitor.digest_delivered` event instead of `monitor.change_detected`, containing every change recorded since the last digest.
+
+## Trigger condition
+
+`watch.on` controls how multiple watched fields combine:
+
+- `"any"` (default) -- fires when at least one watched field changes
+- `"all"` -- fires only when every watched field changes on the same run
+
+## First-run behavior
+
+The first run establishes a baseline and does not notify by default. Set `watch.notify_on_first_run: true` to receive an event on the very first run instead of waiting for a subsequent change.
+
+## Webhook payload
+
+```json
+{
+  "type": "monitor.change_detected",
+  "data": {
+    "schedule_id": "sch_...",
+    "schedule_name": "Headphones price watch",
+    "url": "https://example.com/products/headphones",
+    "changes": [
+      { "field": "price", "previous_value": 79.99, "new_value": 69.99 }
+    ],
+    "detected_at": "2026-07-04T09:00:03Z"
+  }
+}
+```
+
+Delivered through the standard webhook system -- same signature scheme, retry schedule, and at-least-once guarantee as every other webhook event. Register and manage endpoints at [Dashboard -> Webhooks](https://scrapio.dev/dashboard/webhooks).
+
+## Retrieving change history without a webhook
+
+```bash
+curl https://api.scrapio.dev/v1/monitors/sch_.../changes \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+Returns every detected change, newest first, whether or not a webhook is configured.
+
+## Dashboard
+
+Everything above is also available as a form at [Dashboard -> Monitors](https://scrapio.dev/dashboard/monitors) -- pick the URL, the fields to extract and watch, a tolerance for numeric fields, the cron schedule, and an optional webhook endpoint. The dashboard and the API operate on the same monitors, so you can create one in either place and manage it from the other.

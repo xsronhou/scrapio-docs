@@ -1,0 +1,99 @@
+---
+title: Crawling Large Sites
+description: Depth limits, include/exclude patterns, domain scoping, and crawl budget management.
+---
+
+## Basic crawl
+
+Provide one or more seed URLs and the crawler follows links from there:
+
+```json
+{
+  "seeds": ["https://docs.example.com/"],
+  "output": ["markdown"]
+}
+```
+
+The crawler returns an array of pages, each with its URL and outputs.
+
+## Controlling scope
+
+### Domain restriction
+
+Set `same_domain_only: true` (the default) to stay within the seed domain. The crawler ignores links to external domains.
+
+```json
+{
+  "seeds": ["https://docs.example.com/"],
+  "same_domain_only": true
+}
+```
+
+### Depth limit
+
+`max_depth` controls how many link-hops away from the seeds the crawler goes. Default is `2`.
+
+```json
+{
+  "seeds": ["https://docs.example.com/"],
+  "max_depth": 3
+}
+```
+
+A depth of `0` fetches only the seed pages. A depth of `1` fetches seeds plus pages linked directly from seeds.
+
+### Page budget
+
+`max_pages` caps the total number of pages fetched across the entire crawl. Default is `10`, maximum is `50`.
+
+```json
+{
+  "seeds": ["https://docs.example.com/"],
+  "max_pages": 25,
+  "max_depth": 2
+}
+```
+
+Once `max_pages` is reached the crawl stops, even if there are more reachable pages.
+
+## Output formats
+
+The crawl surface supports `html`, `markdown`, and `json` outputs. You can request multiple at once:
+
+```json
+{
+  "seeds": ["https://docs.example.com/"],
+  "output": ["markdown", "json"],
+  "extract": {
+    "mode": "schema",
+    "schema": {
+      "title": "page title",
+      "summary": "one-sentence page summary"
+    }
+  }
+}
+```
+
+## Async crawls
+
+Large crawls always run as async jobs. Submit with `POST /v1/jobs`:
+
+```json
+{
+  "kind": "crawl",
+  "input": {
+    "seeds": ["https://docs.example.com/"],
+    "max_pages": 50,
+    "max_depth": 3,
+    "output": ["markdown"]
+  }
+}
+```
+
+Poll `GET /v1/jobs/{id}` for completion. See [Async Jobs](/guides/async-jobs).
+
+## Crawl budget tips
+
+- Start with `max_pages: 5` to verify the crawl finds the right pages before scaling up.
+- Lower `max_depth` to avoid crawling into unrelated sections (e.g. blog archives linked from docs).
+- Use multiple seeds to cover isolated sections of a site without needing deep traversal.

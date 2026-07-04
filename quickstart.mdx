@@ -1,0 +1,206 @@
+---
+title: Quickstart
+description: Make your first successful API call in under 60 seconds.
+---
+
+## Prerequisites
+
+- An API key from [scrapio.dev](https://scrapio.dev#pricing)
+
+## Install the SDK (optional)
+
+<CodeGroup>
+```bash npm
+npm install @scrapio/api
+```
+
+```bash pip
+pip install scrapio-py
+```
+</CodeGroup>
+
+## 1. Fetch a page
+
+<CodeGroup>
+```typescript TypeScript SDK
+import { ApiClient } from "@scrapio/api";
+
+const client = new ApiClient({ apiKey: "YOUR_API_KEY" });
+
+const result = await client.fetch.fetch({
+  url: "https://example.com",
+  output: ["markdown"],
+});
+
+console.log(result.outputs.markdown);
+```
+
+```python Python SDK
+from scrapio import ApiClient, FetchRequest
+
+client = ApiClient(api_key="YOUR_API_KEY")
+
+result = client.fetch.fetch(FetchRequest(
+    url="https://example.com",
+    output=["markdown"],
+))
+
+print(result.outputs["markdown"])
+```
+
+```bash cURL
+curl -X POST https://api.scrapio.dev/v1/fetch \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "output": ["markdown"]
+  }'
+```
+</CodeGroup>
+
+A successful response looks like this:
+
+```json
+{
+  "request_id": "a1b2c3d4-...",
+  "mode": "inline",
+  "status": "completed",
+  "outputs": {
+    "markdown": "# Example Domain\n\nThis domain is for use in illustrative examples..."
+  },
+  "usage": { "credits": 1 }
+}
+```
+
+## 2. Render a JavaScript-heavy page
+
+Add `render_js: true` to execute JavaScript before capturing the output.
+
+<CodeGroup>
+```typescript TypeScript SDK
+const result = await client.fetch.fetch({
+  url: "https://news.ycombinator.com",
+  render_js: true,
+  output: ["markdown"],
+});
+```
+
+```python Python SDK
+result = client.fetch.fetch(FetchRequest(
+    url="https://news.ycombinator.com",
+    render_js=True,
+    output=["markdown"],
+))
+```
+
+```bash cURL
+curl -X POST https://api.scrapio.dev/v1/fetch \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://news.ycombinator.com",
+    "render_js": true,
+    "output": ["markdown"]
+  }'
+```
+</CodeGroup>
+
+## 3. Extract structured data
+
+Use the `extract` field to pull specific fields from a page.
+
+<CodeGroup>
+```typescript TypeScript SDK
+const result = await client.fetch.fetch({
+  url: "https://news.ycombinator.com",
+  render_js: true,
+  output: ["json"],
+  extract: {
+    mode: "schema",
+    schema: { top_stories: "array of story titles on the front page" },
+  },
+});
+```
+
+```python Python SDK
+result = client.fetch.fetch(FetchRequest(
+    url="https://news.ycombinator.com",
+    render_js=True,
+    output=["json"],
+    extract={
+        "mode": "schema",
+        "schema": {"top_stories": "array of story titles on the front page"},
+    },
+))
+```
+
+```bash cURL
+curl -X POST https://api.scrapio.dev/v1/fetch \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://news.ycombinator.com",
+    "render_js": true,
+    "output": ["json"],
+    "extract": {
+      "mode": "schema",
+      "schema": {
+        "top_stories": "array of story titles on the front page"
+      }
+    }
+  }'
+```
+</CodeGroup>
+
+## 4. Search Google
+
+The Google search surface returns structured SERP data — organic results, related searches, and answer boxes — without managing proxies or browser sessions yourself.
+
+Requests run through an in-house transport layer with deep TLS and HTTP/2 fingerprint impersonation. Each request is bound to a persistent, qualified browser identity. Blocked or challenged requests are automatically retried with a fresh identity (up to 3 attempts) before an error is returned.
+
+<CodeGroup>
+```bash cURL
+curl -X GET "https://api.scrapio.dev/v1/google/search" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -G \
+  --data-urlencode "search=best web scraping API 2025" \
+  --data-urlencode "country_code=us" \
+  --data-urlencode "search_type=classic"
+```
+
+```typescript TypeScript
+const results = await client.google.search({
+  search: "best web scraping API 2025",
+  country_code: "us",
+  search_type: "classic",
+});
+console.log(results.organic_results);
+```
+
+```python Python
+results = client.google.search(
+    search="best web scraping API 2025",
+    country_code="us",
+    search_type="classic",
+)
+print(results.organic_results)
+```
+</CodeGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="SDKs" icon="box" href="/sdks">
+    Full install and initialization guide for TypeScript and Python SDKs.
+  </Card>
+  <Card title="Authentication" icon="key" href="/authentication">
+    How to manage and rotate API keys.
+  </Card>
+  <Card title="Async jobs" icon="clock" href="/guides/async-jobs">
+    Submit long-running jobs and poll for results.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/fetch">
+    Full parameter reference for every endpoint.
+  </Card>
+</CardGroup>

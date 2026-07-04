@@ -1,0 +1,68 @@
+---
+title: Rate Limits & Credits
+description: How the credit system works, per-surface costs, and what happens when you hit a limit.
+---
+
+## Credit system
+
+Every API call consumes credits. Credits are deducted when a request completes successfully. Failed requests (4xx errors caused by bad input) are not charged.
+
+Your balance resets daily at midnight UTC on the Free plan. Paid plans carry credits forward.
+
+## Per-surface credit costs
+
+| Surface | Credits per call | Notes |
+|---------|-----------------|-------|
+| Fetch (no JS) | 1 | Static HTML fetch |
+| Fetch (JS rendering) | 2 | `render_js: true` |
+| Fetch + extract | 2–5 | +1–3 depending on extraction mode |
+| Crawl | 1 per page crawled | Charged per page, not per job |
+| Interact | 3 | Per interaction session |
+| Search (no fetch) | 2 | Google SERP only |
+| Search + fetch results | 2 + 1 per fetched result | |
+| YouTube search | 1 | |
+| YouTube video details | 1 | |
+| YouTube subtitles | 1 | |
+| Amazon product | 2 | |
+| Amazon search | 2 | |
+| Walmart product | 2 | |
+| Walmart search | 2 | |
+
+## Plan limits
+
+| Plan | Daily credits | Notes |
+|------|--------------|-------|
+| Free | 1,000 | Resets midnight UTC |
+| Pro | 50,000 | Rolls over unused credits (up to 2×) |
+| Enterprise | Custom | SLA + dedicated capacity |
+
+## Quota errors
+
+When you exceed your balance or daily cap, the API returns:
+
+```json
+{
+  "request_id": "...",
+  "error": {
+    "code": "daily_credit_cap_exceeded",
+    "message": "This tenant has reached its daily credit cap."
+  }
+}
+```
+
+| Code | Status | When |
+|------|--------|------|
+| `credits_exhausted` | 402 | Balance is zero |
+| `daily_credit_cap_exceeded` | 429 | Daily cap reached (Free plan) |
+
+## Checking your usage
+
+Use the `usage` field in every successful inline response to see how many credits that call consumed:
+
+```json
+{
+  "usage": { "credits": 2 }
+}
+```
+
+Aggregate usage dashboards are available at [scrapio.dev](https://scrapio.dev).

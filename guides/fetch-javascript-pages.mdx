@@ -1,0 +1,85 @@
+---
+title: Fetching JavaScript Pages
+description: When to use render_js, how JS rendering works, and how to control it.
+---
+
+## When to use `render_js`
+
+Set `"render_js": true` when the content you need is injected by JavaScript after the initial HTML loads. Common cases:
+
+- Single-page applications (React, Vue, Angular)
+- Infinite-scroll feeds where items appear after JS executes
+- Pages behind login redirects that trigger on load
+- Dynamic price or inventory widgets
+
+If the page's HTML already contains the content (SSR pages, Wikipedia, static sites), skip `render_js` — it saves credits and latency.
+
+## How it works
+
+When `render_js` is `true`, the API launches a headless Chromium browser, navigates to the URL, waits for the network to settle, and captures the fully-rendered DOM. The browser is isolated per request and discarded afterwards.
+
+Rendering typically adds 2–5 seconds of latency.
+
+## Waiting for specific conditions
+
+Use `wait_for` to hold rendering until a specific condition is met:
+
+```json
+{
+  "url": "https://example.com/dashboard",
+  "render_js": true,
+  "wait_for": { "network_idle": true },
+  "output": ["html"]
+}
+```
+
+`network_idle: true` waits until there are no in-flight network requests for 500 ms. This is useful for pages that fire background API calls after initial load.
+
+## Setting a timeout
+
+Use `timeout_ms` to cap how long the browser waits. The default is 15,000 ms (15 s) for inline requests. Async requests allow up to 300,000 ms (5 min).
+
+```json
+{
+  "url": "https://example.com/slow-app",
+  "render_js": true,
+  "timeout_ms": 30000,
+  "output": ["markdown"]
+}
+```
+
+If the timeout is exceeded, the API returns a `timeout` error code.
+
+## Device emulation
+
+Emulate mobile or tablet viewports to reach responsive content:
+
+```json
+{
+  "url": "https://m.example.com",
+  "render_js": true,
+  "device": "mobile",
+  "output": ["html"]
+}
+```
+
+Supported values: `"desktop"` (default), `"mobile"`, `"tablet"`.
+
+## Sessions
+
+Reuse a browser session across multiple fetches — cookies, local storage, and auth state are preserved:
+
+```json
+{
+  "url": "https://app.example.com/page-2",
+  "render_js": true,
+  "session": { "id": "sess_abc123" },
+  "output": ["markdown"]
+}
+```
+
+See [Identity & Sessions](/guides/identity-and-sessions) for the full session lifecycle.
+
+## Cost
+
+JS-rendered fetches cost 2 credits vs 1 for static fetches.
