@@ -19,7 +19,7 @@
           "errors",
           "rate-limits",
           "sdks",
-          "mcp"
+          "mcp-server"
         ]
       },
       {
