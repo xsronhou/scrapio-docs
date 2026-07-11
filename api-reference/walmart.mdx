@@ -3,8 +3,17 @@ title: Walmart
 description: Search Walmart and retrieve product details.
 ---
 
+<Note>
+  Amazon and Walmart endpoints require the **Commerce add-on** — free to enable on any paid plan (Starter or higher). Without it, these endpoints return `402 commerce_addon_required`. See [Pricing](https://scrapio.dev/pricing#addons) for details.
+</Note>
+
 ## Endpoints
 
 - `GET /v1/walmart/search` — Search Walmart and return structured results.
-- `GET /v1/walmart/product` — Retrieve product details by item ID or URL.
 - `GET /v1/walmart/search/crawl` — Queue a Walmart search crawl as an async job.
+
+<Note>
+  `GET /v1/walmart/product` is temporarily disabled while we work on
+  reliability for individual Walmart product pages. Search and search/crawl
+  are unaffected.
+</Note>

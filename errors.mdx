@@ -55,10 +55,12 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `missing_api_key` | 401 | `Authorization` header is absent. |
 | `invalid_api_key` | 401 | API key not found or revoked. |
 | `credits_exhausted` | 402 | Tenant credit balance is zero. |
+| `commerce_addon_required` | 402 | Amazon/Walmart dedicated endpoints require the Commerce add-on. |
 | `idempotency_conflict` | 409 | Idempotency key reused with a different body. |
 | `extraction_failed` | 422 | LLM or selector extraction produced no usable output. |
 | `extraction_validation_error` | 422 | Extracted data failed schema validation. |
 | `target_blocked` | 502 | The target URL rejected or blocked the request. |
+| `free_plan_proxy_required` | 502 | The Free plan's direct/stealth/gateway access methods were exhausted; this target likely needs proxy access, which Free doesn't include. Upgrade to a paid plan. |
 | `blocked_by_amazon` | 502 | Amazon's bot-protection blocked the request. |
 | `timeout` | 504 | The fetch or interaction exceeded `timeout_ms`. |
 | `proxy_unavailable` | 503 | No usable proxy is available for this request. |
