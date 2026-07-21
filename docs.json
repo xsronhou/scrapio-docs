@@ -44,12 +44,69 @@
           "api-reference/interact",
           "api-reference/search",
           "api-reference/google",
-          "api-reference/youtube",
-          "api-reference/jobs",
-          "api-reference/amazon",
-          "api-reference/walmart",
-          "api-reference/booking",
-          "api-reference/monitors"
+          {
+            "group": "YouTube",
+            "pages": [
+              "api-reference/youtube",
+              "api-reference/youtube/search",
+              "api-reference/youtube/search-crawl",
+              "api-reference/youtube/video",
+              "api-reference/youtube/subtitles"
+            ]
+          },
+          {
+            "group": "Jobs",
+            "pages": [
+              "api-reference/jobs",
+              "api-reference/jobs/create",
+              "api-reference/jobs/status",
+              "api-reference/jobs/result"
+            ]
+          },
+          {
+            "group": "Amazon",
+            "pages": [
+              "api-reference/amazon",
+              "api-reference/amazon/search",
+              "api-reference/amazon/product",
+              "api-reference/amazon/pricing",
+              "api-reference/amazon/search-crawl"
+            ]
+          },
+          {
+            "group": "Walmart",
+            "pages": [
+              "api-reference/walmart",
+              "api-reference/walmart/search",
+              "api-reference/walmart/search-crawl"
+            ]
+          },
+          {
+            "group": "Booking.com",
+            "pages": [
+              "api-reference/booking",
+              "api-reference/booking/search",
+              "api-reference/booking/search-crawl",
+              "api-reference/booking/property",
+              "api-reference/booking/reviews"
+            ]
+          },
+          {
+            "group": "Monitors",
+            "pages": [
+              "api-reference/monitors",
+              "api-reference/monitors/create",
+              "api-reference/monitors/list",
+              "api-reference/monitors/get",
+              "api-reference/monitors/update",
+              "api-reference/monitors/delete",
+              "api-reference/monitors/trigger",
+              "api-reference/monitors/runs",
+              "api-reference/monitors/runs-latest",
+              "api-reference/monitors/changes",
+              "api-reference/monitors/changes-latest"
+            ]
+          }
         ]
       }
     ]
