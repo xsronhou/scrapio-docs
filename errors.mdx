@@ -55,7 +55,7 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `missing_api_key` | 401 | `Authorization` header is absent. |
 | `invalid_api_key` | 401 | API key not found or revoked. |
 | `credits_exhausted` | 402 | Tenant credit balance is zero. |
-| `commerce_addon_required` | 402 | Amazon/Walmart dedicated endpoints require the Commerce add-on. |
+| `plan_upgrade_required` | 402 | Endpoint requires a higher plan tier (Google/Search need Pro+; Amazon/Walmart/Booking.com need Starter+). |
 | `idempotency_conflict` | 409 | Idempotency key reused with a different body. |
 | `extraction_failed` | 422 | LLM or selector extraction produced no usable output. |
 | `extraction_validation_error` | 422 | Extracted data failed schema validation. |

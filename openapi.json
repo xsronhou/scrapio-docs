@@ -2863,7 +2863,7 @@
           "Booking"
         ],
         "summary": "Search Booking.com hotels",
-        "description": "Searches Booking.com hotel availability for a destination and stay window, returning structured property results (price, stars, review score, coordinates, and more). Requires the Travel add-on. `pos_country` pins the point-of-sale market by routing through a residential proxy in that country, since Booking's prices vary by point of sale.",
+        "description": "Searches Booking.com hotel availability for a destination and stay window, returning structured property results (price, stars, review score, coordinates, and more). Requires a Starter plan or higher. `pos_country` pins the point-of-sale market by routing through a residential proxy in that country, since Booking's prices vary by point of sale.",
         "operationId": "searchBooking",
         "parameters": [
           {
@@ -3083,7 +3083,7 @@
             }
           },
           "402": {
-            "description": "Travel add-on not enabled for this tenant.",
+            "description": "Plan upgrade required for this tenant.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3128,7 +3128,7 @@
           "Booking"
         ],
         "summary": "Queue a Booking.com search crawl job",
-        "description": "Submits a multi-page Booking.com search as an async job (up to 25 pages from `start_page`), returning a `job_id` to poll. Requires the Travel add-on.",
+        "description": "Submits a multi-page Booking.com search as an async job (up to 25 pages from `start_page`), returning a `job_id` to poll. Requires a Starter plan or higher.",
         "operationId": "queueBookingSearchCrawl",
         "parameters": [
           {
@@ -3348,7 +3348,7 @@
             }
           },
           "402": {
-            "description": "Travel add-on not enabled for this tenant.",
+            "description": "Plan upgrade required for this tenant.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3373,7 +3373,7 @@
           "Booking"
         ],
         "summary": "Get Booking.com property details",
-        "description": "Retrieves structured property details from a Booking.com hotel page: name, description, address, coordinates, amenities, images, and per-room rates for the given stay window. Accepts a `property_id` (from a search result) or a full Booking property `url`. Requires the Travel add-on.",
+        "description": "Retrieves structured property details from a Booking.com hotel page: name, description, address, coordinates, amenities, images, and per-room rates for the given stay window. Accepts a `property_id` (from a search result) or a full Booking property `url`. Requires a Starter plan or higher.",
         "operationId": "getBookingProperty",
         "parameters": [
           {
@@ -3533,7 +3533,7 @@
             }
           },
           "402": {
-            "description": "Travel add-on not enabled for this tenant.",
+            "description": "Plan upgrade required for this tenant.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3578,7 +3578,7 @@
           "Booking"
         ],
         "summary": "Get Booking.com property reviews",
-        "description": "Retrieves a Booking.com property's review score breakdown (staff, facilities, cleanliness, and more). By default only the score breakdown is returned; set `include_review_details: true` to click through and return individual review cards too, billed as a separate interact session (25 credits total instead of 15). Requires the Travel add-on.",
+        "description": "Retrieves a Booking.com property's review score breakdown (staff, facilities, cleanliness, and more). By default only the score breakdown is returned; set `include_review_details: true` to click through and return individual review cards too, billed as a separate interact session (25 credits total instead of 15). Requires a Starter plan or higher.",
         "operationId": "getBookingReviews",
         "parameters": [
           {
@@ -3687,7 +3687,7 @@
             }
           },
           "402": {
-            "description": "Travel add-on not enabled for this tenant.",
+            "description": "Plan upgrade required for this tenant.",
             "content": {
               "application/json": {
                 "schema": {

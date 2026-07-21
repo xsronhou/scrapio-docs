@@ -23,9 +23,9 @@ Your balance resets daily at midnight UTC on the Free plan. Paid plans carry cre
 | YouTube search | 1 | |
 | YouTube video details | 1 | |
 | YouTube subtitles | 1 | |
-| Amazon product | 10 | Requires the free Commerce add-on |
-| Amazon search | 10 | Requires the free Commerce add-on |
-| Walmart search | 10 | Requires the free Commerce add-on |
+| Amazon product | 10 | Requires a Starter plan or higher |
+| Amazon search | 10 | Requires a Starter plan or higher |
+| Walmart search | 10 | Requires a Starter plan or higher |
 
 <Note>
   `GET /v1/walmart/product` is temporarily disabled while we work on
@@ -45,9 +45,9 @@ Your balance resets daily at midnight UTC on the Free plan. Paid plans carry cre
 
 The Free plan never routes requests through a datacenter or residential proxy — only direct HTTP and stealth-browser access. Most targets work fine without a proxy, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
 
-### Amazon/Walmart require the Commerce add-on
+### Amazon/Walmart/Booking.com require a paid plan
 
-Amazon and Walmart endpoints require the **Commerce add-on** — free to enable on any paid plan (Starter or higher). Without it, these endpoints return `402 commerce_addon_required`. See [Pricing](https://scrapio.dev/pricing#addons) for details.
+Amazon, Walmart, and Booking.com endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](https://scrapio.dev/pricing) for details.
 
 ## Quota errors
 
