@@ -40,6 +40,7 @@
         "pages": [
           "api-reference/fetch",
           "api-reference/crawl",
+          "api-reference/map",
           "api-reference/interact",
           "api-reference/search",
           "api-reference/google",
@@ -47,6 +48,7 @@
           "api-reference/jobs",
           "api-reference/amazon",
           "api-reference/walmart",
+          "api-reference/booking",
           "api-reference/monitors"
         ]
       }
@@ -80,7 +82,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/xsronhou/scrapping-tool"
+      "github": "https://github.com/xsronhou/scrapio"
     }
   }
 }
