@@ -44,6 +44,7 @@
           "api-reference/interact",
           "api-reference/search",
           "api-reference/google",
+          "api-reference/fast-search",
           {
             "group": "YouTube",
             "pages": [
