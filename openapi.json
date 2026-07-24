@@ -46,6 +46,9 @@
       "name": "Google"
     },
     {
+      "name": "Fast Search"
+    },
+    {
       "name": "Jobs"
     },
     {
@@ -526,6 +529,156 @@
             "lang": "JavaScript",
             "label": "Node.js",
             "source": "const params = new URLSearchParams({ search: \"openai\", country_code: \"us\" });\nconst resp = await fetch(`https://api.scrapio.dev/v1/google/search?${params}`, {\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n});\nconst data = await resp.json();\nconsole.log(data.organic_results);"
+          }
+        ]
+      }
+    },
+    "/v1/fast-search": {
+      "get": {
+        "tags": [
+          "Fast Search"
+        ],
+        "summary": "Fast Search",
+        "description": "Execute a lighter, faster Google web search. Returns organic results, news results, people-also-ask, related searches, and answer boxes only -- no knowledge graph, ads, shopping results, or HTML capture. Requires a Starter plan or higher.",
+        "operationId": "fastSearch",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search query text"
+            }
+          },
+          {
+            "name": "country_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country code for localized results",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Language for results",
+              "type": "string",
+              "minLength": 2
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Result page number",
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Fast Search response with organic results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Fast Search requires a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Decodo blocked or failed the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Fast Search backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastSearchErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/fast-search?search=openai&country_code=us\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          },
+          {
+            "lang": "Python",
+            "label": "Python",
+            "source": "import os, requests\nresp = requests.get(\n    \"https://api.scrapio.dev/v1/fast-search\",\n    headers={\"Authorization\": f\"Bearer {os.environ['SCRAPIO_API_KEY']}\"},\n    params={\"search\": \"openai\", \"country_code\": \"us\"},\n)\nprint(resp.json()[\"organic_results\"])"
+          },
+          {
+            "lang": "JavaScript",
+            "label": "Node.js",
+            "source": "const params = new URLSearchParams({ search: \"openai\", country_code: \"us\" });\nconst resp = await fetch(`https://api.scrapio.dev/v1/fast-search?${params}`, {\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n});\nconst data = await resp.json();\nconsole.log(data.organic_results);"
           }
         ]
       }
@@ -8562,6 +8715,111 @@
           }
         },
         "additionalProperties": {}
+      },
+      "FastSearchErrorResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "FastSearchRequest": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Search query text"
+          },
+          "country_code": {
+            "description": "Country code for localized results",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "language": {
+            "description": "Language for results",
+            "type": "string",
+            "minLength": 2
+          },
+          "page": {
+            "description": "Result page number",
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "search"
+        ],
+        "additionalProperties": false
+      },
+      "FastSearchSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "meta_data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          "organic_results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "news_results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          }
+        },
+        "additionalProperties": false
       },
       "YouTubeSearchQuery": {
         "type": "object",
