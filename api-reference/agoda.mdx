@@ -10,6 +10,7 @@ description: Search hotel availability, retrieve property details and room rates
 ## Endpoints
 
 - `GET /v1/agoda/search` — Search hotel availability for a destination and stay window.
+- `GET /v1/agoda/search/crawl` — Queue a multi-page Agoda search as an async job (up to 25 pages).
 - `GET /v1/agoda/property` — Retrieve structured property details and per-room rates.
 - `GET /v1/agoda/reviews` — Retrieve the review score breakdown and individual review cards.
 
@@ -39,7 +40,9 @@ Passing a full `url` instead skips this requirement entirely, since the property
 
 ## Pagination
 
-Agoda has no URL-based pagination, unlike Booking's separate `/v1/booking/search/crawl` async job. Passing `page` (greater than 1) on `/v1/agoda/search` or `/v1/agoda/reviews` drives a real, synchronous capture-and-replay session: Scrapio simulates the pagination click Agoda's own UI requires, intercepts the resulting dynamically-header-guarded request, and replays it with the patched page number — all within the same request/response cycle, no job polling required. Because it drives a real interaction, it's billed at 25 credits instead of the base 15.
+Agoda has no URL-based pagination — there is no `page` query parameter Agoda's own site respects. Passing `page` (greater than 1) on `/v1/agoda/search` or `/v1/agoda/reviews` instead drives a real, synchronous capture-and-replay session: Scrapio simulates the pagination click Agoda's own UI requires, intercepts the resulting dynamically-header-guarded request, and replays it with the patched page number — all within the same request/response cycle, no job polling required. Because it drives a real interaction, it's billed at 25 credits instead of the base 15.
+
+For a larger page range than fits comfortably in one inline request's timeout budget, `GET /v1/agoda/search/crawl` queues the same real capture-and-replay mechanism as a background job (up to 25 pages from `start_page`), mirroring Booking's `/v1/booking/search/crawl`. Unlike Booking's crawl, every page — including the first — goes through the capture-replay path and is billed at the same interact rate, since Agoda has no cheaper plain-fetch page 1. It also does not accept `sort_by`/`min_price`/`max_price`/`stars`/`min_review_score`: Agoda's search filters only apply via a single interact click session with no mechanism that carries across a multi-page crawl.
 
 ## Individual review cards
 
