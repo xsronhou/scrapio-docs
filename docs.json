@@ -92,6 +92,16 @@
             ]
           },
           {
+            "group": "Agoda",
+            "pages": [
+              "api-reference/agoda",
+              "api-reference/agoda/search",
+              "api-reference/agoda/property",
+              "api-reference/agoda/reviews"
+            ]
+          },
+          "api-reference/hotel-monitors",
+          {
             "group": "Monitors",
             "pages": [
               "api-reference/monitors",

@@ -21,3 +21,7 @@ Booking's prices vary by point of sale — the same room can quote differently d
 ## Individual review cards
 
 `GET /v1/booking/reviews` always returns the review score breakdown (staff, facilities, cleanliness, and more) from a plain page load. Individual review cards render behind a client-side panel that only populates after a click, so retrieving them requires a real browser interaction — set `include_review_details: true` to opt into that click-through. It's billed as a separate interact session on top of the base fetch: 25 credits total instead of 15.
+
+## Hotel monitors
+
+Watch a Booking.com property at fixed dates and occupancy, and get notified only when the price actually changes — including cross-provider rate-parity monitoring against Agoda. See [Hotel Monitors](/api-reference/hotel-monitors).

@@ -1,0 +1,50 @@
+---
+title: Agoda
+description: Search hotel availability, retrieve property details and room rates, and get review scores from Agoda.
+---
+
+<Note>
+  Agoda endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/agoda/search` — Search hotel availability for a destination and stay window.
+- `GET /v1/agoda/property` — Retrieve structured property details and per-room rates.
+- `GET /v1/agoda/reviews` — Retrieve the review score breakdown and individual review cards.
+
+## Resolving a property by ID
+
+`/v1/agoda/property` and `/v1/agoda/reviews` accept either a full `url` or a `property_id`. If you only have `property_id`, you must also pass `city_id` — Agoda's own suggest endpoint only does fuzzy text matching, not ID lookups, so there's no way to resolve a property's city from `property_id` alone. Every `GET /v1/agoda/search` response carries the resolved city as `meta_data.resolved_city_id` for exactly this purpose:
+
+```bash
+# 1. Search once to resolve the city
+curl -G https://api.scrapio.dev/v1/agoda/search \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  --data-urlencode "location=Paris" \
+  --data-urlencode "check_in=2026-08-10" \
+  --data-urlencode "check_out=2026-08-12"
+# -> meta_data.resolved_city_id: 9395, properties[].property_id: "3"
+
+# 2. Reuse city_id on later property/reviews lookups
+curl -G https://api.scrapio.dev/v1/agoda/property \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  --data-urlencode "property_id=3" \
+  --data-urlencode "city_id=9395" \
+  --data-urlencode "check_in=2026-08-10" \
+  --data-urlencode "check_out=2026-08-12"
+```
+
+Passing a full `url` instead skips this requirement entirely, since the property (and its city) are already fully identified by the URL.
+
+## Pagination
+
+Agoda has no URL-based pagination, unlike Booking's separate `/v1/booking/search/crawl` async job. Passing `page` (greater than 1) on `/v1/agoda/search` or `/v1/agoda/reviews` drives a real, synchronous capture-and-replay session: Scrapio simulates the pagination click Agoda's own UI requires, intercepts the resulting dynamically-header-guarded request, and replays it with the patched page number — all within the same request/response cycle, no job polling required. Because it drives a real interaction, it's billed at 25 credits instead of the base 15.
+
+## Individual review cards
+
+Unlike Booking.com, `GET /v1/agoda/reviews` returns both the review score breakdown and individual review cards from a single plain page load — there's no `include_review_details` opt-in or separate interact-session billing tier. Page 1 is always 15 credits; `page` beyond 1 is billed at 25 credits for the same real-interaction reason as search pagination.
+
+## Hotel monitors
+
+Watch an Agoda property at fixed dates and occupancy, and get notified only when the price actually changes — including cross-provider rate-parity monitoring against Booking.com. See [Hotel Monitors](/api-reference/hotel-monitors).

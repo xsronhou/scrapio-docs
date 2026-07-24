@@ -1,0 +1,88 @@
+---
+title: Hotel Monitors
+description: Watch a Booking.com or Agoda property at fixed dates and occupancy, and get notified when the price changes — including cross-provider rate-parity monitoring.
+---
+
+<Note>
+  Hotel monitor endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+Hotel monitors are a specialized wrapper around the same [generic monitors](/api-reference/monitors) engine, scoped to a Booking.com or Agoda property at fixed check-in/check-out dates and occupancy — no `extract` schema to define, since a hotel monitor always watches the property's cheapest available room rate. A monitor created here is also visible via `GET /v1/monitors/{id}`.
+
+## Endpoints
+
+Available under both `/v1/booking/monitors` and `/v1/agoda/monitors` — the prefix only matters for creating a single-channel monitor; everything else (including a `channels` monitor) is reachable through either:
+
+- `POST /v1/booking/monitors` / `POST /v1/agoda/monitors` — Create a monitor.
+- `GET .../monitors` — List monitors.
+- `GET .../monitors/{id}` — Get monitor detail.
+- `PATCH .../monitors/{id}` — Update dates, occupancy, currency, cron, watch config, name, webhook, or active state.
+- `DELETE .../monitors/{id}` — Delete a monitor.
+- `POST .../monitors/{id}/trigger` — Run immediately and synchronously (returns `{run_id, status}` once the check completes — unlike the generic monitors trigger, which queues async).
+- `GET .../monitors/{id}/runs` / `GET .../monitors/{id}/runs/latest` — Run history.
+- `GET .../monitors/{id}/changes` / `GET .../monitors/{id}/changes/latest` — Detected price-change history, newest first.
+
+## Creating a single-channel monitor
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/booking/monitors \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" -H "Content-Type: application/json" \
+  -d '{
+    "name": "Hotel Mansion — Amsterdam, Sep 10-12",
+    "property_id": "nl/hotel-mansion",
+    "check_in": "2026-09-10", "check_out": "2026-09-12",
+    "adults": 2, "currency": "EUR",
+    "cron": "0 * * * *",
+    "watch": { "thresholds": { "abs": 5, "pct": 2 } },
+    "webhook_endpoint_id": "whe_..."
+  }'
+```
+
+Booking identifies the property with `property_id` (the `/hotel/xx/property-slug.html` segment). Agoda identifies it with `url` (the full property URL) instead — see [Agoda's property resolution](/api-reference/agoda#resolving-a-property-by-id) if you only have a numeric `property_id` and `city_id`.
+
+`watch.thresholds` (`{abs, pct}`) filters out rounding noise — only a move past the absolute *or* percentage threshold (whichever comes first) counts as a real change and fires `monitor.change_detected`.
+
+## Cross-provider `channels` monitors
+
+Hotels are contractually required to keep prices consistent across channels. A `channels` monitor watches the same property on both Booking.com and Agoda in one request and computes the spread every run, instead of you diffing two separate single-property monitors yourself. Pass `channels` (2-4 entries, one per provider, no duplicate providers) instead of a single `property_id`/`url`:
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/booking/monitors \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" -H "Content-Type: application/json" \
+  -d '{
+    "name": "paris-rate-parity",
+    "channels": [
+      { "provider": "booking", "property_id": "fr/beauvoir" },
+      { "provider": "agoda", "property_id": "https://www.agoda.com/odalys-city-paris-xvii_3/hotel/paris-fr.html" }
+    ],
+    "check_in": "2026-09-10", "check_out": "2026-09-12", "adults": 2, "currency": "EUR",
+    "cron": "0 * * * *",
+    "watch": { "parity_threshold": { "abs": 10 } }
+  }'
+```
+
+`channels[].property_id` holds the identifying string for that leg regardless of provider — for an Agoda channel entry, pass the full property URL in `property_id` (Agoda's own field-name convention of `url` doesn't apply inside `channels`). The endpoint you POST to (`/v1/booking/monitors` or `/v1/agoda/monitors`) doesn't matter for a `channels` monitor — neither provider "owns" it, and it's readable/updatable/deletable/triggerable through either router. `channels` itself can't be changed later via `PATCH`; only dates, occupancy, currency, cron, watch, name, webhook, and active state are mutable after creation.
+
+`watch.parity_threshold` (`{abs, pct}`, channels monitors only) controls when a `monitor.rate_parity_alert` webhook fires, separately from `watch.thresholds` (which, for channels, is keyed by provider — e.g. `{booking: {abs, pct}, agoda: {abs, pct}}` — and controls per-channel `monitor.change_detected` events).
+
+## Webhook events
+
+- **`monitor.change_detected`** — a watched price moved past its threshold. Booking single-channel monitors get a price-shaped payload (`previous_price`, `current_price`, `diff`, `params`); Agoda single-channel and `channels` monitors currently get the generic diff-engine shape (`changes: [{field, previous_value, new_value}]`) instead — read `GET .../monitors/{id}/changes` for a normalized hotel view of any provider.
+- **`monitor.rate_parity_alert`** — `channels`-only. Fires when the spread between channels crosses `watch.parity_threshold`:
+  ```json
+  {
+    "type": "monitor.rate_parity_alert",
+    "data": {
+      "schedule_id": "sch_...",
+      "channels": [{ "provider": "booking", "property_id": "fr/beauvoir", "price": 296 }],
+      "currency": "EUR",
+      "spread_abs": 21,
+      "spread_pct": 7.1,
+      "cheapest_channel": "agoda",
+      "most_expensive_channel": "booking",
+      "detected_at": "2026-08-15T09:00:03Z"
+    }
+  }
+  ```
+
+No change on a given run means no webhook fires at all. See the [Website Monitoring guide](/guides/website-monitoring) for the general `watch` configuration model (digest delivery, `notify_on_first_run`) and webhook envelope shape.
