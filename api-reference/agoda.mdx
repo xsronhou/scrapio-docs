@@ -13,6 +13,7 @@ description: Search hotel availability, retrieve property details and room rates
 - `GET /v1/agoda/search/crawl` — Queue a multi-page Agoda search as an async job (up to 25 pages).
 - `GET /v1/agoda/property` — Retrieve structured property details and per-room rates.
 - `GET /v1/agoda/reviews` — Retrieve the review score breakdown and individual review cards.
+- `GET /v1/agoda/reviews/crawl` — Queue the same reviews capture as an async job, with no deadline.
 
 ## Resolving a property by ID
 
@@ -47,6 +48,8 @@ For a larger page range than fits comfortably in one inline request's timeout bu
 ## Individual review cards
 
 Unlike Booking.com, `GET /v1/agoda/reviews` returns both the review score breakdown and individual review cards from a single plain page load — there's no `include_review_details` opt-in or separate interact-session billing tier. Page 1 is always 15 credits; `page` beyond 1 is billed at 25 credits for the same real-interaction reason as search pagination.
+
+Capturing that data reliably can take longer than an HTTP request can safely wait — `GET /v1/agoda/reviews` bounds itself to stay under the ~100s edge timeout and returns quickly with an empty `reviews`/`score_breakdown` rather than hang if that budget runs out. If you need real review data reliably rather than a fast response, use `GET /v1/agoda/reviews/crawl` instead: same parameters, same result shape, but it runs as a background job (poll `GET /v1/jobs/{id}`) with no deadline.
 
 ## Hotel monitors
 

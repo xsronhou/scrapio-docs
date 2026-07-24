@@ -4407,13 +4407,144 @@
         ]
       }
     },
+    "/v1/agoda/reviews/crawl": {
+      "get": {
+        "tags": [
+          "Agoda"
+        ],
+        "summary": "Queue an Agoda reviews crawl job",
+        "description": "Submits a real Agoda reviews capture as an async job, returning a `job_id` to poll. Identical to `GET /v1/agoda/reviews` in every way except execution mode: capturing real review data can take longer than a synchronous HTTP request can safely wait (Cloudflare's edge timeout is ~100s), so this runs the same capture with no artificial deadline instead of racing one. Prefer this over the synchronous endpoint when you need real review data reliably, not just a fast response. Requires a Starter plan or higher.",
+        "operationId": "queueAgodaReviewsCrawl",
+        "parameters": [
+          {
+            "name": "property_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Agoda numeric property ID",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Full Agoda property URL",
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          {
+            "name": "city_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Agoda numeric city ID, required alongside property_id when url is not given (see GET /v1/agoda/search's resolved_city_id)",
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Review page number (default 1)",
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Review sort order",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Review language filter (ISO 2-letter code)",
+              "type": "string",
+              "pattern": "^[A-Za-z]{2}$"
+            }
+          },
+          {
+            "name": "timeout_ms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Max time to wait, in ms",
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Agoda reviews crawl job queued.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncJobAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Plan upgrade required for this tenant.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/agoda/reviews/crawl?property_id=3&city_id=9395\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/agoda/reviews": {
       "get": {
         "tags": [
           "Agoda"
         ],
         "summary": "Get Agoda property reviews",
-        "description": "Retrieves an Agoda property's review score breakdown and individual review cards from a single plain page load — unlike Booking.com, no click-through opt-in is needed. Requires a Starter plan or higher. `page` beyond 1 drives a real capture-and-replay session, billed at 25 credits instead of 15.",
+        "description": "Retrieves an Agoda property's review score breakdown and individual review cards from a single plain page load — unlike Booking.com, no click-through opt-in is needed. Requires a Starter plan or higher. `page` beyond 1 drives a real capture-and-replay session, billed at 25 credits instead of 15. Real review capture can take longer than this endpoint can safely wait for inline (bounded to keep the request under Cloudflare's edge timeout) — if that budget is exceeded, this returns quickly with an empty `reviews`/`score_breakdown` rather than hanging. For reliable real data, use `GET /v1/agoda/reviews/crawl` instead, which runs the same capture as a background job with no deadline.",
         "operationId": "getAgodaReviews",
         "parameters": [
           {

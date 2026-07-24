@@ -98,7 +98,8 @@
               "api-reference/agoda/search",
               "api-reference/agoda/search-crawl",
               "api-reference/agoda/property",
-              "api-reference/agoda/reviews"
+              "api-reference/agoda/reviews",
+              "api-reference/agoda/reviews-crawl"
             ]
           },
           "api-reference/hotel-monitors",
