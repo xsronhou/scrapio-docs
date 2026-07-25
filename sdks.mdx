@@ -5,7 +5,7 @@ description: Official SDKs for the Scrapio — TypeScript, Python, Go, Ruby, PHP
 
 ## Official SDKs
 
-Scrapio ships official SDKs for six languages. All are generated from the OpenAPI spec and published to their respective package registries.
+Scrapio ships official SDKs for six languages, covering fetch, crawl, interact, Google and Fast Search, Amazon, Walmart, YouTube, Booking.com, and Agoda. Published to their respective package registries.
 
 | Language | Package | Registry |
 |----------|---------|----------|
@@ -62,6 +62,20 @@ const items = await client.walmart.search({ query: "headphones" });
 
 // YouTube video
 const video = await client.youtube.getVideo({ video_id: "dQw4w9WgXcQ" });
+
+// Booking.com hotel search
+const hotels = await client.booking.search({
+  location: "Paris, France",
+  check_in: "2026-09-10",
+  check_out: "2026-09-14",
+});
+
+// Agoda property details
+const property = await client.agoda.getProperty({
+  url: "https://www.agoda.com/example-hotel",
+  check_in: "2026-09-10",
+  check_out: "2026-09-14",
+});
 
 // Async job with polling helper
 const job = await client.jobs.create({
@@ -160,6 +174,16 @@ items = client.walmart.search("headphones")
 # YouTube video
 video = client.youtube.get_video("dQw4w9WgXcQ")
 
+# Booking.com hotel search
+hotels = client.booking.search("Paris, France", check_in="2026-09-10", check_out="2026-09-14")
+
+# Agoda property details
+property = client.agoda.get_property(
+    url="https://www.agoda.com/example-hotel",
+    check_in="2026-09-10",
+    check_out="2026-09-14",
+)
+
 # Async job with polling helper
 from scrapio import CreateJobRequest
 
@@ -247,6 +271,9 @@ results, err := client.Google.Search(ctx, &scrapio.GoogleSearchRequest{
     Search: "web scraping tools",
 })
 
+// Booking.com hotel search
+hotels, err := client.Booking.Search(ctx, "Paris, France", "2026-09-10", "2026-09-14")
+
 // Async job
 job, err := client.Jobs.Create(ctx, &scrapio.CreateJobRequest{
     JobType: "fetch",
@@ -288,6 +315,9 @@ results = client.google.search(search: "web scraping tools")
 # Amazon product
 product = client.amazon.get_product(asin: "B08N5WRWNW")
 
+# Booking.com hotel search
+hotels = client.booking.search(location: "Paris, France", check_in: "2026-09-10", check_out: "2026-09-14")
+
 # Async job
 job = client.jobs.create(job_type: "fetch", payload: { url: "https://example.com", output: ["markdown"] })
 result = client.jobs.wait_for_completion(job.job_id)
@@ -328,6 +358,9 @@ $results = $client->google->search(["search" => "web scraping tools"]);
 
 // Amazon product
 $product = $client->amazon->getProduct(["asin" => "B08N5WRWNW"]);
+
+// Booking.com hotel search
+$hotels = $client->booking->search("Paris, France", "2026-09-10", "2026-09-14");
 
 // Async job
 $job = $client->jobs->create([
