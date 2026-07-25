@@ -155,7 +155,8 @@ Available options:
 ### Usage (sync)
 
 ```python
-from scrapio import ApiClient, FetchRequest, GoogleSearchParams
+from scrapio import ApiClient, FetchRequest
+from scrapio.types import GoogleSearchParams
 
 client = ApiClient(api_key="sk-...")
 
@@ -264,10 +265,10 @@ result, err := client.Fetch.Fetch(ctx, &scrapio.FetchRequest{
     URL:    "https://example.com",
     Output: []string{"markdown"},
 })
-fmt.Println(*result.Outputs.Markdown)
+fmt.Println(result.Outputs["markdown"])
 
 // Google search
-results, err := client.Google.Search(ctx, &scrapio.GoogleSearchRequest{
+results, err := client.Google.Search(ctx, &scrapio.GoogleSearchParams{
     Search: "web scraping tools",
 })
 
@@ -299,7 +300,7 @@ Requires Ruby 2.7 or later.
 ```ruby
 require "scrapio"
 
-client = Scrapio::Client.new(api_key: ENV["SCRAPIO_API_KEY"])
+client = Scrapio::Client.new(ENV["SCRAPIO_API_KEY"])
 ```
 
 ### Usage
@@ -307,20 +308,20 @@ client = Scrapio::Client.new(api_key: ENV["SCRAPIO_API_KEY"])
 ```ruby
 # Fetch a page
 result = client.fetch.fetch(url: "https://example.com", output: ["markdown"])
-puts result.outputs["markdown"]
+puts result["outputs"]["markdown"]
 
 # Google search
 results = client.google.search(search: "web scraping tools")
 
 # Amazon product
-product = client.amazon.get_product(asin: "B08N5WRWNW")
+product = client.amazon.get_product("B08N5WRWNW")
 
 # Booking.com hotel search
 hotels = client.booking.search(location: "Paris, France", check_in: "2026-09-10", check_out: "2026-09-14")
 
 # Async job
 job = client.jobs.create(job_type: "fetch", payload: { url: "https://example.com", output: ["markdown"] })
-result = client.jobs.wait_for_completion(job.job_id)
+result = client.jobs.wait_for_completion(job["job_id"])
 ```
 
 ---
@@ -351,23 +352,23 @@ $result = $client->fetch->fetch([
     "url"    => "https://example.com",
     "output" => ["markdown"],
 ]);
-echo $result->outputs["markdown"];
+echo $result['outputs']['markdown'];
 
 // Google search
 $results = $client->google->search(["search" => "web scraping tools"]);
 
 // Amazon product
-$product = $client->amazon->getProduct(["asin" => "B08N5WRWNW"]);
+$product = $client->amazon->getProduct("B08N5WRWNW");
 
 // Booking.com hotel search
 $hotels = $client->booking->search("Paris, France", "2026-09-10", "2026-09-14");
 
 // Async job
-$job = $client->jobs->create([
-    "job_type" => "fetch",
-    "payload"  => ["url" => "https://example.com", "output" => ["markdown"]],
-]);
-$result = $client->jobs->waitForCompletion($job->jobId);
+$job = $client->jobs->create(
+    "fetch",
+    ["url" => "https://example.com", "output" => ["markdown"]],
+);
+$result = $client->jobs->waitForCompletion($job['job_id']);
 ```
 
 ---
@@ -446,9 +447,9 @@ var completed = client.jobs().waitForCompletion(job.jobId);
 
 Each SDK maintains a `CHANGELOG.md` in its package directory, updated on every release.
 
-- [TypeScript SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-typescript/CHANGELOG.md)
-- [Python SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-python/CHANGELOG.md)
-- [Go SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-go/CHANGELOG.md)
-- [Ruby SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-ruby/CHANGELOG.md)
-- [PHP SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-php/CHANGELOG.md)
-- [Java SDK changelog](https://github.com/xsronhou/scrapping-tool/blob/main/packages/sdk-java/CHANGELOG.md)
+- [TypeScript SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-typescript/CHANGELOG.md)
+- [Python SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-python/CHANGELOG.md)
+- [Go SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-go/CHANGELOG.md)
+- [Ruby SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-ruby/CHANGELOG.md)
+- [PHP SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-php/CHANGELOG.md)
+- [Java SDK changelog](https://github.com/xsronhou/scrapio/blob/main/packages/sdk-java/CHANGELOG.md)
