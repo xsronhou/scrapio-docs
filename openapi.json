@@ -754,6 +754,87 @@
         ]
       }
     },
+    "/v1/jobs/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Cancel an async job",
+        "description": "Cancels an async job that hasn't finished yet. Calling this on a job that has already reached a terminal state (`completed`, `partial`, `failed`, or already `cancelled`) is a no-op: it returns `200` with the job's current status unchanged. Calling it on a job that is still `queued` or `running` marks it `cancelled` and returns `202`.",
+        "operationId": "cancelJob",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The job identifier returned when the job was created.",
+            "schema": {
+              "type": "string",
+              "example": "job_abc123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job was already in a terminal state; status returned unchanged.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobCancelResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Job was queued or running and has now been marked cancelled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobCancelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found or expired.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl -X POST https://api.scrapio.dev/v1/jobs/job_abc123/cancel \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          },
+          {
+            "lang": "Python",
+            "label": "Python",
+            "source": "import os, requests\nresp = requests.post(\n    \"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\",\n    headers={\"Authorization\": f\"Bearer {os.environ['SCRAPIO_API_KEY']}\"},\n)\nprint(resp.json()[\"status\"])"
+          },
+          {
+            "lang": "JavaScript",
+            "label": "Node.js",
+            "source": "const resp = await fetch(\"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\", {\n  method: \"POST\",\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n});\nconst { status } = await resp.json();"
+          }
+        ]
+      }
+    },
     "/v1/jobs": {
       "post": {
         "tags": [
@@ -7292,6 +7373,45 @@
           "mode",
           "status",
           "job_id"
+        ],
+        "additionalProperties": false
+      },
+      "JobCancelResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "job_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "partial",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "async"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "job_id",
+          "job_type",
+          "status",
+          "mode"
         ],
         "additionalProperties": false
       },

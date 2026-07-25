@@ -61,7 +61,8 @@
               "api-reference/jobs",
               "api-reference/jobs/create",
               "api-reference/jobs/status",
-              "api-reference/jobs/result"
+              "api-reference/jobs/result",
+              "api-reference/jobs/cancel"
             ]
           },
           {

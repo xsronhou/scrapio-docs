@@ -8,5 +8,6 @@ description: Create async jobs, poll for status, and retrieve results.
 - `POST /v1/jobs` — Submit any surface operation as an async job.
 - `GET /v1/jobs/{id}` — Poll job status.
 - `GET /v1/jobs/{id}/result` — Retrieve the completed result.
+- `POST /v1/jobs/{id}/cancel` — Cancel a job that hasn't finished yet. Calling this on an already-terminal job (completed, partial, failed, or already cancelled) is a no-op that returns the job's current status unchanged.
 
 See the [Async Jobs guide](/guides/async-jobs) for the full polling workflow.
