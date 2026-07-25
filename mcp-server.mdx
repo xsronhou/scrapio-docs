@@ -38,6 +38,10 @@ The server starts on stdio by default and is ready to accept connections from yo
     ```
 
     Restart Claude Desktop. The tools appear automatically — no further setup needed.
+
+    <Note>
+      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** lets you add a server by pasting a URL instead — but it's built for the HTTP transport, not for spawning a local `npx` process. Run the server once in HTTP mode (see the HTTP tab below), then enter `http://localhost:3010/mcp` in that UI.
+    </Note>
   </Tab>
   <Tab title="Cursor">
     Open **Cursor Settings → MCP** and add a new server, or edit `~/.cursor/mcp.json`:
