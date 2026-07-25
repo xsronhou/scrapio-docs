@@ -42,7 +42,7 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `402` | Payment required — credit balance is zero. |
 | `409` | Conflict — idempotency key already exists with a different request body. |
 | `422` | Unprocessable — extraction or validation logic failed on the fetched content. |
-| `429` | Too many requests — daily credit cap exceeded or upstream rate limit hit. |
+| `429` | Too many requests — upstream rate limit hit. |
 | `502` | Bad gateway — the target site blocked or rejected the request. |
 | `503` | Service unavailable — execution backend (browser, proxy) is unavailable. |
 | `500` | Internal server error — unexpected error; always retryable. |
@@ -55,7 +55,7 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `missing_api_key` | 401 | `Authorization` header is absent. |
 | `invalid_api_key` | 401 | API key not found or revoked. |
 | `credits_exhausted` | 402 | Tenant credit balance is zero. |
-| `plan_upgrade_required` | 402 | Endpoint requires a higher plan tier (Google/Search need Pro+; Amazon/Walmart/Booking.com need Starter+). |
+| `plan_upgrade_required` | 402 | Endpoint requires a higher plan tier (Google SERP search needs Pro+; Amazon, Walmart, Booking.com, Agoda, and Fast Search need Starter+). |
 | `idempotency_conflict` | 409 | Idempotency key reused with a different body. |
 | `extraction_failed` | 422 | LLM or selector extraction produced no usable output. |
 | `extraction_validation_error` | 422 | Extracted data failed schema validation. |
@@ -64,6 +64,5 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `blocked_by_amazon` | 502 | Amazon's bot-protection blocked the request. |
 | `timeout` | 504 | The fetch or interaction exceeded `timeout_ms`. |
 | `proxy_unavailable` | 503 | No usable proxy is available for this request. |
-| `daily_credit_cap_exceeded` | 429 | Per-tenant daily cap reached. |
 | `job_not_found` | 404 | The `job_id` does not exist or has expired. |
 | `job_not_ready` | 409 | The job has not finished; check status first. |

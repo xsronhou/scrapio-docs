@@ -29,16 +29,16 @@ Where `credits_per_page` is 1 for static HTML or 2 for JS-rendered pages.
 
 For extraction jobs, add 1–3 credits per page depending on extraction mode.
 
-## Daily cap behaviour
+## Balance exhaustion behaviour
 
-Free plan tenants have a daily credit cap (1,000 credits). When the cap is reached mid-crawl, the job stops and returns a `429` with `daily_credit_cap_exceeded`. Partial results are returned for whatever pages were fetched before the cap.
+When your credit balance runs out mid-crawl, the job stops and returns a `402` with `credits_exhausted`. Partial results are returned for whatever pages were fetched before the balance hit zero.
 
 ## Monitoring usage
 
 You can monitor usage through:
 
 1. **Per-response `usage` field** — inspect credits in every API response.
-2. **Dashboard** — aggregate daily and monthly usage at [scrapio.dev](https://scrapio.dev).
+2. **Dashboard** — aggregate usage at [scrapio.dev](https://scrapio.dev).
 
 ## Reducing credit usage
 
@@ -50,4 +50,4 @@ You can monitor usage through:
 
 ## Upgrading your plan
 
-Visit [scrapio.dev#pricing](https://scrapio.dev#pricing) to upgrade from Free to Pro. Pro plans include 50,000 daily credits with rollover, higher `timeout_ms` limits, and priority execution.
+Visit [scrapio.dev#pricing](https://scrapio.dev#pricing) to upgrade from Free to a paid plan. Starter includes 25,000 credits/month and unlocks the dedicated APIs and Fast Search; Pro includes 100,000 credits/month and adds Google SERP search, higher `timeout_ms` limits, and priority execution; Scale includes 500,000 credits/month. Credits do not roll over on any plan.
