@@ -20,24 +20,9 @@ When `render_js` is `true`, the API launches a headless Chromium browser, naviga
 
 Rendering typically adds 2–5 seconds of latency.
 
-## Waiting for specific conditions
-
-Use `wait_for` to hold rendering until a specific condition is met:
-
-```json
-{
-  "url": "https://example.com/dashboard",
-  "render_js": true,
-  "wait_for": { "network_idle": true },
-  "output": ["html"]
-}
-```
-
-`network_idle: true` waits until there are no in-flight network requests for 500 ms. This is useful for pages that fire background API calls after initial load.
-
 ## Setting a timeout
 
-Use `timeout_ms` to cap how long the browser waits. The default is 15,000 ms (15 s) for inline requests. Async requests allow up to 300,000 ms (5 min).
+Use `timeout_ms` to cap how long the browser waits. The default is 10,000 ms (10 s) for inline requests. Async requests allow up to 300,000 ms (5 min).
 
 ```json
 {

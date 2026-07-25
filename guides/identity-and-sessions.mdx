@@ -1,6 +1,6 @@
 ---
 title: Identity & Sessions
-description: Persistent browser sessions for stateful scraping — cookies, auth tokens, and identity profiles.
+description: Persistent browser sessions for stateful scraping — cookies, local storage, and auth tokens carried across requests.
 ---
 
 ## What is a session?
@@ -72,7 +72,7 @@ The session's cookies and storage are loaded before the page navigates, so auth-
 
 ## Session response field
 
-Every fetch and interact response includes a `session` field indicating whether the session was updated:
+When a request includes `session.id`, the response includes a `session` field indicating whether the session was updated:
 
 ```json
 {
@@ -85,15 +85,9 @@ Every fetch and interact response includes a `session` field indicating whether 
 
 `updated: true` means cookies or storage changed during this request.
 
-## Identity profiles
-
-Identity profiles are named credential sets stored server-side and associated with a tenant. They let you inject pre-configured browser identities (user-agents, locale, timezone) without sending credentials in every request.
-
-Identity management endpoints are in the `Auth` reference section. This feature is available on Pro and Enterprise plans.
-
 ## Session limits
 
 - Sessions are per-tenant and identified by the string ID you provide.
-- Session state is stored in Redis and survives API restarts.
-- Inactive sessions expire after 24 hours.
-- There is no explicit "delete session" endpoint in the current release; sessions expire naturally.
+- Session state is stored in Postgres and survives API restarts.
+- Sessions do not currently expire automatically — there is no default TTL, so a session persists until you stop reusing its ID.
+- There is no explicit "delete session" endpoint in the current release.

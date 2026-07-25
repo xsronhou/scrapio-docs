@@ -7,9 +7,9 @@ description: Use CSS selectors, JSON schemas, or natural-language instructions t
 
 The `extract` field is available on `Fetch`, `Crawl`, and `Interact`. Always pair it with `"output": ["json"]` — the extracted data is returned in `outputs.json`.
 
-### `mode: "schema"` — LLM-based extraction
+### `mode: "schema"` — described-field extraction
 
-Describe the fields you want in plain English. The API uses an LLM to locate and extract them from the page.
+Describe the fields you want in plain English. By default the API uses an LLM to locate and extract them if a provider is configured, falling back to a heuristic extractor otherwise. Pass `"engine": "llm"` to require the LLM and fail with `llm_unavailable` instead of silently falling back, or `"engine": "heuristic"` to skip the LLM entirely.
 
 ```json
 {
@@ -77,7 +77,7 @@ Field `type` options:
 
 ### `mode: "instruction"` — free-form LLM instruction
 
-Give the LLM an open-ended instruction when the schema isn't predictable in advance.
+Give the LLM an open-ended instruction when the schema isn't predictable in advance. Same `engine` option as `mode: "schema"` applies here.
 
 ```json
 {
@@ -104,8 +104,8 @@ Returns the full page as a single field without any structuring. Useful when you
 
 ## Extraction errors
 
-If extraction fails or the LLM can't find the requested fields, the API returns status `422` with code `extraction_validation_error`. The response includes a `diagnostics` object explaining which fields failed.
+If extraction fails, the API returns status `422` with one of: `schema_validation_failed` (schema mode couldn't resolve a requested field), `instruction_limits_exceeded` (instruction mode exceeded its field/token limits), `llm_unavailable` (LLM extraction requested but no provider configured or reachable), or `selectors_unsupported` (an unsupported selector or field type). See [Error Reference](/errors) for the full list. The failure detail is in `error.message`, not a separate `diagnostics` object.
 
 ## Cost
 
-LLM-based extraction (`schema`, `instruction`, `page`) adds 1–3 credits depending on page length. Selector-based extraction (`selectors`) adds 1 credit.
+Any request with an `extract` config (any mode, including `selectors`) costs a flat 5 credits if extraction ran through the LLM, or 2 credits otherwise — it does not vary with page length or scale per-field.

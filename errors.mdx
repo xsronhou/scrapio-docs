@@ -57,8 +57,10 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | `credits_exhausted` | 402 | Tenant credit balance is zero. |
 | `plan_upgrade_required` | 402 | Endpoint requires a higher plan tier (Google SERP search needs Pro+; Amazon, Walmart, Booking.com, Agoda, and Fast Search need Starter+). |
 | `idempotency_conflict` | 409 | Idempotency key reused with a different body. |
-| `extraction_failed` | 422 | LLM or selector extraction produced no usable output. |
-| `extraction_validation_error` | 422 | Extracted data failed schema validation. |
+| `schema_validation_failed` | 422 | `extract.mode: "schema"` could not resolve one or more requested fields. |
+| `instruction_limits_exceeded` | 422 | `extract.mode: "instruction"` exceeded the field/token limits for a single instruction. |
+| `llm_unavailable` | 422 | LLM-based extraction was requested but no LLM provider is configured or reachable. |
+| `selectors_unsupported` | 422 | `extract.mode: "selectors"` was used with a selector or field type the extractor doesn't support. |
 | `target_blocked` | 502 | The target URL rejected or blocked the request. |
 | `free_plan_proxy_required` | 502 | The Free plan's direct/stealth/gateway access methods were exhausted; this target likely needs proxy access, which Free doesn't include. Upgrade to a paid plan. |
 | `blocked_by_amazon` | 502 | Amazon's bot-protection blocked the request. |

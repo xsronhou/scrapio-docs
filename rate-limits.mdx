@@ -15,7 +15,7 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 |---------|-----------------|-------|
 | Fetch (no JS) | 1 | Static HTML fetch |
 | Fetch (JS rendering) | 2 | `render_js: true` |
-| Fetch + extract | 2–5 | +1–3 depending on extraction mode |
+| Fetch + extract | 2 or 5 | Flat 5 if extraction runs through the LLM, flat 2 otherwise — independent of `render_js` |
 | Crawl | 1 per page crawled | Charged per page, not per job |
 | Interact | 3 | Per interaction session |
 | Search (no fetch) | 12 | Google SERP only |

@@ -49,15 +49,15 @@ Reordering the same items does not trigger a change; adding or removing an item 
 
 ## Watching a whole page (no schema)
 
-For pages where you don't want to define an extraction schema, `watch.mode: "content"` hashes the page's markdown output and compares the hash between runs:
+For pages where you don't want to define an extraction schema, top-level `mode: "content"` hashes the page's markdown output and compares the hash between runs:
 
 ```json
 {
   "name": "Terms of service watch",
   "url": "https://example.com/terms",
+  "mode": "content",
   "cron": "0 6 * * *",
   "watch": {
-    "mode": "content",
     "ignore_patterns": ["\\d{1,2}:\\d{2}\\s?(AM|PM)"]
   }
 }

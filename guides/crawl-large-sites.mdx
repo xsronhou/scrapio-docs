@@ -44,7 +44,7 @@ A depth of `0` fetches only the seed pages. A depth of `1` fetches seeds plus pa
 
 ### Page budget
 
-`max_pages` caps the total number of pages fetched across the entire crawl. Default is `10`, maximum is `50`.
+`max_pages` caps the total number of pages fetched across the entire crawl. Default is `25`, maximum is `50`.
 
 ```json
 {
@@ -76,7 +76,7 @@ The crawl surface supports `html`, `markdown`, and `json` outputs. You can reque
 
 ## Async crawls
 
-Large crawls always run as async jobs. Submit with `POST /v1/jobs`:
+`POST /v1/crawl` always runs synchronously and returns inline once the crawl finishes, regardless of `max_pages` or `max_depth` — there's no automatic size threshold that promotes a crawl to async. For large crawls that would otherwise tie up the request for a long time, submit the same parameters as an async job instead with `POST /v1/jobs`:
 
 ```json
 {
