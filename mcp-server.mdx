@@ -40,8 +40,29 @@ The server starts on stdio by default and is ready to accept connections from yo
     Restart Claude Desktop. The tools appear automatically — no further setup needed.
 
     <Note>
-      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** lets you add a server by pasting a URL instead — but it's built for the HTTP transport, not for spawning a local `npx` process. Run the server once in HTTP mode (see the HTTP tab below), then enter `http://localhost:3010/mcp` in that UI.
+      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** lets you add a server by pasting a URL instead — but it's built for the HTTP transport, not for spawning a local `npx` process. Enter `https://mcp.scrapio.dev/mcp` to use the hosted endpoint (see the Hosted tab below), or run the server yourself in HTTP mode and enter `http://localhost:3010/mcp`.
     </Note>
+  </Tab>
+  <Tab title="Hosted (no install)">
+    Point your agent runtime directly at Scrapio's hosted MCP endpoint — nothing to install or run locally:
+
+    - **URL:** `https://mcp.scrapio.dev/mcp`
+    - **Auth:** send `Authorization: Bearer <SCRAPIO_API_KEY>` on every request (most MCP clients that support remote/HTTP servers have a field for this — for the JSON-based configs above, add a `"headers"` block instead of `"env"`):
+
+    ```json
+    {
+      "mcpServers": {
+        "scrapio": {
+          "url": "https://mcp.scrapio.dev/mcp",
+          "headers": {
+            "Authorization": "Bearer sk-..."
+          }
+        }
+      }
+    }
+    ```
+
+    Each API key gets its own isolated session — the hosted endpoint is multi-tenant, so different keys never see each other's sessions or data. This is the same underlying server as the self-hosted HTTP mode below, just running with per-request auth instead of one fixed key.
   </Tab>
   <Tab title="Cursor">
     Open **Cursor Settings → MCP** and add a new server, or edit `~/.cursor/mcp.json`:
@@ -156,7 +177,7 @@ Agent: get_job(job_id="abc123")
 
 | Variable | Required | Description |
 |---|---|---|
-| `SCRAPIO_API_KEY` | Yes | Your API key. Get one at [scrapio.dev](https://scrapio.dev#pricing). |
+| `SCRAPIO_API_KEY` | Yes, unless using the hosted endpoint | Your API key. Get one at [scrapio.dev](https://scrapio.dev#pricing). Not used by the hosted endpoint (`mcp.scrapio.dev`), which takes the key per-request via the `Authorization` header instead. |
 | `SCRAPIO_BASE_URL` | No | Override the API base URL (for local development or staging). |
 | `MCP_PORT` | No | Port for HTTP transport mode. Defaults to `3010`. |
 
