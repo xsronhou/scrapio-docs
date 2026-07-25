@@ -179,11 +179,13 @@ console.log(results.organic_results);
 ```
 
 ```python Python
-results = client.google.search(
+from scrapio.types import GoogleSearchParams
+
+results = client.google.search(GoogleSearchParams(
     search="best web scraping API 2025",
     country_code="us",
     search_type="classic",
-)
+))
 print(results.organic_results)
 ```
 </CodeGroup>
