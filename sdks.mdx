@@ -14,7 +14,7 @@ Scrapio ships official SDKs for six languages, covering fetch, crawl, interact, 
 | Go | `github.com/xsronhou/scrapio-go` | [pkg.go.dev](https://pkg.go.dev/github.com/xsronhou/scrapio-go) |
 | Ruby | `scrapio` | [RubyGems](https://rubygems.org/gems/scrapio) |
 | PHP | `scrapio/scrapio` | [Packagist](https://packagist.org/packages/scrapio/scrapio) |
-| Java | `dev.scrapio:scrapio-java` | [Maven Central](https://central.sonatype.com/artifact/dev.scrapio/scrapio-java) |
+| Java | `io.github.xsronhou:scrapio-java` | [Maven Central](https://central.sonatype.com/artifact/io.github.xsronhou/scrapio-java) |
 
 ---
 
@@ -380,7 +380,7 @@ Add to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>dev.scrapio</groupId>
+    <groupId>io.github.xsronhou</groupId>
     <artifactId>scrapio-java</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -389,7 +389,7 @@ Add to your `pom.xml`:
 Or Gradle:
 
 ```gradle
-implementation 'dev.scrapio:scrapio-java:1.0.0'
+implementation 'io.github.xsronhou:scrapio-java:1.0.0'
 ```
 
 Requires Java 11 or later.
@@ -397,7 +397,7 @@ Requires Java 11 or later.
 ### Initialize
 
 ```java
-import dev.scrapio.ScrapioClient;
+import io.github.xsronhou.scrapio.ScrapioClient;
 
 ScrapioClient client = ScrapioClient.builder()
     .apiKey(System.getenv("SCRAPIO_API_KEY"))
@@ -414,11 +414,20 @@ var result = client.fetch().fetch(
         .output(List.of("markdown"))
         .build()
 );
-System.out.println(result.getOutputs().getMarkdown());
+System.out.println(result.outputs.get("markdown"));
 
 // Google search
 var results = client.google().search(
     GoogleSearchRequest.builder().search("web scraping tools").build()
+);
+
+// Booking.com hotel search
+var hotels = client.booking().search(
+    HotelSearchParams.builder()
+        .location("Paris, France")
+        .checkIn("2026-09-10")
+        .checkOut("2026-09-14")
+        .build()
 );
 
 // Async job
@@ -428,7 +437,7 @@ var job = client.jobs().create(
         .payload(Map.of("url", "https://example.com", "output", List.of("markdown")))
         .build()
 );
-var completed = client.jobs().waitForCompletion(job.getJobId());
+var completed = client.jobs().waitForCompletion(job.jobId);
 ```
 
 ---
