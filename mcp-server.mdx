@@ -20,29 +20,6 @@ The server starts on stdio by default and is ready to accept connections from yo
 ## Configure your agent
 
 <Tabs>
-  <Tab title="Claude Desktop">
-    Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
-
-    ```json
-    {
-      "mcpServers": {
-        "scrapio": {
-          "command": "npx",
-          "args": ["-y", "@scrapio/mcp"],
-          "env": {
-            "SCRAPIO_API_KEY": "sk-..."
-          }
-        }
-      }
-    }
-    ```
-
-    Restart Claude Desktop. The tools appear automatically — no further setup needed.
-
-    <Note>
-      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** accepts a URL and handles login for you — enter `https://mcp.scrapio.dev/mcp` (the hosted endpoint, see the Hosted tab below) and you'll be sent through a normal login-and-approve screen, no API key to paste anywhere. It's built for the HTTP transport, not for spawning a local `npx` process, so this only works with the hosted endpoint or your own server running in HTTP mode.
-    </Note>
-  </Tab>
   <Tab title="Hosted (no install)">
     Point your agent runtime directly at Scrapio's hosted MCP endpoint — nothing to install or run locally:
 
@@ -73,40 +50,6 @@ The server starts on stdio by default and is ready to accept connections from yo
 
     This is the same underlying server and the same per-tenant isolation as the OAuth method — just authenticated with a fixed key instead of a login flow.
   </Tab>
-  <Tab title="Cursor">
-    Open **Cursor Settings → MCP** and add a new server, or edit `~/.cursor/mcp.json`:
-
-    ```json
-    {
-      "mcpServers": {
-        "scrapio": {
-          "command": "npx",
-          "args": ["-y", "@scrapio/mcp"],
-          "env": {
-            "SCRAPIO_API_KEY": "sk-..."
-          }
-        }
-      }
-    }
-    ```
-  </Tab>
-  <Tab title="Windsurf">
-    Edit `~/.codeium/windsurf/mcp_config.json`:
-
-    ```json
-    {
-      "mcpServers": {
-        "scrapio": {
-          "command": "npx",
-          "args": ["-y", "@scrapio/mcp"],
-          "env": {
-            "SCRAPIO_API_KEY": "sk-..."
-          }
-        }
-      }
-    }
-    ```
-  </Tab>
   <Tab title="HTTP (remote / self-hosted)">
     For deployments where the MCP server runs as a persistent process rather than a child process:
 
@@ -134,10 +77,10 @@ The server starts on stdio by default and is ready to accept connections from yo
 | `amazon_search_crawl` | Queue an async, multi-page Amazon search crawl — returns a job ID. Requires a Starter plan or higher. |
 | `walmart_search` | Search Walmart and return structured product listings. Requires a Starter plan or higher. |
 | `walmart_search_crawl` | Queue an async, multi-page Walmart search crawl — returns a job ID. Requires a Starter plan or higher. |
-| `youtube_transcript` | Get the full transcript for a YouTube video by URL or video ID |
-| `youtube_search` | Search YouTube and return structured video results |
-| `youtube_video` | Get structured metadata for a single YouTube video |
-| `youtube_search_crawl` | Queue an async, multi-page YouTube search crawl — returns a job ID |
+| `youtube_transcript` | Get the full transcript for a YouTube video by URL or video ID. Requires a Starter plan or higher. |
+| `youtube_search` | Search YouTube and return structured video results. Requires a Starter plan or higher. |
+| `youtube_video` | Get structured metadata for a single YouTube video. Requires a Starter plan or higher. |
+| `youtube_search_crawl` | Queue an async, multi-page YouTube search crawl — returns a job ID. Requires a Starter plan or higher. Capped at 700 total results (10 credits per page crawled). |
 | `booking_search` | Search Booking.com for hotels by location and stay dates. Requires a Starter plan or higher. |
 | `booking_property` | Get structured details — amenities, room rates, review score — for a single Booking.com property. Requires a Starter plan or higher. |
 | `booking_reviews` | Get guest reviews and the score breakdown for a Booking.com property. Requires a Starter plan or higher. |
@@ -207,5 +150,8 @@ Agent: get_job(job_id="abc123")
   </Accordion>
   <Accordion title="npx is slow to start">
     The first run downloads the package. Subsequent calls use the npm cache and start in under a second. For production deployments, install globally with `npm install -g @scrapio/mcp` and reference the binary directly.
+  </Accordion>
+  <Accordion title="A tool call suddenly fails with a generic error, after previously working">
+    If you're connected to the hosted endpoint (`mcp.scrapio.dev`), this usually means the server was redeployed and your client's existing connection is stale. Disconnect and reconnect the connector (for Claude Desktop: **Settings → Connectors** → remove and re-add, or toggle it off and on) to establish a fresh session. This doesn't affect the local `npx`/stdio setup, which reconnects automatically on your runtime's next restart.
   </Accordion>
 </AccordionGroup>
