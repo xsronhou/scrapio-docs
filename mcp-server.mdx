@@ -40,14 +40,23 @@ The server starts on stdio by default and is ready to accept connections from yo
     Restart Claude Desktop. The tools appear automatically — no further setup needed.
 
     <Note>
-      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** lets you add a server by pasting a URL instead — but it's built for the HTTP transport, not for spawning a local `npx` process. Enter `https://mcp.scrapio.dev/mcp` to use the hosted endpoint (see the Hosted tab below), or run the server yourself in HTTP mode and enter `http://localhost:3010/mcp`.
+      Prefer not to hand-edit JSON? Claude Desktop's **Settings → Connectors → Add custom connector** accepts a URL and handles login for you — enter `https://mcp.scrapio.dev/mcp` (the hosted endpoint, see the Hosted tab below) and you'll be sent through a normal login-and-approve screen, no API key to paste anywhere. It's built for the HTTP transport, not for spawning a local `npx` process, so this only works with the hosted endpoint or your own server running in HTTP mode.
     </Note>
   </Tab>
   <Tab title="Hosted (no install)">
     Point your agent runtime directly at Scrapio's hosted MCP endpoint — nothing to install or run locally:
 
-    - **URL:** `https://mcp.scrapio.dev/mcp`
-    - **Auth:** send `Authorization: Bearer <SCRAPIO_API_KEY>` on every request (most MCP clients that support remote/HTTP servers have a field for this — for the JSON-based configs above, add a `"headers"` block instead of `"env"`):
+    **URL:** `https://mcp.scrapio.dev/mcp`
+
+    ### OAuth (recommended)
+
+    For clients with a "paste a URL" connector flow (Claude Desktop's **Settings → Connectors → Add custom connector**, and similar), just enter the URL above. You'll be redirected to log in to your Scrapio account and approve access — no API key to find or paste. Each login/approval is scoped to your own account; the hosted endpoint is multi-tenant, so different accounts never see each other's sessions or data.
+
+    Behind the scenes: the client registers itself automatically (no setup on your end), then runs a normal OAuth authorization-code flow against `https://mcp.scrapio.dev`. If your client doesn't support this, use the manual method below instead.
+
+    ### Manual API key
+
+    For clients that only support a static header (or if you'd rather not go through the login flow), send `Authorization: Bearer <SCRAPIO_API_KEY>` on every request — for the JSON-based configs above, add a `"headers"` block instead of `"env"`:
 
     ```json
     {
@@ -62,7 +71,7 @@ The server starts on stdio by default and is ready to accept connections from yo
     }
     ```
 
-    Each API key gets its own isolated session — the hosted endpoint is multi-tenant, so different keys never see each other's sessions or data. This is the same underlying server as the self-hosted HTTP mode below, just running with per-request auth instead of one fixed key.
+    This is the same underlying server and the same per-tenant isolation as the OAuth method — just authenticated with a fixed key instead of a login flow.
   </Tab>
   <Tab title="Cursor">
     Open **Cursor Settings → MCP** and add a new server, or edit `~/.cursor/mcp.json`:
