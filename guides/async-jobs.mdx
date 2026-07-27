@@ -139,6 +139,6 @@ result = requests.get(f"{base}/v1/jobs/{job_id}/result", headers=headers).json()
 print(result["outputs"]["markdown"])
 ```
 
-## Result TTL
+## Result retention
 
-Job results are retained for 24 hours after completion. After that, `/v1/jobs/{id}/result` returns `404`.
+Job results do not currently expire automatically — there is no default retention window, so a completed job's result stays available via `/v1/jobs/{id}/result` until you stop needing it. Don't rely on this as a permanent guarantee; retrieve results you need to keep rather than treating job storage as long-term archival.
