@@ -16,7 +16,7 @@ If the page's HTML already contains the content (SSR pages, Wikipedia, static si
 
 ## How it works
 
-When `render_js` is `true`, the API launches a headless Chromium browser, navigates to the URL, waits for the network to settle, and captures the fully-rendered DOM. The browser is isolated per request and discarded afterwards.
+When `render_js` is `true`, the API navigates to the URL in a headless Chromium browser, waits for the network to settle, and captures the fully-rendered DOM. Each request gets a fresh, isolated browser context (cookies, storage, and cache are not shared with other requests) — the underlying browser process itself is kept warm and reused across requests for performance, not relaunched from scratch each time.
 
 Rendering typically adds 2–5 seconds of latency.
 
