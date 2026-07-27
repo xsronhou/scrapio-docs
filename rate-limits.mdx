@@ -21,9 +21,10 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 | Search (no fetch) | 12 | Google SERP only |
 | Search + fetch results | 12 + 1 per fetched result | |
 | Fast Search | 15 | Organic results only, no HTML capture. Requires a Starter plan or higher |
-| YouTube search | 1 | |
-| YouTube video details | 1 | |
-| YouTube subtitles | 1 | |
+| YouTube search | 10 | Requires a Starter plan or higher |
+| YouTube video details | 10 | Requires a Starter plan or higher |
+| YouTube subtitles | 10 | Requires a Starter plan or higher |
+| YouTube search crawl (async) | 10 per page crawled | Requires a Starter plan or higher. Capped at 700 total results (`end_page * limit` must not exceed 700) |
 | Google SERP search | 15 | Requires a Pro plan or higher |
 | Amazon product / search | 10 | Requires a Starter plan or higher |
 | Walmart search | 10 | Requires a Starter plan or higher |
@@ -38,7 +39,7 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 | Plan | Monthly credits | Notes |
 |------|--------------|-------|
 | Free | 1,000 | Resets monthly. No proxy access — see below. |
-| Starter | 25,000 | Unlocks dedicated APIs (Amazon, Walmart, Booking.com, Agoda) and Fast Search. |
+| Starter | 25,000 | Unlocks dedicated APIs (Amazon, Walmart, Booking.com, Agoda, YouTube) and Fast Search. |
 | Pro | 100,000 | Everything in Starter, plus Google SERP search. |
 | Scale | 500,000 | Everything in Pro, plus custom rate limits. |
 | Enterprise | Custom | SLA + dedicated capacity |
@@ -49,9 +50,9 @@ Credits do not roll over on any plan — unused credits expire at the end of the
 
 The Free plan never routes requests through a datacenter or residential proxy — only direct HTTP and stealth-browser access. Most targets work fine without a proxy, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
 
-### Amazon, Walmart, Booking.com, Agoda, and Fast Search require a paid plan
+### Amazon, Walmart, Booking.com, Agoda, YouTube, and Fast Search require a paid plan
 
-Amazon, Walmart, Booking.com, Agoda, and Fast Search all require a Starter plan or higher. Google SERP search requires a Pro plan or higher. Requesting any of these on an ineligible plan returns `402 plan_upgrade_required`.
+Amazon, Walmart, Booking.com, Agoda, YouTube (search, video, subtitles, and search crawl), and Fast Search all require a Starter plan or higher. Google SERP search requires a Pro plan or higher. Requesting any of these on an ineligible plan returns `402 plan_upgrade_required`.
 
 ## Quota errors
 
