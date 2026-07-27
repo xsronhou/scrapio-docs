@@ -52,8 +52,7 @@ Some errors include a `diagnostics` object with additional context (e.g. whether
 | Code | Status | Description |
 |------|--------|-------------|
 | `invalid_request` | 400 | Request schema validation failed. |
-| `missing_api_key` | 401 | `Authorization` header is absent. |
-| `invalid_api_key` | 401 | API key not found or revoked. |
+| `unauthorized` | 401 | `Authorization` header is absent, or the API key wasn't recognized. |
 | `credits_exhausted` | 402 | Tenant credit balance is zero. |
 | `plan_upgrade_required` | 402 | Endpoint requires a higher plan tier (Google SERP search needs Pro+; Amazon, Walmart, Booking.com, Agoda, and Fast Search need Starter+). |
 | `idempotency_conflict` | 409 | Idempotency key reused with a different body. |

@@ -58,7 +58,7 @@ const results = await client.google.search({ search: "web scraping tools" });
 const product = await client.amazon.getProduct({ asin: "B08N5WRWNW" });
 
 // Walmart search
-const items = await client.walmart.search({ query: "headphones" });
+const items = await client.walmart.search({ search: "headphones" });
 
 // YouTube video
 const video = await client.youtube.getVideo({ video_id: "dQw4w9WgXcQ" });
@@ -252,9 +252,11 @@ Requires Go 1.21 or later.
 ```go
 import scrapio "github.com/xsronhou/scrapio-go"
 
+// Hardcoded:
 client := scrapio.NewClient("YOUR_API_KEY")
-// or from env:
-client := scrapio.NewClient(os.Getenv("SCRAPIO_API_KEY"))
+
+// Or from env (pick one):
+// client := scrapio.NewClient(os.Getenv("SCRAPIO_API_KEY"))
 ```
 
 ### Usage
@@ -280,7 +282,7 @@ job, err := client.Jobs.Create(ctx, &scrapio.CreateJobRequest{
     JobType: "fetch",
     Payload: map[string]any{"url": "https://example.com", "output": []string{"markdown"}},
 })
-result, err := client.Jobs.WaitForCompletion(ctx, job.JobID, nil)
+jobResult, err := client.Jobs.WaitForCompletion(ctx, job.JobID, nil)
 ```
 
 ---

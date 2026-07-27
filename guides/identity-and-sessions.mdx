@@ -83,7 +83,7 @@ When a request includes `session.id`, the response includes a `session` field in
 }
 ```
 
-`updated: true` means cookies or storage changed during this request.
+`updated: true` means the session was successfully persisted after this request — it's set on every successful session-using request, not only when cookies or storage actually changed.
 
 ## Session limits
 

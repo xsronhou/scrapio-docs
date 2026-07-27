@@ -13,7 +13,7 @@ Every successful inline response includes a `usage` field:
 }
 ```
 
-For async jobs, credits are reported in the job status response once the job completes.
+Async jobs don't currently report a `usage`/credits field anywhere in the job status or result response — the deduction happens server-side and isn't surfaced back to the caller today.
 
 ## Estimating costs
 
@@ -31,7 +31,7 @@ For a plain Fetch call, credits are 1 for a static request or 2 with `render_js:
 
 ## Balance exhaustion behaviour
 
-When your credit balance runs out mid-crawl, the job stops and returns a `402` with `credits_exhausted`. Partial results are returned for whatever pages were fetched before the balance hit zero.
+Credit balance is checked once, at authentication, before a crawl starts — a `402` with `credits_exhausted` is returned up front if you're already out of credits. Once a crawl is running, it isn't re-checked mid-run and won't stop partway through if your balance hits zero.
 
 ## Monitoring usage
 

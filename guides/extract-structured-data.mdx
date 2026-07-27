@@ -104,7 +104,7 @@ Returns the full page as a single field without any structuring. Useful when you
 
 ## Extraction errors
 
-If extraction fails, the API returns status `422` with one of: `schema_validation_failed` (schema mode couldn't resolve a requested field), `instruction_limits_exceeded` (instruction mode exceeded its field/token limits), `llm_unavailable` (LLM extraction requested but no provider configured or reachable), or `selectors_unsupported` (an unsupported selector or field type). See [Error Reference](/errors) for the full list. The failure detail is in `error.message`, not a separate `diagnostics` object.
+If extraction fails, the API returns status `422` with one of: `schema_validation_failed` (schema mode couldn't resolve a requested field), `instruction_limits_exceeded` (instruction mode exceeded its field/token limits), `llm_unavailable` (LLM extraction requested but no provider configured or reachable), or `selectors_unsupported` (an unsupported selector or field type). See [Error Reference](/errors) for the full list. The failure detail is in `error.message`, and the response also includes a `diagnostics` object (`{ outcome: "failed", retryable, blocked?, timed_out? }`) describing whether the failure is worth retrying.
 
 ## Cost
 
