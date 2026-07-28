@@ -79,8 +79,8 @@ const property = await client.agoda.getProperty({
 
 // Async job with polling helper
 const job = await client.jobs.create({
-  job_type: "fetch",
-  payload: { url: "https://example.com", output: ["markdown"] },
+  kind: "fetch",
+  input: { url: "https://example.com", output: ["markdown"] },
 });
 const result = await client.jobs.waitForCompletion(job.job_id, {
   pollIntervalMs: 2000,
@@ -189,8 +189,8 @@ property = client.agoda.get_property(
 from scrapio import CreateJobRequest
 
 job = client.jobs.create(CreateJobRequest(
-    job_type="fetch",
-    payload={"url": "https://example.com", "output": ["markdown"]},
+    kind="fetch",
+    input={"url": "https://example.com", "output": ["markdown"]},
 ))
 result = client.jobs.wait_for_completion(job.job_id, poll_interval=2.0, timeout=120.0)
 ```
@@ -205,8 +205,8 @@ async def main():
     async with AsyncApiClient(api_key="sk-...") as client:
         page = await client.fetch.fetch(FetchRequest(url="https://example.com", output=["markdown"]))
         job = await client.jobs.create(CreateJobRequest(
-            job_type="fetch",
-            payload={"url": "https://example.com", "output": ["markdown"]},
+            kind="fetch",
+            input={"url": "https://example.com", "output": ["markdown"]},
         ))
         result = await client.jobs.wait_for_completion(job.job_id, poll_interval=2.0, timeout=120.0)
 
@@ -279,8 +279,8 @@ hotels, err := client.Booking.Search(ctx, "Paris, France", "2026-09-10", "2026-0
 
 // Async job
 job, err := client.Jobs.Create(ctx, &scrapio.CreateJobRequest{
-    JobType: "fetch",
-    Payload: map[string]any{"url": "https://example.com", "output": []string{"markdown"}},
+    Kind:  "fetch",
+    Input: map[string]any{"url": "https://example.com", "output": []string{"markdown"}},
 })
 jobResult, err := client.Jobs.WaitForCompletion(ctx, job.JobID, nil)
 ```
@@ -322,7 +322,7 @@ product = client.amazon.get_product("B08N5WRWNW")
 hotels = client.booking.search(location: "Paris, France", check_in: "2026-09-10", check_out: "2026-09-14")
 
 # Async job
-job = client.jobs.create(job_type: "fetch", payload: { url: "https://example.com", output: ["markdown"] })
+job = client.jobs.create(kind: "fetch", input: { url: "https://example.com", output: ["markdown"] })
 result = client.jobs.wait_for_completion(job["job_id"])
 ```
 
@@ -385,14 +385,14 @@ Add to your `pom.xml`:
 <dependency>
     <groupId>io.github.xsronhou</groupId>
     <artifactId>scrapio-java</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 Or Gradle:
 
 ```gradle
-implementation 'io.github.xsronhou:scrapio-java:1.0.1'
+implementation 'io.github.xsronhou:scrapio-java:1.0.2'
 ```
 
 Requires Java 11 or later.
@@ -436,8 +436,8 @@ var hotels = client.booking().search(
 // Async job
 var job = client.jobs().create(
     CreateJobRequest.builder()
-        .jobType("fetch")
-        .payload(Map.of("url", "https://example.com", "output", List.of("markdown")))
+        .kind("fetch")
+        .input(Map.of("url", "https://example.com", "output", List.of("markdown")))
         .build()
 );
 var completed = client.jobs().waitForCompletion(job.jobId);
