@@ -154,6 +154,17 @@
   "footer": {
     "socials": {
       "github": "https://github.com/xsronhou/scrapio"
-    }
+    },
+    "links": [
+      {
+        "header": "Legal",
+        "items": [
+          {
+            "label": "scrapio.dev owned by SaaSphire LLC",
+            "href": "https://scrapio.dev/terms"
+          }
+        ]
+      }
+    ]
   }
 }
