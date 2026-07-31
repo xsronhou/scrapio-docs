@@ -67,6 +67,33 @@
       "name": "Agoda"
     },
     {
+      "name": "Airbnb"
+    },
+    {
+      "name": "ChatGPT"
+    },
+    {
+      "name": "Perplexity"
+    },
+    {
+      "name": "Gemini"
+    },
+    {
+      "name": "Bing"
+    },
+    {
+      "name": "Reddit"
+    },
+    {
+      "name": "TikTok"
+    },
+    {
+      "name": "Apple App Store"
+    },
+    {
+      "name": "Target"
+    },
+    {
       "name": "Monitors"
     }
   ],
@@ -533,6 +560,1676 @@
         ]
       }
     },
+    "/v1/airbnb/search": {
+      "get": {
+        "tags": [
+          "Airbnb"
+        ],
+        "summary": "Search Airbnb listings",
+        "description": "Searches Airbnb listings for a free-text location, returning structured results (name, price, rating, images, and more). Backed by Decodo's own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "searchAirbnb",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Free-text location to search, e.g. 'New York'"
+            }
+          },
+          {
+            "name": "check_in",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Check-in date (YYYY-MM-DD)",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "name": "check_out",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Check-out date (YYYY-MM-DD)",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "name": "adults",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of adult guests",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "children",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of child guests",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "infants",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of infant guests",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "pets",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of pets",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Airbnb search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirbnbSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Airbnb dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Airbnb upstream failed or returned an unparseable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Airbnb execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/airbnb/search?location=New%20York&check_in=2026-09-01&check_out=2026-09-05&adults=2\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/airbnb/listing": {
+      "get": {
+        "tags": [
+          "Airbnb"
+        ],
+        "summary": "Get Airbnb listing details",
+        "description": "Retrieves structured detail for a single Airbnb listing by numeric id (from a search result). Backed by Decodo's own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getAirbnbListing",
+        "parameters": [
+          {
+            "name": "listing_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          },
+          {
+            "name": "check_in",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Check-in date (YYYY-MM-DD)",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "name": "check_out",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Check-out date (YYYY-MM-DD)",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "name": "adults",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of adult guests",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Airbnb listing details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AirbnbListingResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid listing parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Airbnb dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested listing could not be found or parsed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Airbnb upstream failed or returned an unparseable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Airbnb execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/airbnb/listing?listing_id=1706670209492936270\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/chatgpt/prompt": {
+      "get": {
+        "tags": [
+          "ChatGPT"
+        ],
+        "summary": "Query ChatGPT",
+        "description": "Sends a prompt to ChatGPT and returns the structured response (text, Markdown, citations, and web search queries used). Backed by Decodo's own maintained `chatgpt` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "promptChatgpt",
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000,
+              "description": "The prompt sent to ChatGPT"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Activate ChatGPT's web search functionality for this prompt",
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the prompt",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured ChatGPT response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatgptPromptResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid prompt parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "ChatGPT dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "ChatGPT upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "ChatGPT execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/chatgpt/prompt?prompt=What%20are%20the%20top%20tourist%20attractions%20in%20Paris%3F&search=true\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/perplexity/prompt": {
+      "get": {
+        "tags": [
+          "Perplexity"
+        ],
+        "summary": "Query Perplexity",
+        "description": "Sends a prompt to Perplexity (which always performs a live web search) and returns the structured response: answer Markdown, suggested related queries, and cited sources. Backed by Decodo's own maintained `perplexity` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "promptPerplexity",
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000,
+              "description": "The prompt sent to Perplexity"
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the prompt",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Perplexity response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PerplexityPromptResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid prompt parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Perplexity dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Perplexity upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Perplexity execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/perplexity/prompt?prompt=Top%203%20tips%20to%20improve%20productivity%20while%20working%20from%20home\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/gemini/prompt": {
+      "get": {
+        "tags": [
+          "Gemini"
+        ],
+        "summary": "Query Gemini",
+        "description": "Sends a prompt to Gemini and returns the structured response (text, Markdown, and citations). Backed by Decodo's own maintained `gemini` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "promptGemini",
+        "parameters": [
+          {
+            "name": "prompt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000,
+              "description": "The prompt sent to Gemini"
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the prompt",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Gemini response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeminiPromptResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid prompt parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Gemini dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Gemini upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Gemini execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/gemini/prompt?prompt=Moon%20Landing\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/bing/search": {
+      "get": {
+        "tags": [
+          "Bing"
+        ],
+        "summary": "Search Bing",
+        "description": "Searches Bing and returns structured organic and paid (sponsored) results. Backed by Decodo's own maintained `bing_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "searchBing",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search query text"
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the query",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Bing web interface language",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 16
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Top-level domain to search, e.g. 'co.uk'",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 16
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Starting page number (1-100)",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "page_count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Number of result pages to fetch (1-10)",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Bing search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BingSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Bing search requires a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bing upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Bing execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/bing/search?search=laptop\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/reddit/post": {
+      "get": {
+        "tags": [
+          "Reddit"
+        ],
+        "summary": "Get a Reddit post",
+        "description": "Retrieves a Reddit post and its top-level comments. Backed by Decodo's own maintained `reddit_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getRedditPost",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "description": "Reddit post URL"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Reddit post and comments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedditPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Reddit dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested post could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Reddit upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Reddit execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/reddit/post?url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fnba%2Fcomments%2F17jrqc5%2F\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/reddit/subreddit": {
+      "get": {
+        "tags": [
+          "Reddit"
+        ],
+        "summary": "Get a subreddit's post feed",
+        "description": "Retrieves a subreddit's post feed. Accepts either `subreddit` (bare name) or a full `url`. Backed by Decodo's own maintained `reddit_subreddit` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getRedditSubreddit",
+        "parameters": [
+          {
+            "name": "subreddit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Subreddit name, e.g. 'nba' (without r/)",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Full subreddit URL",
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured subreddit post feed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedditSubredditResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing both subreddit and url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Reddit dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested subreddit could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Reddit upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Reddit execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/reddit/subreddit?subreddit=nba\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/reddit/user": {
+      "get": {
+        "tags": [
+          "Reddit"
+        ],
+        "summary": "Get a Reddit user's activity feed",
+        "description": "Retrieves a Reddit user's mixed post/comment activity feed. Accepts either `username` (bare name) or a full `url`. Backed by Decodo's own maintained `reddit_user` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getRedditUser",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Reddit username, e.g. 'spez' (without u/)",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Full user profile URL",
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Reddit user activity feed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedditUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing both username and url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Reddit dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested user could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Reddit upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Reddit execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/reddit/user?username=spez\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/tiktok/post": {
+      "get": {
+        "tags": [
+          "TikTok"
+        ],
+        "summary": "Get a TikTok post",
+        "description": "Retrieves structured metadata for a TikTok video post: description, author, engagement stats, video/cover URLs, and music. Backed by Decodo's own maintained `tiktok_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getTikTokPost",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "description": "TikTok post (video) URL"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured TikTok post details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TikTokPostResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "TikTok dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested post could not be found or parsed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "TikTok upstream failed or returned an unparseable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "TikTok execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/tiktok/post?url=https%3A%2F%2Fwww.tiktok.com%2F%40scout2015%2Fvideo%2F6718335390845095173\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/apple-app-store/app": {
+      "get": {
+        "tags": [
+          "Apple App Store"
+        ],
+        "summary": "Get an Apple App Store app listing",
+        "description": "Retrieves structured metadata for an Apple App Store app listing: name, description, price, category, rating, and developer. Backed by Decodo's own maintained `apple_app_store` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getAppleAppStoreApp",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "description": "Apple App Store app listing URL"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Apple App Store app details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppleAppStoreResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or missing url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Apple App Store dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested app could not be found or parsed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Apple App Store upstream failed or returned an unparseable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Apple App Store execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/apple-app-store/app?url=https%3A%2F%2Fapps.apple.com%2Fus%2Fapp%2Ftiktok%2Fid835599320\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/target/product": {
+      "get": {
+        "tags": [
+          "Target"
+        ],
+        "summary": "Get a Target product",
+        "description": "Retrieves structured product details from Target.com: price, brand, rating, category, images, and description. Backed by Decodo's own maintained `target_product` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "getTargetProduct",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{8}$|^\\d{10}$"
+            }
+          },
+          {
+            "name": "delivery_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Delivery method",
+              "type": "string",
+              "enum": [
+                "pickup",
+                "delivery",
+                "shipping"
+              ]
+            }
+          },
+          {
+            "name": "delivery_zip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Zip code for delivery/shipping (required with those delivery types)",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 10
+            }
+          },
+          {
+            "name": "store_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Target store ID (required for pickup)",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 4
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Target product details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product_id or delivery parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Target dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested product could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Target upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Target execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/target/product?product_id=92186007\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/target/search": {
+      "get": {
+        "tags": [
+          "Target"
+        ],
+        "summary": "Search Target.com",
+        "description": "Searches Target.com and returns structured product results. Backed by Decodo's own maintained `target_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "searchTarget",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search query text"
+            }
+          },
+          {
+            "name": "delivery_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Delivery method",
+              "type": "string",
+              "enum": [
+                "pickup",
+                "delivery",
+                "shipping"
+              ]
+            }
+          },
+          {
+            "name": "delivery_zip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Zip code for delivery/shipping (required with those delivery types)",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 10
+            }
+          },
+          {
+            "name": "store_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Target store ID (required for pickup)",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 4
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Target search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search or delivery parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Target dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Target upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Target execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/target/search?search=laptop\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/fast-search": {
       "get": {
         "tags": [
@@ -750,87 +2447,6 @@
             "lang": "JavaScript",
             "label": "Node.js",
             "source": "const headers = { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` };\nlet status;\ndo {\n  await new Promise(r => setTimeout(r, 3000));\n  status = await fetch(\"https://api.scrapio.dev/v1/jobs/job_abc123\", { headers }).then(r => r.json());\n} while (!status.result_available && ![\"failed\",\"cancelled\"].includes(status.status));"
-          }
-        ]
-      }
-    },
-    "/v1/jobs/{id}/cancel": {
-      "post": {
-        "tags": [
-          "Jobs"
-        ],
-        "summary": "Cancel an async job",
-        "description": "Cancels an async job that hasn't finished yet. Calling this on a job that has already reached a terminal state (`completed`, `partial`, `failed`, or already `cancelled`) is a no-op: it returns `200` with the job's current status unchanged. Calling it on a job that is still `queued` or `running` marks it `cancelled` and returns `202`.",
-        "operationId": "cancelJob",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "The job identifier returned when the job was created.",
-            "schema": {
-              "type": "string",
-              "example": "job_abc123"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Job was already in a terminal state; status returned unchanged.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JobCancelResponse"
-                }
-              }
-            }
-          },
-          "202": {
-            "description": "Job was queued or running and has now been marked cancelled.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JobCancelResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Missing or invalid API key.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Job not found or expired.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "x-codeSamples": [
-          {
-            "lang": "cURL",
-            "label": "cURL",
-            "source": "curl -X POST https://api.scrapio.dev/v1/jobs/job_abc123/cancel \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
-          },
-          {
-            "lang": "Python",
-            "label": "Python",
-            "source": "import os, requests\nresp = requests.post(\n    \"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\",\n    headers={\"Authorization\": f\"Bearer {os.environ['SCRAPIO_API_KEY']}\"},\n)\nprint(resp.json()[\"status\"])"
-          },
-          {
-            "lang": "JavaScript",
-            "label": "Node.js",
-            "source": "const resp = await fetch(\"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\", {\n  method: \"POST\",\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n});\nconst { status } = await resp.json();"
           }
         ]
       }
@@ -1487,6 +3103,120 @@
             "lang": "JavaScript",
             "label": "Node.js",
             "source": "const params = new URLSearchParams({ video_id: \"dQw4w9WgXcQ\", language: \"en\" });\nconst { subtitles } = await fetch(`https://api.scrapio.dev/v1/youtube/subtitles?${params}`, {\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n}).then(r => r.json());"
+          }
+        ]
+      }
+    },
+    "/v1/youtube/channel": {
+      "get": {
+        "tags": [
+          "YouTube"
+        ],
+        "summary": "Get YouTube channel details",
+        "description": "Retrieves channel metadata (subscriber/view/video counts, description, links) and a list of recent videos for a YouTube channel handle. Backed by Decodo's own maintained `youtube_channel` Web Scraping API target, independently of whether search/video/subtitles happen to be self-hosted or Decodo-backed on this deployment. Requires a Starter plan or higher.",
+        "operationId": "getYouTubeChannel",
+        "parameters": [
+          {
+            "name": "handle",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64,
+              "pattern": "^@?[A-Za-z0-9_.-]{2,63}$",
+              "description": "YouTube channel handle, e.g. @channelname"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Max number of recent videos to include",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured YouTube channel details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YouTubeChannelResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid channel handle.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "YouTube channel requires a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "YouTube channel upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "YouTube channel execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/youtube/channel?handle=@decodo_official&limit=20\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
@@ -7376,45 +9106,6 @@
         ],
         "additionalProperties": false
       },
-      "JobCancelResponse": {
-        "type": "object",
-        "properties": {
-          "request_id": {
-            "type": "string"
-          },
-          "job_id": {
-            "type": "string"
-          },
-          "job_type": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "queued",
-              "running",
-              "completed",
-              "partial",
-              "failed",
-              "cancelled"
-            ]
-          },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "async"
-            ]
-          }
-        },
-        "required": [
-          "request_id",
-          "job_id",
-          "job_type",
-          "status",
-          "mode"
-        ],
-        "additionalProperties": false
-      },
       "FetchJobStatusResponse": {
         "type": "object",
         "properties": {
@@ -9372,6 +11063,215 @@
         ],
         "additionalProperties": false
       },
+      "YouTubeChannelQuery": {
+        "type": "object",
+        "properties": {
+          "handle": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^@?[A-Za-z0-9_.-]{2,63}$",
+            "description": "YouTube channel handle, e.g. @channelname"
+          },
+          "limit": {
+            "description": "Max number of recent videos to include",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "handle"
+        ],
+        "additionalProperties": false
+      },
+      "YouTubeChannelResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "handle": {
+                "type": "string"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "avatar_url": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "country": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "joined_date": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "subscriber_count": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "view_count": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "video_count": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "title"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "videos": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "position": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "view_count": {
+                      "type": "string"
+                    },
+                    "uploaded_at": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "position",
+                    "url",
+                    "title"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "handle",
+              "description",
+              "avatar_url",
+              "country",
+              "joined_date",
+              "subscriber_count",
+              "view_count",
+              "video_count",
+              "links",
+              "videos"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "request_id",
+          "channel"
+        ],
+        "additionalProperties": false
+      },
       "AmazonProductQuery": {
         "type": "object",
         "properties": {
@@ -10137,6 +12037,2831 @@
           "seller_summary",
           "offers",
           "url"
+        ],
+        "additionalProperties": false
+      },
+      "AirbnbSearchQuery": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Free-text location to search, e.g. 'New York'"
+          },
+          "check_in": {
+            "description": "Check-in date (YYYY-MM-DD)",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "check_out": {
+            "description": "Check-out date (YYYY-MM-DD)",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "adults": {
+            "description": "Number of adult guests",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "children": {
+            "description": "Number of child guests",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "infants": {
+            "description": "Number of infant guests",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "pets": {
+            "description": "Number of pets",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "additionalProperties": false
+      },
+      "AirbnbSearchResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "airbnb"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "search"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string"
+          },
+          "query_context": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "check_in": {
+                "type": "string"
+              },
+              "check_out": {
+                "type": "string"
+              },
+              "adults": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "infants": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "pets": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "additionalProperties": false
+          },
+          "meta_data": {
+            "type": "object",
+            "properties": {
+              "number_of_results": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "number_of_results"
+            ],
+            "additionalProperties": false
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "room_type": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "rating": {
+                  "type": "object",
+                  "properties": {
+                    "average": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "review_count": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "label": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "average",
+                    "review_count",
+                    "label"
+                  ],
+                  "additionalProperties": false
+                },
+                "price": {
+                  "type": "object",
+                  "properties": {
+                    "display": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "qualifier": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "accessibility_label": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "display",
+                    "qualifier",
+                    "accessibility_label"
+                  ],
+                  "additionalProperties": false
+                },
+                "badges": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "images": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "location": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "latitude": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "longitude": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "city",
+                    "latitude",
+                    "longitude"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "room_type",
+                "url",
+                "rating",
+                "price",
+                "badges",
+                "images",
+                "location"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "query_context",
+          "meta_data",
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "AirbnbListingQuery": {
+        "type": "object",
+        "properties": {
+          "listing_id": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "check_in": {
+            "description": "Check-in date (YYYY-MM-DD)",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "check_out": {
+            "description": "Check-out date (YYYY-MM-DD)",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "adults": {
+            "description": "Number of adult guests",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "listing_id"
+        ],
+        "additionalProperties": false
+      },
+      "AirbnbListingResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "airbnb"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "listing"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string"
+          },
+          "listing": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "property_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "space_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "overview": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "items"
+                ],
+                "additionalProperties": false
+              },
+              "person_capacity": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rating": {
+                "type": "object",
+                "properties": {
+                  "average": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "review_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "label": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "average",
+                  "review_count",
+                  "label"
+                ],
+                "additionalProperties": false
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "latitude": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "longitude": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "city",
+                  "latitude",
+                  "longitude"
+                ],
+                "additionalProperties": false
+              },
+              "host": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "is_superhost": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "years_hosting": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "is_superhost",
+                  "years_hosting"
+                ],
+                "additionalProperties": false
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "property_type",
+              "space_type",
+              "overview",
+              "person_capacity",
+              "rating",
+              "location",
+              "host",
+              "images",
+              "url"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "listing"
+        ],
+        "additionalProperties": false
+      },
+      "ChatgptPromptQuery": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000,
+            "description": "The prompt sent to ChatGPT"
+          },
+          "search": {
+            "description": "Activate ChatGPT's web search functionality for this prompt",
+            "type": "boolean"
+          },
+          "geo": {
+            "description": "Country to use when submitting the prompt",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "ChatgptPromptResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "chatgpt"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "response_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "markdown_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "search_queries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "url",
+                "text",
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "prompt",
+          "model",
+          "response_text",
+          "markdown_text",
+          "search_queries",
+          "citations"
+        ],
+        "additionalProperties": false
+      },
+      "PerplexityPromptQuery": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000,
+            "description": "The prompt sent to Perplexity"
+          },
+          "geo": {
+            "description": "Country to use when submitting the prompt",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "PerplexityPromptResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "perplexity"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "answer_markdown": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "related_queries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "source": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "url",
+                "title",
+                "source"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "prompt",
+          "model",
+          "answer_markdown",
+          "related_queries",
+          "sources"
+        ],
+        "additionalProperties": false
+      },
+      "GeminiPromptQuery": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000,
+            "description": "The prompt sent to Gemini"
+          },
+          "geo": {
+            "description": "Country to use when submitting the prompt",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "GeminiPromptResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "gemini"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "response_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "markdown_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "url",
+                "text",
+                "title",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "prompt",
+          "model",
+          "response_text",
+          "markdown_text",
+          "citations"
+        ],
+        "additionalProperties": false
+      },
+      "BingSearchQuery": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Search query text"
+          },
+          "geo": {
+            "description": "Country to use when submitting the query",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          },
+          "locale": {
+            "description": "Bing web interface language",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 16
+          },
+          "domain": {
+            "description": "Top-level domain to search, e.g. 'co.uk'",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 16
+          },
+          "page": {
+            "description": "Starting page number (1-100)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "page_count": {
+            "description": "Number of result pages to fetch (1-10)",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "search"
+        ],
+        "additionalProperties": false
+      },
+      "BingSearchResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "bing"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "query_context": {
+            "type": "object",
+            "properties": {
+              "search": {
+                "type": "string"
+              },
+              "geo": {
+                "type": "string"
+              },
+              "locale": {
+                "type": "string"
+              },
+              "domain": {
+                "type": "string"
+              },
+              "page": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "search"
+            ],
+            "additionalProperties": false
+          },
+          "meta_data": {
+            "type": "object",
+            "properties": {
+              "page": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "page",
+              "url"
+            ],
+            "additionalProperties": false
+          },
+          "organic_results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "position": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "position_overall": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "url_shown": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "position",
+                "position_overall",
+                "title",
+                "description",
+                "url",
+                "url_shown"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "paid_results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "position": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "position_overall": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "url_shown": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "position",
+                "position_overall",
+                "title",
+                "description",
+                "url",
+                "url_shown"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "query_context",
+          "meta_data",
+          "organic_results",
+          "paid_results"
+        ],
+        "additionalProperties": false
+      },
+      "RedditPostQuery": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Reddit post URL"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "RedditPostResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "reddit"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "post": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "author": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "subreddit": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "subreddit_prefixed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "selftext": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "permalink": {
+                "type": "string",
+                "format": "uri"
+              },
+              "score": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "upvote_ratio": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "num_comments": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "created_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "over_18": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "is_video": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "thumbnail": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "flair": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "awards_count": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "author",
+              "subreddit",
+              "subreddit_prefixed",
+              "selftext",
+              "url",
+              "permalink",
+              "score",
+              "upvote_ratio",
+              "num_comments",
+              "created_at",
+              "over_18",
+              "is_video",
+              "thumbnail",
+              "flair",
+              "awards_count"
+            ],
+            "additionalProperties": false
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "body": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "score": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "created_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "permalink": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "parent_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "link_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "author",
+                "body",
+                "score",
+                "created_at",
+                "permalink",
+                "parent_id",
+                "link_id"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "post",
+          "comments"
+        ],
+        "additionalProperties": false
+      },
+      "RedditSubredditQuery": {
+        "type": "object",
+        "properties": {
+          "subreddit": {
+            "description": "Subreddit name, e.g. 'nba' (without r/)",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "url": {
+            "description": "Full subreddit URL",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RedditSubredditResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "reddit"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "subreddit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "subreddit": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "subreddit_prefixed": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "selftext": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "permalink": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "score": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "upvote_ratio": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "num_comments": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "created_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "over_18": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "is_video": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "thumbnail": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "flair": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "awards_count": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "author",
+                "subreddit",
+                "subreddit_prefixed",
+                "selftext",
+                "url",
+                "permalink",
+                "score",
+                "upvote_ratio",
+                "num_comments",
+                "created_at",
+                "over_18",
+                "is_video",
+                "thumbnail",
+                "flair",
+                "awards_count"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "subreddit",
+          "posts"
+        ],
+        "additionalProperties": false
+      },
+      "RedditUserQuery": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "description": "Reddit username, e.g. 'spez' (without u/)",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "url": {
+            "description": "Full user profile URL",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RedditUserResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "reddit"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "post",
+                    "comment"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "permalink": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "score": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "created_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "subreddit": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "body": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "kind",
+                "id",
+                "author",
+                "permalink",
+                "score",
+                "created_at",
+                "title",
+                "subreddit",
+                "body"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "username",
+          "items"
+        ],
+        "additionalProperties": false
+      },
+      "TikTokPostQuery": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "TikTok post (video) URL"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "TikTokPostResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "tiktok"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "post": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "created_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "duration_seconds": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "author": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nickname": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "avatar_url": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "username",
+                  "nickname",
+                  "avatar_url"
+                ],
+                "additionalProperties": false
+              },
+              "stats": {
+                "type": "object",
+                "properties": {
+                  "likes": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "comments": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "shares": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "plays": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "collects": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "likes",
+                  "comments",
+                  "shares",
+                  "plays",
+                  "collects"
+                ],
+                "additionalProperties": false
+              },
+              "video": {
+                "type": "object",
+                "properties": {
+                  "cover_url": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "play_url": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "cover_url",
+                  "play_url"
+                ],
+                "additionalProperties": false
+              },
+              "music": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "author": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "title",
+                  "author"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "description",
+              "created_at",
+              "duration_seconds",
+              "author",
+              "stats",
+              "video",
+              "music"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "post"
+        ],
+        "additionalProperties": false
+      },
+      "AppleAppStoreQuery": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Apple App Store app listing URL"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "AppleAppStoreResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "apple_app_store"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "app": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "image_url": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "price": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "currency": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "category": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sub_category": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rating": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "value",
+                  "count"
+                ],
+                "additionalProperties": false
+              },
+              "author": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "url": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "url"
+                ],
+                "additionalProperties": false
+              },
+              "operating_system": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "available_on_device": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "url",
+              "name",
+              "description",
+              "image_url",
+              "price",
+              "currency",
+              "category",
+              "sub_category",
+              "rating",
+              "author",
+              "operating_system",
+              "available_on_device"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "app"
+        ],
+        "additionalProperties": false
+      },
+      "TargetProductQuery": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "string",
+            "pattern": "^\\d{8}$|^\\d{10}$"
+          },
+          "delivery_type": {
+            "description": "Delivery method",
+            "type": "string",
+            "enum": [
+              "pickup",
+              "delivery",
+              "shipping"
+            ]
+          },
+          "delivery_zip": {
+            "description": "Zip code for delivery/shipping (required with those delivery types)",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10
+          },
+          "store_id": {
+            "description": "Target store ID (required for pickup)",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 4
+          }
+        },
+        "required": [
+          "product_id"
+        ],
+        "additionalProperties": false
+      },
+      "TargetProductResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "target"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "brand": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "url": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "url"
+                ],
+                "additionalProperties": false
+              },
+              "price": {
+                "type": "object",
+                "properties": {
+                  "current": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "discounted": {
+                    "anyOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "current",
+                  "discounted"
+                ],
+                "additionalProperties": false
+              },
+              "currency": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "in_stock": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "rating": {
+                "type": "object",
+                "properties": {
+                  "count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "score": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "count",
+                  "score"
+                ],
+                "additionalProperties": false
+              },
+              "category": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "path": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "path"
+                ],
+                "additionalProperties": false
+              },
+              "images": {
+                "type": "object",
+                "properties": {
+                  "main": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "alternate": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "main",
+                  "alternate"
+                ],
+                "additionalProperties": false
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "title",
+              "brand",
+              "price",
+              "currency",
+              "in_stock",
+              "rating",
+              "category",
+              "images",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "product"
+        ],
+        "additionalProperties": false
+      },
+      "TargetSearchQuery": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Search query text"
+          },
+          "delivery_type": {
+            "description": "Delivery method",
+            "type": "string",
+            "enum": [
+              "pickup",
+              "delivery",
+              "shipping"
+            ]
+          },
+          "delivery_zip": {
+            "description": "Zip code for delivery/shipping (required with those delivery types)",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10
+          },
+          "store_id": {
+            "description": "Target store ID (required for pickup)",
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 4
+          }
+        },
+        "required": [
+          "search"
+        ],
+        "additionalProperties": false
+      },
+      "TargetSearchResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "target"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "query_context": {
+            "type": "object",
+            "properties": {
+              "search": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "search"
+            ],
+            "additionalProperties": false
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "brand_name": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "brand_url": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "price": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "comparison_price": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "currency": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rating": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "score": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "score"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "product_id",
+                "url",
+                "title",
+                "brand_name",
+                "brand_url",
+                "price",
+                "comparison_price",
+                "currency",
+                "rating"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "query_context",
+          "results"
         ],
         "additionalProperties": false
       },

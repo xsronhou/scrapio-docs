@@ -52,9 +52,16 @@
               "api-reference/youtube/search",
               "api-reference/youtube/search-crawl",
               "api-reference/youtube/video",
-              "api-reference/youtube/subtitles"
+              "api-reference/youtube/subtitles",
+              "api-reference/youtube/channel"
             ]
           },
+          "api-reference/bing",
+          "api-reference/chatgpt",
+          "api-reference/perplexity",
+          "api-reference/gemini",
+          "api-reference/tiktok",
+          "api-reference/apple-app-store",
           {
             "group": "Jobs",
             "pages": [
@@ -84,6 +91,14 @@
             ]
           },
           {
+            "group": "Target",
+            "pages": [
+              "api-reference/target",
+              "api-reference/target/product",
+              "api-reference/target/search"
+            ]
+          },
+          {
             "group": "Booking.com",
             "pages": [
               "api-reference/booking",
@@ -105,6 +120,23 @@
             ]
           },
           "api-reference/hotel-monitors",
+          {
+            "group": "Airbnb",
+            "pages": [
+              "api-reference/airbnb",
+              "api-reference/airbnb/search",
+              "api-reference/airbnb/listing"
+            ]
+          },
+          {
+            "group": "Reddit",
+            "pages": [
+              "api-reference/reddit",
+              "api-reference/reddit/post",
+              "api-reference/reddit/subreddit",
+              "api-reference/reddit/user"
+            ]
+          },
           {
             "group": "Monitors",
             "pages": [

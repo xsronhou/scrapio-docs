@@ -1,0 +1,14 @@
+---
+title: Reddit
+description: Fetch a Reddit post with comments, a subreddit's post feed, or a user's activity feed.
+---
+
+<Note>
+  Reddit endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/reddit/post` — Fetch a Reddit post and its top-level comments.
+- `GET /v1/reddit/subreddit` — Fetch a subreddit's current post feed.
+- `GET /v1/reddit/user` — Fetch a user's mixed post/comment activity feed.
