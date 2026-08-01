@@ -9,7 +9,7 @@ Every successful inline response includes a `usage` field:
 
 ```json
 {
-  "usage": { "credits": 2 }
+  "usage": { "credits": 5 }
 }
 ```
 
@@ -22,12 +22,12 @@ Use the credit table in [Rate Limits & Credits](/rate-limits) to estimate costs 
 A quick formula for crawls:
 
 ```
-estimated_credits = max_pages × 1
+estimated_credits = max_pages × 2
 ```
 
-Crawl bills a flat 1 credit per page regardless of extraction — `render_js` isn't a Crawl parameter, and adding `extract` doesn't change the per-page cost.
+Crawl bills a flat 2 credits per page regardless of extraction — `render_js` isn't a Crawl parameter, and adding `extract` doesn't change the per-page cost.
 
-For a plain Fetch call, credits are 1 for a static request or 2 with `render_js: true` — but once `extract` is set (any mode), the cost becomes a flat 5 credits if extraction runs through the LLM, or 2 credits otherwise, independent of `render_js`.
+For a plain Fetch call, credits are 1 for a static request or 5 with `render_js: true` — but once `extract` is set (any mode), the cost becomes a flat 5 credits if extraction runs through the LLM, or 2 credits otherwise, independent of `render_js`.
 
 ## Balance exhaustion behaviour
 
@@ -42,7 +42,7 @@ You can monitor usage through:
 
 ## Reducing credit usage
 
-- Use `render_js: false` when pages don't need JavaScript (saves 1 credit per fetch — only applies when `extract` isn't set; extraction cost is flat regardless of `render_js`).
+- Use `render_js: false` when pages don't need JavaScript (saves 4 credits per fetch — only applies when `extract` isn't set; extraction cost is flat regardless of `render_js`).
 - Use `mode: "selectors"` or `engine: "heuristic"` extraction instead of the LLM where the DOM is stable (saves 3 credits per fetch: 2 instead of 5).
 - Set a tight `max_pages` on crawls to avoid over-crawling.
 - Use `same_domain_only: true` (the default) to prevent the crawler from following external links.
