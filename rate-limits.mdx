@@ -13,11 +13,14 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 
 | Surface | Credits per call | Notes |
 |---------|-----------------|-------|
-| Fetch (no JS) | 1 | Static HTML fetch |
-| Fetch (JS rendering) | 5 | `render_js: true` |
+| Fetch (no JS) | 1 | Static HTML fetch, direct/stealth access tier |
+| Fetch (JS rendering) | 5 | `render_js: true`, direct/stealth access tier |
 | Fetch + extract | 2 or 5 | Flat 5 if extraction runs through the LLM, flat 2 otherwise — independent of `render_js` |
-| Crawl | 2 per page crawled | Charged per page, not per job |
-| Interact | 3 | Per interaction session |
+| Fetch — datacenter proxy surcharge | +10 | Added on top of the base Fetch price only when your request actually escalates to a datacenter proxy to succeed. Paid plans only. |
+| Fetch — residential proxy surcharge | +65 | Added on top of the base Fetch price only when your request needs a residential proxy — typically hardened, anti-bot-defended targets. Paid plans only. |
+| Crawl | 2 per page crawled | Charged per page, not per job. Subject to the same proxy-tier surcharge as Fetch below |
+| Map | 2 per URL mapped | Same base price and surcharge behavior as Crawl (billed under the `crawl` surface) |
+| Interact | 3 | Per interaction session. Not subject to the proxy-tier surcharge below |
 | Search (no fetch) | 15 | Google SERP only |
 | Search + fetch results | 15 + normal Fetch cost (1 or 5) per fetched result | Each result is fetched via the standard Fetch surface, not a flat +1 |
 | Fast Search | 15 | Organic results only, no HTML capture. Requires a Starter plan or higher |
@@ -34,6 +37,33 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 
 `GET /v1/walmart/product` is temporarily disabled while we work on reliability for individual Walmart product pages. Search and search/crawl are unaffected.
 
+### Proxy-tier surcharge on Fetch, Crawl, and Map
+
+`Fetch`, `Crawl`, and `Map` all escalate through an access-tier ladder automatically — direct HTTP, stealth browser, then proxy tiers if needed — to get past anti-bot defenses. Each surface's base credit price only covers the direct/stealth tiers. If a specific request (or, for Crawl/Map, a specific page/URL) needs a proxy to succeed, a surcharge is added on top, billed off whichever tier actually served that request, not a flat rate applied to every call:
+
+- **+10 credits** if the request needed a datacenter proxy.
+- **+65 credits** if the request needed a residential proxy (typically hardened, anti-bot-defended targets like sites behind PerimeterX-class defenses).
+
+Most requests never touch a proxy tier and are billed at the base price only. For Crawl/Map, the surcharge applies per page/URL — a 10-page crawl where 2 pages needed residential proxy bills `8 × 2 + 2 × (2 + 65) = 150` credits, not a flat `10 × 2 = 20`. `Interact` is billed at its flat per-session price regardless of access tier and is not affected by this surcharge.
+
+### `use_proxy`: skip straight to the strongest tier
+
+`Fetch`, `Crawl`, `Map`, and `Interact` all accept an optional `use_proxy: true` field. By default these surfaces escalate through the access-tier ladder automatically, cheapest tier first, only advancing when a cheaper tier gets blocked. If you already know a target needs the strongest tier — e.g. you're hitting a hardened site and expect to be blocked on anything cheaper — setting `use_proxy: true` skips the wasted cheap-tier attempts and goes straight there, which also reduces the chance of hitting `timeout_ms` mid-escalation on a tight budget.
+
+`use_proxy` requires a paid plan (Starter or higher) and returns `402 plan_upgrade_required` immediately if set on the Free plan, since Free never reaches that tier regardless. Billing is unaffected by the flag itself — you're still billed by whichever tier the request actually lands on (see the surcharge table above), not a separate rate for using `use_proxy`.
+
+### Crawl and Map auto-promote to an async job on large requests
+
+`Crawl` and `Map` normally run synchronously, fetching every page within the same HTTP request/response. If your request is large enough that it would plausibly exceed the tenant's inline execution budget — `max_pages`/`max_urls` above the surface's own default (25 for Crawl, 100 for Map), or an explicit `timeout_ms` above your plan's inline timeout — the API automatically queues it as an async job instead of holding the connection open, and responds the same way `POST /v1/jobs` does:
+
+```json
+{ "request_id": "...", "mode": "async", "status": "queued", "job_id": "...", "reason": "..." }
+```
+
+Poll `GET /v1/jobs/{job_id}` for the result, same as any other async job. Small/default requests are unaffected and stay synchronous — you can also opt into async explicitly at any size via `POST /v1/jobs` with `{ "kind": "crawl" | "map", "input": {...} }`.
+
+If a request times out before the ladder would have reached its strongest tier, the `504 timeout` error includes a hint suggesting `use_proxy` or a higher `timeout_ms`, unless the request already had `use_proxy` set or is on the Free plan (where the hint wouldn't apply).
+
 ## Plan limits
 
 | Plan | Monthly credits | Notes |
@@ -46,9 +76,9 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 
 Credits do not roll over on any plan — unused credits expire at the end of the billing cycle.
 
-### Free plan does not include proxy access
+### Free plan does not include proxy or Camoufox access
 
-The Free plan never routes requests through a datacenter or residential proxy — only direct HTTP and stealth-browser access. Most targets work fine without a proxy, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
+The Free plan never routes requests through a datacenter or residential proxy, and never through our hardened Camoufox browser — only direct HTTP and stealth-browser access. Most targets work fine without either, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
 
 ### Amazon, Walmart, Booking.com, Agoda, YouTube, and Fast Search require a paid plan
 
