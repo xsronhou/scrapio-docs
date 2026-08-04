@@ -566,7 +566,7 @@
           "Airbnb"
         ],
         "summary": "Search Airbnb listings",
-        "description": "Searches Airbnb listings for a free-text location, returning structured results (name, price, rating, images, and more). Backed by Decodo's own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Airbnb listings for a free-text location, returning structured results (name, price, rating, images, and more). Backed by our own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchAirbnb",
         "parameters": [
           {
@@ -731,7 +731,7 @@
           "Airbnb"
         ],
         "summary": "Get Airbnb listing details",
-        "description": "Retrieves structured detail for a single Airbnb listing by numeric id (from a search result). Backed by Decodo's own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured detail for a single Airbnb listing by numeric id (from a search result). Backed by our own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getAirbnbListing",
         "parameters": [
           {
@@ -872,7 +872,7 @@
           "ChatGPT"
         ],
         "summary": "Query ChatGPT",
-        "description": "Sends a prompt to ChatGPT and returns the structured response (text, Markdown, citations, and web search queries used). Backed by Decodo's own maintained `chatgpt` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to ChatGPT and returns the structured response (text, Markdown, citations, and web search queries used). Backed by our own maintained `chatgpt` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptChatgpt",
         "parameters": [
           {
@@ -949,7 +949,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -994,7 +994,7 @@
           "Perplexity"
         ],
         "summary": "Query Perplexity",
-        "description": "Sends a prompt to Perplexity (which always performs a live web search) and returns the structured response: answer Markdown, suggested related queries, and cited sources. Backed by Decodo's own maintained `perplexity` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to Perplexity (which always performs a live web search) and returns the structured response: answer Markdown, suggested related queries, and cited sources. Backed by our own maintained `perplexity` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptPerplexity",
         "parameters": [
           {
@@ -1062,7 +1062,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1107,7 +1107,7 @@
           "Gemini"
         ],
         "summary": "Query Gemini",
-        "description": "Sends a prompt to Gemini and returns the structured response (text, Markdown, and citations). Backed by Decodo's own maintained `gemini` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to Gemini and returns the structured response (text, Markdown, and citations). Backed by our own maintained `gemini` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptGemini",
         "parameters": [
           {
@@ -1175,7 +1175,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1220,7 +1220,7 @@
           "Bing"
         ],
         "summary": "Search Bing",
-        "description": "Searches Bing and returns structured organic and paid (sponsored) results. Backed by Decodo's own maintained `bing_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Bing and returns structured organic and paid (sponsored) results. Backed by our own maintained `bing_search` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchBing",
         "parameters": [
           {
@@ -1331,7 +1331,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1376,7 +1376,7 @@
           "Reddit"
         ],
         "summary": "Get a Reddit post",
-        "description": "Retrieves a Reddit post and its top-level comments. Backed by Decodo's own maintained `reddit_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a Reddit post and its top-level comments. Backed by our own maintained `reddit_post` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditPost",
         "parameters": [
           {
@@ -1442,7 +1442,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1487,7 +1487,7 @@
           "Reddit"
         ],
         "summary": "Get a subreddit's post feed",
-        "description": "Retrieves a subreddit's post feed. Accepts either `subreddit` (bare name) or a full `url`. Backed by Decodo's own maintained `reddit_subreddit` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a subreddit's post feed. Accepts either `subreddit` (bare name) or a full `url`. Backed by our own maintained `reddit_subreddit` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditSubreddit",
         "parameters": [
           {
@@ -1564,7 +1564,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1609,7 +1609,7 @@
           "Reddit"
         ],
         "summary": "Get a Reddit user's activity feed",
-        "description": "Retrieves a Reddit user's mixed post/comment activity feed. Accepts either `username` (bare name) or a full `url`. Backed by Decodo's own maintained `reddit_user` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a Reddit user's mixed post/comment activity feed. Accepts either `username` (bare name) or a full `url`. Backed by our own maintained `reddit_user` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditUser",
         "parameters": [
           {
@@ -1686,7 +1686,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1731,7 +1731,7 @@
           "TikTok"
         ],
         "summary": "Get a TikTok post",
-        "description": "Retrieves structured metadata for a TikTok video post: description, author, engagement stats, video/cover URLs, and music. Backed by Decodo's own maintained `tiktok_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured metadata for a TikTok video post: description, author, engagement stats, video/cover URLs, and music. Backed by our own maintained `tiktok_post` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getTikTokPost",
         "parameters": [
           {
@@ -1797,7 +1797,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1842,7 +1842,7 @@
           "Apple App Store"
         ],
         "summary": "Get an Apple App Store app listing",
-        "description": "Retrieves structured metadata for an Apple App Store app listing: name, description, price, category, rating, and developer. Backed by Decodo's own maintained `apple_app_store` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured metadata for an Apple App Store app listing: name, description, price, category, rating, and developer. Backed by our own maintained `apple_app_store` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getAppleAppStoreApp",
         "parameters": [
           {
@@ -1908,7 +1908,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1953,7 +1953,7 @@
           "Target"
         ],
         "summary": "Get a Target product",
-        "description": "Retrieves structured product details from Target.com: price, brand, rating, category, images, and description. Backed by Decodo's own maintained `target_product` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured product details from Target.com: price, brand, rating, category, images, and description. Backed by our own maintained `target_product` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getTargetProduct",
         "parameters": [
           {
@@ -2065,7 +2065,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2110,7 +2110,7 @@
           "Target"
         ],
         "summary": "Search Target.com",
-        "description": "Searches Target.com and returns structured product results. Backed by Decodo's own maintained `target_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Target.com and returns structured product results. Backed by our own maintained `target_search` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchTarget",
         "parameters": [
           {
@@ -2213,7 +2213,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2363,7 +2363,7 @@
             }
           },
           "502": {
-            "description": "Decodo blocked or failed the request.",
+            "description": "Upstream provider blocked or failed the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3135,7 +3135,7 @@
           "YouTube"
         ],
         "summary": "Get YouTube channel details",
-        "description": "Retrieves channel metadata (subscriber/view/video counts, description, links) and a list of recent videos for a YouTube channel handle. Backed by Decodo's own maintained `youtube_channel` Web Scraping API target, independently of whether search/video/subtitles happen to be self-hosted or Decodo-backed on this deployment. Requires a Starter plan or higher.",
+        "description": "Retrieves channel metadata (subscriber/view/video counts, description, links) and a list of recent videos for a YouTube channel handle. Backed by our own maintained `youtube_channel` Web Scraping API target, independently of whether search/video/subtitles happen to be self-hosted or provider-backed on this deployment. Requires a Starter plan or higher.",
         "operationId": "getYouTubeChannel",
         "parameters": [
           {
@@ -3204,7 +3204,7 @@
             }
           },
           "429": {
-            "description": "Daily credit cap exceeded, or Decodo rate-limited the request.",
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3238,7 +3238,7 @@
           {
             "lang": "cURL",
             "label": "cURL",
-            "source": "curl \"https://api.scrapio.dev/v1/youtube/channel?handle=@decodo_official&limit=20\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+            "source": "curl \"https://api.scrapio.dev/v1/youtube/channel?handle=@scrapio&limit=20\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
