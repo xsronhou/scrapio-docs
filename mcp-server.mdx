@@ -3,7 +3,7 @@ title: MCP Server
 description: Use the Scrapio from Claude, Cursor, Windsurf, and any MCP-compatible agent.
 ---
 
-The Scrapio MCP server gives AI agents direct access to the full web data surface through a single registered server — fetch, crawl, Google and Fast Search, YouTube, Amazon and Walmart product data, Booking.com and Agoda hotel data, browser automation, and async jobs.
+The Scrapio MCP server gives AI agents direct access to the full web data surface through a single registered server — fetch, crawl, Google and Fast Search, YouTube, Amazon and Walmart product data, Booking.com and Agoda hotel data, Airbnb and Target listings, Reddit, TikTok, and Apple App Store data, Bing search, ChatGPT/Perplexity/Gemini prompting, browser automation, and async jobs.
 
 Also listed on the official [MCP registry](https://registry.modelcontextprotocol.io) as `io.github.xsronhou/scrapio-mcp`.
 
@@ -87,6 +87,20 @@ The server starts on stdio by default and is ready to accept connections from yo
 | `agoda_search` | Search Agoda for hotels by location and stay dates. Requires a Starter plan or higher. |
 | `agoda_property` | Get structured details — amenities, room rates, review score — for a single Agoda property. Requires a Starter plan or higher. |
 | `agoda_reviews` | Get guest reviews and the score breakdown for an Agoda property. Requires a Starter plan or higher. |
+| `airbnb_search` | Search Airbnb listings for a free-text location. Requires a Starter plan or higher. |
+| `airbnb_listing` | Get structured detail for a single Airbnb listing by id. Requires a Starter plan or higher. |
+| `target_search` | Search Target.com and return structured product results. Requires a Starter plan or higher. |
+| `target_product` | Get structured product details from Target.com. Requires a Starter plan or higher. |
+| `reddit_post` | Get a Reddit post and its top-level comments. Requires a Starter plan or higher. |
+| `reddit_subreddit` | Get a subreddit's post feed. Requires a Starter plan or higher. |
+| `reddit_user` | Get a Reddit user's mixed post/comment activity feed. Requires a Starter plan or higher. |
+| `tiktok_post` | Get structured metadata for a TikTok video post. Requires a Starter plan or higher. |
+| `apple_app_store_app` | Get structured metadata for an Apple App Store app listing. Requires a Starter plan or higher. |
+| `bing_search` | Search Bing and return structured organic and paid results. Requires a Starter plan or higher. |
+| `chatgpt_prompt` | Send a prompt to ChatGPT and return the structured response, including citations. Requires a Starter plan or higher. |
+| `perplexity_prompt` | Send a prompt to Perplexity and return the structured, web-search-grounded response. Requires a Starter plan or higher. |
+| `gemini_prompt` | Send a prompt to Gemini and return the structured response, including citations. Requires a Starter plan or higher. |
+| `youtube_channel` | Get channel metadata and recent videos for a YouTube channel handle. Requires a Starter plan or higher. |
 
 ## Example prompts
 
