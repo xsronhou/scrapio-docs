@@ -83,9 +83,9 @@ If a request times out before the ladder would have reached its strongest tier, 
 
 Credits do not roll over on any plan — unused credits expire at the end of the billing cycle.
 
-### Free plan does not include proxy or Camoufox access
+### Free plan does not include proxy access
 
-The Free plan never routes requests through our residential proxy, and never through our hardened Camoufox browser — only direct HTTP and stealth-browser access. Most targets work fine without either, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
+The Free plan never routes requests through a datacenter or residential proxy — only direct HTTP and stealth-browser access. Most targets work fine without either, but sites with stronger anti-bot defenses may block Free-plan requests that would succeed on a paid plan. When this happens, the API returns `free_plan_proxy_required` (see [Error Reference](/errors)) instead of a generic block, so you know upgrading is the fix rather than retrying.
 
 ### Dedicated APIs and Fast Search require a paid plan
 

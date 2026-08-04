@@ -7717,7 +7717,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
             "type": "boolean"
           }
         },
@@ -8116,7 +8116,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
                     "type": "boolean"
                   }
                 },
@@ -8550,7 +8550,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -9002,7 +9002,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every page crawled. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every page crawled. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -9082,7 +9082,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every URL mapped. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every URL mapped. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -16472,7 +16472,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every page crawled. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every page crawled. Requires a paid plan.",
             "type": "boolean"
           }
         },
@@ -16520,7 +16520,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every URL mapped. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every URL mapped. Requires a paid plan.",
             "type": "boolean"
           }
         },
@@ -16922,7 +16922,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan.",
             "type": "boolean"
           }
         },
