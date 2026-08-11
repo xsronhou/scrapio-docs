@@ -566,7 +566,7 @@
           "Airbnb"
         ],
         "summary": "Search Airbnb listings",
-        "description": "Searches Airbnb listings for a free-text location, returning structured results (name, price, rating, images, and more). Backed by our own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Airbnb listings for a free-text location, returning structured results (name, price, rating, images, and more). Backed by a maintained third-party `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchAirbnb",
         "parameters": [
           {
@@ -731,7 +731,7 @@
           "Airbnb"
         ],
         "summary": "Get Airbnb listing details",
-        "description": "Retrieves structured detail for a single Airbnb listing by numeric id (from a search result). Backed by our own maintained `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured detail for a single Airbnb listing by numeric id (from a search result). Backed by a maintained third-party `airbnb` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getAirbnbListing",
         "parameters": [
           {
@@ -872,7 +872,7 @@
           "ChatGPT"
         ],
         "summary": "Query ChatGPT",
-        "description": "Sends a prompt to ChatGPT and returns the structured response (text, Markdown, citations, and web search queries used). Backed by our own maintained `chatgpt` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to ChatGPT and returns the structured response (text, Markdown, citations, and web search queries used). Backed by a maintained third-party `chatgpt` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptChatgpt",
         "parameters": [
           {
@@ -994,7 +994,7 @@
           "Perplexity"
         ],
         "summary": "Query Perplexity",
-        "description": "Sends a prompt to Perplexity (which always performs a live web search) and returns the structured response: answer Markdown, suggested related queries, and cited sources. Backed by our own maintained `perplexity` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to Perplexity (which always performs a live web search) and returns the structured response: answer Markdown, suggested related queries, and cited sources. Backed by a maintained third-party `perplexity` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptPerplexity",
         "parameters": [
           {
@@ -1107,7 +1107,7 @@
           "Gemini"
         ],
         "summary": "Query Gemini",
-        "description": "Sends a prompt to Gemini and returns the structured response (text, Markdown, and citations). Backed by our own maintained `gemini` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Sends a prompt to Gemini and returns the structured response (text, Markdown, and citations). Backed by a maintained third-party `gemini` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "promptGemini",
         "parameters": [
           {
@@ -1220,7 +1220,7 @@
           "Bing"
         ],
         "summary": "Search Bing",
-        "description": "Searches Bing and returns structured organic and paid (sponsored) results. Backed by our own maintained `bing_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Bing and returns structured organic and paid (sponsored) results. Backed by a maintained third-party `bing_search` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchBing",
         "parameters": [
           {
@@ -1376,7 +1376,7 @@
           "Reddit"
         ],
         "summary": "Get a Reddit post",
-        "description": "Retrieves a Reddit post and its top-level comments. Backed by our own maintained `reddit_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a Reddit post and its top-level comments. Backed by a maintained third-party `reddit_post` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditPost",
         "parameters": [
           {
@@ -1487,7 +1487,7 @@
           "Reddit"
         ],
         "summary": "Get a subreddit's post feed",
-        "description": "Retrieves a subreddit's post feed. Accepts either `subreddit` (bare name) or a full `url`. Backed by our own maintained `reddit_subreddit` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a subreddit's post feed. Accepts either `subreddit` (bare name) or a full `url`. Backed by a maintained third-party `reddit_subreddit` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditSubreddit",
         "parameters": [
           {
@@ -1609,7 +1609,7 @@
           "Reddit"
         ],
         "summary": "Get a Reddit user's activity feed",
-        "description": "Retrieves a Reddit user's mixed post/comment activity feed. Accepts either `username` (bare name) or a full `url`. Backed by our own maintained `reddit_user` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves a Reddit user's mixed post/comment activity feed. Accepts either `username` (bare name) or a full `url`. Backed by a maintained third-party `reddit_user` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getRedditUser",
         "parameters": [
           {
@@ -1725,13 +1725,420 @@
         ]
       }
     },
+    "/v1/product-hunt/leaderboard": {
+      "get": {
+        "tags": [
+          "Product Hunt"
+        ],
+        "summary": "Get the Product Hunt leaderboard",
+        "description": "Retrieves the Product Hunt leaderboard for a given period. Plain render returns the first ~19 products; pass `full_list=true` to scroll and load the complete list (extra cost). Self-hosted extraction behind a Cloudflare bypass. Requires a Starter plan or higher.",
+        "operationId": "getProductHuntLeaderboard",
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Leaderboard window (default daily)",
+              "type": "string",
+              "enum": [
+                "daily",
+                "weekly",
+                "monthly"
+              ]
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Date the leaderboard is anchored to (YYYY-MM-DD, daily/weekly only). Defaults to today.",
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Topic slug to filter by, e.g. 'artificial-intelligence'",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "full_list",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Scroll to load the full list instead of just the first ~19 products (default false, extra cost)",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "true",
+                    "false"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Product Hunt leaderboard.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductHuntLeaderboardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid period, date, or category.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Product Hunt dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Product Hunt upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Product Hunt execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/product-hunt/leaderboard?period=daily\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/product-hunt/product": {
+      "get": {
+        "tags": [
+          "Product Hunt"
+        ],
+        "summary": "Get a Product Hunt product page",
+        "description": "Retrieves a Product Hunt product's launch page: tagline, topics, upvotes, makers, and optionally top-level comments. Accepts either `slug` or a full `url`. Self-hosted extraction behind a Cloudflare bypass. Requires a Starter plan or higher.",
+        "operationId": "getProductHuntProduct",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Product Hunt post slug, e.g. 'scrapio'",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Full Product Hunt product URL",
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          {
+            "name": "include_comments",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Include top-level discussion comments (default false)",
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "enum": [
+                    "true",
+                    "false"
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Product Hunt product page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductHuntProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing both slug and url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Product Hunt dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested product could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Product Hunt upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Product Hunt execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/product-hunt/product?slug=scrapio\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/product-hunt/maker": {
+      "get": {
+        "tags": [
+          "Product Hunt"
+        ],
+        "summary": "Get a maker's profile",
+        "description": "Retrieves a Product Hunt maker's profile: headline, follower count, launched products, and social links. Accepts either `username` or a full `url`. Self-hosted extraction behind a Cloudflare bypass. Requires a Starter plan or higher.",
+        "operationId": "getProductHuntMaker",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Product Hunt username, e.g. 'rrhoover' (without @)",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Full Product Hunt profile URL",
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured Product Hunt maker profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductHuntMakerResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing both username and url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Product Hunt dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested maker could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded, or the upstream provider rate-limited the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Product Hunt upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Product Hunt execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/product-hunt/maker?username=rrhoover\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/tiktok/post": {
       "get": {
         "tags": [
           "TikTok"
         ],
         "summary": "Get a TikTok post",
-        "description": "Retrieves structured metadata for a TikTok video post: description, author, engagement stats, video/cover URLs, and music. Backed by our own maintained `tiktok_post` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured metadata for a TikTok video post: description, author, engagement stats, video/cover URLs, and music. Backed by a maintained third-party `tiktok_post` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getTikTokPost",
         "parameters": [
           {
@@ -1842,7 +2249,7 @@
           "Apple App Store"
         ],
         "summary": "Get an Apple App Store app listing",
-        "description": "Retrieves structured metadata for an Apple App Store app listing: name, description, price, category, rating, and developer. Backed by our own maintained `apple_app_store` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured metadata for an Apple App Store app listing: name, description, price, category, rating, and developer. Backed by a maintained third-party `apple_app_store` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getAppleAppStoreApp",
         "parameters": [
           {
@@ -1953,7 +2360,7 @@
           "Target"
         ],
         "summary": "Get a Target product",
-        "description": "Retrieves structured product details from Target.com: price, brand, rating, category, images, and description. Backed by our own maintained `target_product` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Retrieves structured product details from Target.com: price, brand, rating, category, images, and description. Backed by a maintained third-party `target_product` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "getTargetProduct",
         "parameters": [
           {
@@ -2110,7 +2517,7 @@
           "Target"
         ],
         "summary": "Search Target.com",
-        "description": "Searches Target.com and returns structured product results. Backed by our own maintained `target_search` Web Scraping API target. Requires a Starter plan or higher.",
+        "description": "Searches Target.com and returns structured product results. Backed by a maintained third-party `target_search` Web Scraping API target. Requires a Starter plan or higher.",
         "operationId": "searchTarget",
         "parameters": [
           {
@@ -2363,7 +2770,7 @@
             }
           },
           "502": {
-            "description": "Upstream provider blocked or failed the request.",
+            "description": "The upstream provider blocked or failed the request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3135,7 +3542,7 @@
           "YouTube"
         ],
         "summary": "Get YouTube channel details",
-        "description": "Retrieves channel metadata (subscriber/view/video counts, description, links) and a list of recent videos for a YouTube channel handle. Backed by our own maintained `youtube_channel` Web Scraping API target, independently of whether search/video/subtitles happen to be self-hosted or provider-backed on this deployment. Requires a Starter plan or higher.",
+        "description": "Retrieves channel metadata (subscriber/view/video counts, description, links) and a list of recent videos for a YouTube channel handle. Backed by a maintained third-party `youtube_channel` Web Scraping API target, independently of whether search/video/subtitles happen to be self-hosted or third-party-backed on this deployment. Requires a Starter plan or higher.",
         "operationId": "getYouTubeChannel",
         "parameters": [
           {
@@ -3238,7 +3645,7 @@
           {
             "lang": "cURL",
             "label": "cURL",
-            "source": "curl \"https://api.scrapio.dev/v1/youtube/channel?handle=@scrapio&limit=20\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+            "source": "curl \"https://api.scrapio.dev/v1/youtube/channel?handle=@decodo_official&limit=20\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
@@ -6399,7 +6806,7 @@
           "Agoda"
         ],
         "summary": "Queue an Agoda reviews crawl job",
-        "description": "Submits a real Agoda reviews capture as an async job, returning a `job_id` to poll. Identical to `GET /v1/agoda/reviews` in every way except execution mode: capturing real review data can take longer than a synchronous HTTP request can safely wait (Cloudflare's edge timeout is ~100s), so this runs the same capture with no artificial deadline instead of racing one. Prefer this over the synchronous endpoint when you need real review data reliably, not just a fast response. Requires a Starter plan or higher.",
+        "description": "Submits a real Agoda reviews capture as an async job, returning a `job_id` to poll. Runs the same per-page capture as `GET /v1/agoda/reviews`, but with no HTTP response deadline (capturing real review data can take longer than a synchronous request can safely wait — Cloudflare's edge timeout is ~100s) and, unlike the synchronous endpoint's single `page`, a real `start_page`/`end_page` range: every page in the range is fetched and merged into one response, deduped by the page each fetch actually reached (a requested page can degrade to an earlier one if its numbered pagination fails to render). Omitting both `start_page`/`end_page` crawls just page 1. Requires a Starter plan or higher.",
         "operationId": "queueAgodaReviewsCrawl",
         "parameters": [
           {
@@ -6433,11 +6840,21 @@
             }
           },
           {
-            "name": "page",
+            "name": "start_page",
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Review page number (default 1)",
+              "description": "First review page to crawl (default 1)",
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          },
+          {
+            "name": "end_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Last review page to crawl (default start_page -- single page)",
               "type": "string",
               "pattern": "^\\d+$"
             }
@@ -6467,7 +6884,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Max time to wait, in ms",
+              "description": "Max time to wait per page, in ms",
               "type": "string",
               "pattern": "^\\d+$"
             }
@@ -6519,7 +6936,7 @@
           {
             "lang": "cURL",
             "label": "cURL",
-            "source": "curl \"https://api.scrapio.dev/v1/agoda/reviews/crawl?property_id=3&city_id=9395\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+            "source": "curl \"https://api.scrapio.dev/v1/agoda/reviews/crawl?property_id=3&city_id=9395&start_page=1&end_page=5\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
@@ -7717,7 +8134,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
             "type": "boolean"
           }
         },
@@ -8116,7 +8533,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan. Useful when you already know the target needs it, to avoid wasted attempts and reduce the chance of timing out mid-escalation.",
                     "type": "boolean"
                   }
                 },
@@ -8227,6 +8644,11 @@
                             "selector": {
                               "type": "string",
                               "minLength": 1
+                            },
+                            "settle_ms": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0,
+                              "maximum": 30000
                             }
                           },
                           "required": [
@@ -8355,6 +8777,14 @@
                             "selector": {
                               "type": "string",
                               "minLength": 1
+                            },
+                            "timeout_ms": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0,
+                              "maximum": 30000
+                            },
+                            "optional": {
+                              "type": "boolean"
                             }
                           },
                           "required": [
@@ -8550,7 +8980,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -9002,7 +9432,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every page crawled. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every page crawled. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -9082,7 +9512,7 @@
                     "maximum": 300000
                   },
                   "use_proxy": {
-                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every URL mapped. Requires a paid plan.",
+                    "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every URL mapped. Requires a paid plan.",
                     "type": "boolean"
                   }
                 },
@@ -9191,6 +9621,25 @@
           },
           "result_available": {
             "type": "boolean"
+          },
+          "progress": {
+            "type": "object",
+            "properties": {
+              "completed": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "total": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "completed",
+              "total"
+            ]
           },
           "outputs": {
             "type": "object",
@@ -9505,6 +9954,25 @@
               },
               "result_available": {
                 "type": "boolean"
+              },
+              "progress": {
+                "type": "object",
+                "properties": {
+                  "completed": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "total": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "completed",
+                  "total"
+                ]
               },
               "outputs": {
                 "type": "object",
@@ -13976,6 +14444,661 @@
         ],
         "additionalProperties": false
       },
+      "ProductHuntLeaderboardQuery": {
+        "type": "object",
+        "properties": {
+          "period": {
+            "description": "Leaderboard window (default daily)",
+            "type": "string",
+            "enum": [
+              "daily",
+              "weekly",
+              "monthly"
+            ]
+          },
+          "date": {
+            "description": "Date the leaderboard is anchored to (YYYY-MM-DD, daily/weekly only). Defaults to today.",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "category": {
+            "description": "Topic slug to filter by, e.g. 'artificial-intelligence'",
+            "type": "string",
+            "minLength": 1
+          },
+          "full_list": {
+            "description": "Scroll to load the full list instead of just the first ~19 products (default false, extra cost)",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductHuntLeaderboardResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "product_hunt"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "leaderboard"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "period": {
+            "type": "string",
+            "enum": [
+              "daily",
+              "weekly",
+              "monthly"
+            ]
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "tagline": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "upvotes": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "comment_count": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "makers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "thumbnail": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "rank",
+                "slug",
+                "name",
+                "tagline",
+                "url",
+                "upvotes",
+                "comment_count",
+                "topics",
+                "makers",
+                "thumbnail"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "period",
+          "date",
+          "category",
+          "products",
+          "truncated",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "ProductHuntProductQuery": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "description": "Product Hunt post slug, e.g. 'scrapio'",
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "description": "Full Product Hunt product URL",
+            "type": "string",
+            "format": "uri"
+          },
+          "include_comments": {
+            "description": "Include top-level discussion comments (default false)",
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ]
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductHuntProductResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "product_hunt"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "product"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tagline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "upvotes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comment_count": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "launched_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "makers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "name": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "profile_url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "username",
+                "name",
+                "profile_url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "body": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "is_maker": {
+                  "type": "boolean"
+                },
+                "upvotes": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "posted_at": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "author",
+                "body",
+                "is_maker",
+                "upvotes",
+                "posted_at"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "slug",
+          "name",
+          "tagline",
+          "description",
+          "topics",
+          "upvotes",
+          "comment_count",
+          "rank",
+          "launched_at",
+          "website_url",
+          "makers",
+          "images",
+          "comments",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "ProductHuntMakerQuery": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "description": "Product Hunt username, e.g. 'rrhoover' (without @)",
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "description": "Full Product Hunt profile URL",
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductHuntMakerResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "product_hunt"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "maker"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "headline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "followers": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "label",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "tagline": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "upvotes": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "required": [
+                "slug",
+                "name",
+                "tagline",
+                "upvotes",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "username",
+          "name",
+          "headline",
+          "followers",
+          "links",
+          "products",
+          "url"
+        ],
+        "additionalProperties": false
+      },
       "TikTokPostQuery": {
         "type": "object",
         "properties": {
@@ -16472,7 +17595,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every page crawled. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every page crawled. Requires a paid plan.",
             "type": "boolean"
           }
         },
@@ -16520,7 +17643,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier for every URL mapped. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier for every URL mapped. Requires a paid plan.",
             "type": "boolean"
           }
         },
@@ -16599,6 +17722,11 @@
                     "selector": {
                       "type": "string",
                       "minLength": 1
+                    },
+                    "settle_ms": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 30000
                     }
                   },
                   "required": [
@@ -16727,6 +17855,14 @@
                     "selector": {
                       "type": "string",
                       "minLength": 1
+                    },
+                    "timeout_ms": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 30000
+                    },
+                    "optional": {
+                      "type": "boolean"
                     }
                   },
                   "required": [
@@ -16922,7 +18058,7 @@
             "maximum": 300000
           },
           "use_proxy": {
-            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy) access tier. Requires a paid plan.",
+            "description": "Skip the cheap direct/stealth tiers and go straight to the strongest (proxy/Camoufox) access tier. Requires a paid plan.",
             "type": "boolean"
           }
         },
@@ -19929,6 +21065,16 @@
             "items": {
               "type": "object",
               "properties": {
+                "review_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
                 "title": {
                   "anyOf": [
                     {
@@ -20021,6 +21167,7 @@
                 }
               },
               "required": [
+                "review_id",
                 "title",
                 "score",
                 "positive",
@@ -20047,6 +21194,52 @@
           "score_breakdown",
           "reviews"
         ],
+        "additionalProperties": false
+      },
+      "AgodaReviewsCrawlQuery": {
+        "type": "object",
+        "properties": {
+          "property_id": {
+            "description": "Agoda numeric property ID",
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "description": "Full Agoda property URL",
+            "type": "string",
+            "format": "uri"
+          },
+          "city_id": {
+            "description": "Agoda numeric city ID, required alongside property_id when url is not given (see GET /v1/agoda/search's resolved_city_id)",
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "start_page": {
+            "description": "First review page to crawl (default 1)",
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "end_page": {
+            "description": "Last review page to crawl (default start_page -- single page)",
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "sort_by": {
+            "description": "Review sort order",
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "description": "Review language filter (ISO 2-letter code)",
+            "type": "string",
+            "pattern": "^[A-Za-z]{2}$"
+          },
+          "timeout_ms": {
+            "description": "Max time to wait per page, in ms",
+            "type": "string",
+            "pattern": "^\\d+$"
+          }
+        },
         "additionalProperties": false
       },
       "CreateMonitorRequest": {
