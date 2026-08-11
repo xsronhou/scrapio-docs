@@ -9,7 +9,8 @@ description: Fetch ranked leaderboards, a product's profile, or a maker's profil
 
 ## Endpoints
 
-- `GET /v1/product-hunt/leaderboard` — Fetch a ranked daily, weekly, or monthly leaderboard, optionally filtered by topic.
+- `GET /v1/product-hunt/leaderboard` — Fetch a ranked daily, weekly, or monthly leaderboard, optionally filtered by topic. Fast, but always partial (`truncated: true`, only the first ~19-35 products).
+- `GET /v1/product-hunt/leaderboard/crawl` — Queue an async job that scrolls the leaderboard to its genuine end (`truncated: false`). Poll via [Jobs](/api-reference/jobs).
 - `GET /v1/product-hunt/product` — Fetch a single product's profile: tagline, upvotes, topics, makers, and launch date.
 - `GET /v1/product-hunt/maker` — Fetch a maker's profile: headline, followers, external links, and shipped products.
 

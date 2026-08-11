@@ -142,6 +142,7 @@
             "pages": [
               "api-reference/product-hunt",
               "api-reference/product-hunt/leaderboard",
+              "api-reference/product-hunt/leaderboard-crawl",
               "api-reference/product-hunt/product",
               "api-reference/product-hunt/maker"
             ]
