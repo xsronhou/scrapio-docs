@@ -966,7 +966,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Country to use when submitting the request",
+              "description": "Country to use when submitting the request, e.g. 'gb'",
               "type": "string",
               "minLength": 2,
               "maxLength": 64
@@ -1077,7 +1077,7 @@
             "in": "query",
             "required": false,
             "schema": {
-              "description": "Country to use when submitting the request",
+              "description": "Country to use when submitting the request, e.g. 'gb'",
               "type": "string",
               "minLength": 2,
               "maxLength": 64
@@ -13588,7 +13588,7 @@
             "maximum": 9007199254740991
           },
           "geo": {
-            "description": "Country to use when submitting the request",
+            "description": "Country to use when submitting the request, e.g. 'gb'",
             "type": "string",
             "minLength": 2,
             "maxLength": 64
@@ -13859,7 +13859,7 @@
             "pattern": "^\\d+$"
           },
           "geo": {
-            "description": "Country to use when submitting the request",
+            "description": "Country to use when submitting the request, e.g. 'gb'",
             "type": "string",
             "minLength": 2,
             "maxLength": 64
