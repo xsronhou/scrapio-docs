@@ -99,6 +99,14 @@
             ]
           },
           {
+            "group": "AutoTrader",
+            "pages": [
+              "api-reference/autotrader",
+              "api-reference/autotrader/search",
+              "api-reference/autotrader/listing"
+            ]
+          },
+          {
             "group": "Booking.com",
             "pages": [
               "api-reference/booking",

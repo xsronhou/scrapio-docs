@@ -1,0 +1,13 @@
+---
+title: AutoTrader
+description: Search AutoTrader UK car listings and retrieve a listing page.
+---
+
+<Note>
+  AutoTrader endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/autotrader/search` — Search AutoTrader UK car listings near a postcode, returning structured results.
+- `GET /v1/autotrader/listing` — Retrieve structured detail for a single AutoTrader UK listing.

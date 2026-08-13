@@ -70,6 +70,9 @@
       "name": "Airbnb"
     },
     {
+      "name": "AutoTrader"
+    },
+    {
       "name": "ChatGPT"
     },
     {
@@ -862,6 +865,312 @@
             "lang": "cURL",
             "label": "cURL",
             "source": "curl \"https://api.scrapio.dev/v1/airbnb/listing?listing_id=1706670209492936270\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/autotrader/search": {
+      "get": {
+        "tags": [
+          "AutoTrader"
+        ],
+        "summary": "Search AutoTrader UK car listings",
+        "description": "Searches AutoTrader UK (autotrader.co.uk) car listings near a postcode, returning structured results (title, price, mileage, year, location, and more). Backed by a maintained third-party `autotrader` Web Scraping API target. Requires a Starter plan or higher.",
+        "operationId": "searchAutotrader",
+        "parameters": [
+          {
+            "name": "postcode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "UK postcode to anchor the search, e.g. 'SW1A 1AA'"
+            }
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Search radius in miles",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "make",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Vehicle make, e.g. 'BMW'",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Vehicle model, e.g. '3 Series'",
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "year_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Minimum registration year",
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "year_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Maximum registration year",
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "exclude_writeoffs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Exclude write-off category vehicles",
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Result page number",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the request",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured AutoTrader search results.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutotraderSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid search parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "AutoTrader dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "AutoTrader upstream failed or returned an unusable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AutoTrader execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/autotrader/search?postcode=SW1A%201AA&make=BMW&model=3%20Series&year_from=2018\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/autotrader/listing": {
+      "get": {
+        "tags": [
+          "AutoTrader"
+        ],
+        "summary": "Get an AutoTrader UK listing",
+        "description": "Retrieves structured detail for a single AutoTrader UK (autotrader.co.uk) listing by numeric id (from a search result URL). Backed by the same `autotrader` Web Scraping API target as search. Requires a Starter plan or higher.",
+        "operationId": "getAutotraderListing",
+        "parameters": [
+          {
+            "name": "listing_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d+$"
+            }
+          },
+          {
+            "name": "geo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "description": "Country to use when submitting the request",
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Structured AutoTrader listing details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutotraderListingResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid listing parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "AutoTrader dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested listing could not be found or parsed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "AutoTrader upstream failed or returned an unusable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AutoTrader execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/autotrader/listing?listing_id=202606053030491\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
@@ -13220,6 +13529,735 @@
               "host",
               "images",
               "url"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "listing"
+        ],
+        "additionalProperties": false
+      },
+      "AutotraderSearchQuery": {
+        "type": "object",
+        "properties": {
+          "postcode": {
+            "type": "string",
+            "minLength": 1,
+            "description": "UK postcode to anchor the search, e.g. 'SW1A 1AA'"
+          },
+          "radius": {
+            "description": "Search radius in miles",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "make": {
+            "description": "Vehicle make, e.g. 'BMW'",
+            "type": "string",
+            "minLength": 1
+          },
+          "model": {
+            "description": "Vehicle model, e.g. '3 Series'",
+            "type": "string",
+            "minLength": 1
+          },
+          "year_from": {
+            "description": "Minimum registration year",
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 9007199254740991
+          },
+          "year_to": {
+            "description": "Maximum registration year",
+            "type": "integer",
+            "minimum": 1900,
+            "maximum": 9007199254740991
+          },
+          "exclude_writeoffs": {
+            "description": "Exclude write-off category vehicles",
+            "type": "boolean"
+          },
+          "page": {
+            "description": "Result page number",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "geo": {
+            "description": "Country to use when submitting the request",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "postcode"
+        ],
+        "additionalProperties": false
+      },
+      "AutotraderSearchResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "autotrader"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "search"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string"
+          },
+          "query_context": {
+            "type": "object",
+            "properties": {
+              "postcode": {
+                "type": "string"
+              },
+              "radius": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "make": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "year_from": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "year_to": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "exclude_writeoffs": {
+                "type": "boolean"
+              },
+              "page": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "geo": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "postcode"
+            ],
+            "additionalProperties": false
+          },
+          "meta_data": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "number_of_results": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "url",
+              "number_of_results"
+            ],
+            "additionalProperties": false
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "title": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "subtitle": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "attention_grabber": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "price": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "price_indicator": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "mileage": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "year": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "location": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "distance_miles": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "seller_type": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "private"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "listing_type": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "featured",
+                        "you_may_also_like",
+                        "sponsored"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "url",
+                "title",
+                "subtitle",
+                "attention_grabber",
+                "price",
+                "price_indicator",
+                "mileage",
+                "year",
+                "location",
+                "distance_miles",
+                "seller_type",
+                "listing_type"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "page_type",
+          "snapshot_at",
+          "query_context",
+          "meta_data",
+          "results"
+        ],
+        "additionalProperties": false
+      },
+      "AutotraderListingQuery": {
+        "type": "object",
+        "properties": {
+          "listing_id": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "geo": {
+            "description": "Country to use when submitting the request",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "listing_id"
+        ],
+        "additionalProperties": false
+      },
+      "AutotraderListingResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "autotrader"
+            ]
+          },
+          "page_type": {
+            "type": "string",
+            "enum": [
+              "listing"
+            ]
+          },
+          "snapshot_at": {
+            "type": "string"
+          },
+          "listing": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "title": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "make": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "model": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "trim": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "year": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "price": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "price_indicator": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "mileage": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fuel_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body_type": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "gearbox": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "engine_size_litres": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "doors": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "seats": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "body_colour": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "emission_class": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "location": {
+                "type": "object",
+                "properties": {
+                  "town": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "county": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "postcode": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "latitude": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "longitude": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "town",
+                  "county",
+                  "postcode",
+                  "latitude",
+                  "longitude"
+                ],
+                "additionalProperties": false
+              },
+              "seller": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "name": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "phone": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "website": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "rating": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "review_count": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "phone",
+                  "website",
+                  "rating",
+                  "review_count"
+                ],
+                "additionalProperties": false
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              },
+              "vehicle_check_status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "url",
+              "title",
+              "make",
+              "model",
+              "trim",
+              "year",
+              "price",
+              "price_indicator",
+              "mileage",
+              "fuel_type",
+              "body_type",
+              "gearbox",
+              "engine_size_litres",
+              "doors",
+              "seats",
+              "body_colour",
+              "emission_class",
+              "description",
+              "location",
+              "seller",
+              "images",
+              "vehicle_check_status"
             ],
             "additionalProperties": false
           }
