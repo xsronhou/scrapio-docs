@@ -3,3 +3,49 @@ title: Interact
 description: Drive a real browser with a sequence of actions — click, type, scroll, screenshot, and extract.
 openapi: post /v1/interact
 ---
+
+## Prompt mode
+
+<Note>
+  Prompt mode is newly released — request/response details on this page may still change. If you're building against it, watch this page for updates rather than pinning to undocumented behavior.
+</Note>
+
+Instead of a fixed `actions` array, describe the task in plain language and Scrapio figures out the clicks, typing, and navigation itself:
+
+```bash
+curl -X POST https://api.scrapio.dev/v1/interact \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/search",
+    "prompt": "Search for iPhone 16 Pro Max and click the first result",
+    "output": ["html"]
+  }'
+```
+
+`prompt` and `actions` are mutually exclusive — send one or the other, never both. Everything else (`url`, `device`, `output`, `timeout_ms`) works the same as the `actions`-based request.
+
+The response carries the model's own text answer alongside a step-by-step record of what it actually did:
+
+```json
+{
+  "request_id": "req_...",
+  "kind": "interact",
+  "mode": "prompt",
+  "status": "completed",
+  "answer": "iPhone 16 Pro Max: $1,199",
+  "steps": [
+    { "step_id": "step_1", "tool": "snapshot", "status": "completed", "started_at": "...", "completed_at": "..." },
+    { "step_id": "step_2", "tool": "act", "status": "completed", "started_at": "...", "completed_at": "..." }
+  ],
+  "result": {
+    "outputs": { "html": "<html>...</html>" },
+    "final_url": "https://example.com/search/iphone-16-pro-max"
+  },
+  "diagnostics": { "step_errors": [] }
+}
+```
+
+- `status` is `"partial"` (not `"completed"`) if the task hit its step budget before finishing — check `diagnostics.step_limit_reached` and treat `answer` as best-effort in that case.
+- `output` only supports `html` and `screenshot` in prompt mode (no `markdown`/`json`) — the model's own `answer` is the primary structured result, not a page extraction.
+- `steps[].tool` reflects what the model actually called (`snapshot`, `act`, `scroll`, `wait`, `get_url`), not a caller-supplied action list — a failed step still returns `status: "completed"` overall as long as the model recovers and completes the task.
