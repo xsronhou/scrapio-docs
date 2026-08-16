@@ -9,6 +9,10 @@ Inline requests (`POST /v1/fetch`, `POST /v1/crawl`, etc.) have a maximum execut
 
 Any surface can be run as an async job by submitting to `POST /v1/jobs`.
 
+### Cloudflare-protected targets
+
+A target site protected by Cloudflare can take well over 15 seconds to resolve — a single bypass attempt can take up to 90 seconds on its own, and may need to be retried. Passing a `timeout_ms` large enough to realistically clear a Cloudflare challenge will automatically promote the request past the 15-second inline ceiling into an async job, so plan for this as async work rather than expecting an inline response from these targets.
+
 ## Submitting a job
 
 ```bash

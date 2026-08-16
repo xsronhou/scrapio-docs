@@ -129,7 +129,7 @@
           "Fetch"
         ],
         "summary": "Fetch and render a URL",
-        "description": "Fetches a URL and returns its content as HTML, Markdown, JSON, or a screenshot. Set `render_js: true` to execute JavaScript before capturing the output. Requests that exceed 15 seconds are automatically promoted to async jobs and return a `job_id` to poll.",
+        "description": "Fetches a URL and returns its content as HTML, Markdown, JSON, or a screenshot. Set `render_js: true` to execute JavaScript before capturing the output. Requests that exceed 15 seconds are automatically promoted to async jobs and return a `job_id` to poll. Targets protected by Cloudflare can take significantly longer to resolve than that -- a single bypass attempt can take up to 90 seconds, and may be retried -- so pass a `timeout_ms` large enough to cover that (which will itself promote the request to async) rather than a short one that will just fail fast against those targets.",
         "operationId": "createFetch",
         "requestBody": {
           "required": true,
