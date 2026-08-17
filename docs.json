@@ -146,6 +146,16 @@
             ]
           },
           {
+            "group": "Hacker News",
+            "pages": [
+              "api-reference/hacker-news",
+              "api-reference/hacker-news/item",
+              "api-reference/hacker-news/user",
+              "api-reference/hacker-news/search",
+              "api-reference/hacker-news/stories"
+            ]
+          },
+          {
             "group": "Product Hunt",
             "pages": [
               "api-reference/product-hunt",

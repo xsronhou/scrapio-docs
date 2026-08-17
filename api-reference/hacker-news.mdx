@@ -1,0 +1,17 @@
+---
+title: Hacker News
+description: Look up a Hacker News item or user, search stories and comments, or fetch a story-id list (top, new, best, ask, show, job).
+---
+
+<Note>
+  Hacker News endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/hacker-news/item` — Get an item (story, comment, job, poll, or pollopt) by id, optionally with its resolved comment tree.
+- `GET /v1/hacker-news/user` — Get a user's profile: karma, about text, and submitted item ids.
+- `GET /v1/hacker-news/search` — Search stories and comments by keyword via Algolia.
+- `GET /v1/hacker-news/stories` — Resolve a story-id list (top, new, best, ask, show, job) to full item details.
+
+Keyword monitors — recurring searches that notify you when new matching items appear — are available through the generic [Monitors API](/api-reference/monitors) at `POST /v1/hacker-news/monitors`.
