@@ -89,6 +89,8 @@ The server starts on stdio by default and is ready to accept connections from yo
 | `agoda_reviews` | Get guest reviews and the score breakdown for an Agoda property. Requires a Starter plan or higher. |
 | `airbnb_search` | Search Airbnb listings for a free-text location. Requires a Starter plan or higher. |
 | `airbnb_listing` | Get structured detail for a single Airbnb listing by id. Requires a Starter plan or higher. |
+| `autotrader_search` | Search AutoTrader UK car listings near a postcode, with optional make/model/year filters. Requires a Starter plan or higher. |
+| `autotrader_listing` | Get structured detail for a single AutoTrader UK listing by its numeric listing id. Requires a Starter plan or higher. |
 | `target_search` | Search Target.com and return structured product results. Requires a Starter plan or higher. |
 | `target_product` | Get structured product details from Target.com. Requires a Starter plan or higher. |
 | `reddit_post` | Get a Reddit post and its top-level comments. Requires a Starter plan or higher. |
@@ -105,6 +107,10 @@ The server starts on stdio by default and is ready to accept connections from yo
 | `perplexity_prompt` | Send a prompt to Perplexity and return the structured, web-search-grounded response. Requires a Starter plan or higher. |
 | `gemini_prompt` | Send a prompt to Gemini and return the structured response, including citations. Requires a Starter plan or higher. |
 | `youtube_channel` | Get channel metadata and recent videos for a YouTube channel handle. Requires a Starter plan or higher. |
+| `product_hunt_leaderboard` | Get the Product Hunt leaderboard: ranked products with tagline, upvotes, comment count, topics, and makers. Fast, but capped at the page's initial render (`truncated: true`). Requires a Starter plan or higher. |
+| `product_hunt_leaderboard_crawl` | Queue an async job that scrolls a Product Hunt leaderboard to its genuine end and returns a job ID. Requires a Starter plan or higher. |
+| `product_hunt_product` | Get structured details for a single Product Hunt launch: name, tagline, description, topics, upvotes, comment count, makers, and website link. Requires a Starter plan or higher. |
+| `product_hunt_maker` | Get a Product Hunt maker/founder profile: name, headline, follower count, and the products they've shipped. Requires a Starter plan or higher. |
 
 ## Example prompts
 
