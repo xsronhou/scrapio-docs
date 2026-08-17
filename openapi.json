@@ -16295,7 +16295,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/__schema0"
+                  "$ref": "#/components/schemas/HackerNewsCommentItem"
                 }
               },
               {
@@ -16325,214 +16325,7 @@
           "poll",
           "comments"
         ],
-        "additionalProperties": false,
-        "$defs": {
-          "__schema0": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer",
-                "minimum": -9007199254740991,
-                "maximum": 9007199254740991
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "story",
-                  "comment",
-                  "job",
-                  "poll",
-                  "pollopt"
-                ]
-              },
-              "by": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "time": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": -9007199254740991,
-                    "maximum": 9007199254740991
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "created_at": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "text": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "dead": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "deleted": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "title": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "url": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "score": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": -9007199254740991,
-                    "maximum": 9007199254740991
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "descendants": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": -9007199254740991,
-                    "maximum": 9007199254740991
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "kids": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
-                    }
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "parent": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": -9007199254740991,
-                    "maximum": 9007199254740991
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "parts": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "minimum": -9007199254740991,
-                      "maximum": 9007199254740991
-                    }
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "poll": {
-                "anyOf": [
-                  {
-                    "type": "integer",
-                    "minimum": -9007199254740991,
-                    "maximum": 9007199254740991
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "comments": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/__schema0"
-                }
-              }
-            },
-            "required": [
-              "id",
-              "type",
-              "by",
-              "time",
-              "created_at",
-              "text",
-              "dead",
-              "deleted",
-              "title",
-              "url",
-              "score",
-              "descendants",
-              "kids",
-              "parent",
-              "parts",
-              "poll"
-            ],
-            "additionalProperties": false
-          }
-        }
+        "additionalProperties": false
       },
       "HackerNewsUserQuery": {
         "type": "object",
@@ -24837,6 +24630,211 @@
           "changes",
           "detectedAt"
         ]
+      },
+      "HackerNewsCommentItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "story",
+              "comment",
+              "job",
+              "poll",
+              "pollopt"
+            ]
+          },
+          "by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dead": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "deleted": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "descendants": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kids": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "parts": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "poll": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HackerNewsCommentItem"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "by",
+          "time",
+          "created_at",
+          "text",
+          "dead",
+          "deleted",
+          "title",
+          "url",
+          "score",
+          "descendants",
+          "kids",
+          "parent",
+          "parts",
+          "poll"
+        ],
+        "additionalProperties": false
       },
       "WorkflowEnvelopeResponse": {
         "type": "object",
