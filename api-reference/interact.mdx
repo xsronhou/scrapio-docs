@@ -25,6 +25,8 @@ curl -X POST https://api.scrapio.dev/v1/interact \
 
 `prompt` and `actions` are mutually exclusive — send one or the other, never both. Everything else (`url`, `device`, `output`, `timeout_ms`) works the same as the `actions`-based request.
 
+For targets that block non-residential traffic, add `"use_proxy": true` to launch the session through a residential proxy instead of the default direct connection. Requires a paid plan (Starter or higher) and adds a 65-credit surcharge on top of the base 25 (90 total) — see [Rate Limits & Credits](/rate-limits).
+
 The response carries the model's own text answer alongside a step-by-step record of what it actually did:
 
 ```json
@@ -48,4 +50,18 @@ The response carries the model's own text answer alongside a step-by-step record
 
 - `status` is `"partial"` (not `"completed"`) if the task hit its step budget before finishing — check `diagnostics.step_limit_reached` and treat `answer` as best-effort in that case.
 - `output` only supports `html` and `screenshot` in prompt mode (no `markdown`/`json`) — the model's own `answer` is the primary structured result, not a page extraction.
-- `steps[].tool` reflects what the model actually called (`snapshot`, `act`, `scroll`, `wait`, `get_url`), not a caller-supplied action list — a failed step still returns `status: "completed"` overall as long as the model recovers and completes the task.
+- `steps[].tool` reflects what the model actually called (`snapshot`, `act`, `scroll`, `wait`, `get_url`, `read_text`, `list_items`), not a caller-supplied action list — a failed step still returns `status: "completed"` overall as long as the model recovers and completes the task.
+
+## Dedicated-site hints on error
+
+If a request (either mode) targets a site we have a purpose-built API for — Amazon, Walmart, YouTube, Reddit, Booking.com, Agoda, Airbnb, AutoTrader, Target, Product Hunt, TikTok, or the Apple App Store — and the request errors, the response includes an extra `hint` field pointing you at that dedicated endpoint instead, since it's faster, cheaper, and more reliable for that specific site than driving a general-purpose browser:
+
+```json
+{
+  "request_id": "req_...",
+  "error": { "code": "selector_not_found", "message": "..." },
+  "hint": "Amazon URLs are better served by our dedicated Amazon API, which is faster and more reliable than a general-purpose browser for this site: https://docs.scrapio.dev/api-reference/amazon"
+}
+```
+
+`hint` is only present on an error response, and only when the URL matches one of these sites — a successful `/v1/interact` call, or a call against a site with no dedicated API, never includes it.
