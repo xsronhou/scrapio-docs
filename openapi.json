@@ -91,6 +91,9 @@
       "name": "Hacker News"
     },
     {
+      "name": "GitHub"
+    },
+    {
       "name": "TikTok"
     },
     {
@@ -2557,6 +2560,345 @@
         ]
       }
     },
+    "/v1/github/user": {
+      "get": {
+        "tags": [
+          "GitHub"
+        ],
+        "summary": "Get a GitHub user's public profile",
+        "description": "Retrieves a GitHub user's public profile via GitHub's REST API: bio, company, location, follower/following counts, and public repo count. Requires a Starter plan or higher.",
+        "operationId": "getGithubUser",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The resolved GitHub user profile.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GithubUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid username.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "GitHub dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested user could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "GitHub upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "GitHub upstream unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/github/user?username=torvalds\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/github/repo": {
+      "get": {
+        "tags": [
+          "GitHub"
+        ],
+        "summary": "Get a GitHub repository's public detail",
+        "description": "Retrieves a single repository's public detail via GitHub's REST API: description, stars, forks, primary language, license, and owner. Requires a Starter plan or higher.",
+        "operationId": "getGithubRepo",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "repo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The resolved GitHub repository detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GithubRepoResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid owner/repo.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "GitHub dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested repository could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "GitHub upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "GitHub upstream unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/github/repo?owner=anthropics&repo=claude-code\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/github/repos": {
+      "get": {
+        "tags": [
+          "GitHub"
+        ],
+        "summary": "Get a GitHub user's public repositories",
+        "description": "Retrieves a GitHub user's public repositories via GitHub's REST API, one page per request. Requires a Starter plan or higher.",
+        "operationId": "getGithubRepos",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The user's public repositories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GithubReposResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid username.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "GitHub dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested user could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "GitHub upstream failed or returned an unusable response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "GitHub upstream unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/github/repos?username=torvalds\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/product-hunt/leaderboard": {
       "get": {
         "tags": [
@@ -3973,6 +4315,87 @@
             "lang": "JavaScript",
             "label": "Node.js",
             "source": "const result = await fetch(\"https://api.scrapio.dev/v1/jobs/job_abc123/result\", {\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n}).then(r => r.json());\nconsole.log(result.outputs.markdown);"
+          }
+        ]
+      }
+    },
+    "/v1/jobs/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Jobs"
+        ],
+        "summary": "Cancel an async job",
+        "description": "Cancels an async job that hasn't finished yet. If the job is already in a terminal state (`completed`, `partial`, `failed`, or already `cancelled`), this returns its current status unchanged with a `200` instead of erroring.",
+        "operationId": "cancelJob",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The job identifier returned when the job was created.",
+            "schema": {
+              "type": "string",
+              "example": "job_abc123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The job was already in a terminal state; its current status is returned unchanged.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobCancelResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The job was pending or running and has now been marked cancelled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobCancelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Job not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl -X POST https://api.scrapio.dev/v1/jobs/job_abc123/cancel \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          },
+          {
+            "lang": "Python",
+            "label": "Python",
+            "source": "import os, requests\nresp = requests.post(\n    \"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\",\n    headers={\"Authorization\": f\"Bearer {os.environ['SCRAPIO_API_KEY']}\"},\n)\nprint(resp.json()[\"status\"])"
+          },
+          {
+            "lang": "JavaScript",
+            "label": "Node.js",
+            "source": "const resp = await fetch(\"https://api.scrapio.dev/v1/jobs/job_abc123/cancel\", {\n  method: \"POST\",\n  headers: { Authorization: `Bearer ${process.env.SCRAPIO_API_KEY}` },\n}).then(r => r.json());\nconsole.log(resp.status);"
           }
         ]
       }
@@ -11265,6 +11688,44 @@
           }
         ]
       },
+      "JobCancelResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "job_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "partial",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "async"
+            ]
+          }
+        },
+        "required": [
+          "request_id",
+          "job_id",
+          "job_type",
+          "status",
+          "mode"
+        ]
+      },
       "FetchJobResultResponse": {
         "type": "object",
         "properties": {
@@ -16861,6 +17322,439 @@
           "request_id",
           "type",
           "stories"
+        ],
+        "additionalProperties": false
+      },
+      "GithubUserQuery": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "additionalProperties": false
+      },
+      "GithubUserResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "github"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "username": {
+                "type": "string"
+              },
+              "name": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "bio": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "avatar_url": {
+                "type": "string"
+              },
+              "company": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "location": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "blog": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "counts": {
+                "type": "object",
+                "properties": {
+                  "followers": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "following": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "public_repos": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "followers",
+                  "following",
+                  "public_repos"
+                ],
+                "additionalProperties": false
+              },
+              "created_at": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "name",
+              "bio",
+              "avatar_url",
+              "company",
+              "location",
+              "blog",
+              "counts",
+              "created_at"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "user"
+        ],
+        "additionalProperties": false
+      },
+      "GithubRepoQuery": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "repo": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "owner",
+          "repo"
+        ],
+        "additionalProperties": false
+      },
+      "GithubRepoResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "github"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "object",
+            "properties": {
+              "full_name": {
+                "type": "string"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "avatar_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "avatar_url"
+                ],
+                "additionalProperties": false
+              },
+              "language": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "stats": {
+                "type": "object",
+                "properties": {
+                  "stars": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "forks": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "open_issues": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "stars",
+                  "forks",
+                  "open_issues"
+                ],
+                "additionalProperties": false
+              },
+              "is_fork": {
+                "type": "boolean"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "updated_at": {
+                "type": "string"
+              },
+              "homepage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "full_name",
+              "description",
+              "owner",
+              "language",
+              "topics",
+              "stats",
+              "is_fork",
+              "is_archived",
+              "created_at",
+              "updated_at",
+              "homepage"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "repo"
+        ],
+        "additionalProperties": false
+      },
+      "GithubReposQuery": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "additionalProperties": false
+      },
+      "GithubReposResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "github"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "repos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "full_name": {
+                  "type": "string"
+                },
+                "description": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "owner": {
+                  "type": "object",
+                  "properties": {
+                    "username": {
+                      "type": "string"
+                    },
+                    "avatar_url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "username",
+                    "avatar_url"
+                  ],
+                  "additionalProperties": false
+                },
+                "language": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "stats": {
+                  "type": "object",
+                  "properties": {
+                    "stars": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "forks": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "open_issues": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "stars",
+                    "forks",
+                    "open_issues"
+                  ],
+                  "additionalProperties": false
+                },
+                "is_fork": {
+                  "type": "boolean"
+                },
+                "is_archived": {
+                  "type": "boolean"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "homepage": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "full_name",
+                "description",
+                "owner",
+                "language",
+                "topics",
+                "stats",
+                "is_fork",
+                "is_archived",
+                "created_at",
+                "updated_at",
+                "homepage"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "repos"
         ],
         "additionalProperties": false
       },

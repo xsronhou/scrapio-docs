@@ -156,6 +156,15 @@
             ]
           },
           {
+            "group": "GitHub",
+            "pages": [
+              "api-reference/github",
+              "api-reference/github/user",
+              "api-reference/github/repo",
+              "api-reference/github/repos"
+            ]
+          },
+          {
             "group": "Product Hunt",
             "pages": [
               "api-reference/product-hunt",

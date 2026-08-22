@@ -1,0 +1,14 @@
+---
+title: GitHub
+description: Look up a GitHub user's public profile, a repository's detail, or a user's public repositories.
+---
+
+<Note>
+  GitHub endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/github/user` — Get a user's public profile: bio, company, location, follower/following counts, and public repo count.
+- `GET /v1/github/repo` — Get a single repository's public detail: description, stars, forks, primary language, license, and owner.
+- `GET /v1/github/repos` — Get a user's public repositories, one page per request.
