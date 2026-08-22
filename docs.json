@@ -170,6 +170,18 @@
             ]
           },
           {
+            "group": "Twitter",
+            "pages": [
+              "api-reference/twitter",
+              "api-reference/twitter/profile",
+              "api-reference/twitter/tweets",
+              "api-reference/twitter/tweet",
+              "api-reference/twitter/search",
+              "api-reference/twitter/community",
+              "api-reference/twitter/community-tweets"
+            ]
+          },
+          {
             "group": "Hacker News",
             "pages": [
               "api-reference/hacker-news",

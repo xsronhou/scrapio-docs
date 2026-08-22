@@ -1,0 +1,21 @@
+---
+title: Twitter / X
+description: Fetch X (Twitter) profiles, tweets, search, and Communities — 6 dedicated endpoints.
+---
+
+<Note>
+  Twitter/X endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+<Note>
+  `GET /v1/twitter/search` drives a real Chrome browser session and is slower than the rest of this API — typically 15-20s per request.
+</Note>
+
+## Endpoints
+
+- `GET /v1/twitter/profile` — Fetch a profile by username or url.
+- `GET /v1/twitter/tweets` — Fetch a profile's current tweet timeline.
+- `GET /v1/twitter/tweet` — Fetch a single tweet by url.
+- `GET /v1/twitter/search` — Search tweets, sorted by top or latest.
+- `GET /v1/twitter/community` — Fetch an X Community's details by url.
+- `GET /v1/twitter/community/tweets` — Fetch tweets posted within an X Community.
