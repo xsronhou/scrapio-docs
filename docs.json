@@ -146,6 +146,31 @@
             ]
           },
           {
+            "group": "Instagram",
+            "pages": [
+              "api-reference/instagram",
+              "api-reference/instagram/profile",
+              "api-reference/instagram/posts",
+              "api-reference/instagram/post",
+              "api-reference/instagram/highlights",
+              "api-reference/instagram/highlight",
+              "api-reference/instagram/search",
+              "api-reference/instagram/tagged",
+              "api-reference/instagram/comments",
+              "api-reference/instagram/profile-search",
+              "api-reference/instagram/popular-search",
+              "api-reference/instagram/hashtag-search",
+              "api-reference/instagram/reels-search",
+              "api-reference/instagram/reels-by-audio",
+              "api-reference/instagram/trending-reels",
+              "api-reference/instagram/hashtag-posts",
+              "api-reference/instagram/basic-profile",
+              "api-reference/instagram/comment-replies",
+              "api-reference/instagram/reels",
+              "api-reference/instagram/transcript"
+            ]
+          },
+          {
             "group": "Hacker News",
             "pages": [
               "api-reference/hacker-news",

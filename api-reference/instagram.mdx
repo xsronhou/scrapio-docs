@@ -1,0 +1,34 @@
+---
+title: Instagram
+description: Fetch Instagram profiles, posts, Story Highlights, search, and Reels — 19 dedicated endpoints.
+---
+
+<Note>
+  Instagram endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+<Note>
+  `GET /v1/instagram/profile-search`, `/popular-search`, `/reels-search`, `/reels-by-audio`, and `/trending-reels` drive a real Chrome browser session and are slower than the rest of this API — typically 10-20s per request. `GET /v1/instagram/transcript` is the least-verified endpoint in this API; treat its output as experimental.
+</Note>
+
+## Endpoints
+
+- `GET /v1/instagram/profile` — Fetch a profile by username or url.
+- `GET /v1/instagram/posts` — Fetch a profile's recent post feed.
+- `GET /v1/instagram/post` — Fetch a single post or reel by url.
+- `GET /v1/instagram/highlights` — List a profile's Story Highlight reels.
+- `GET /v1/instagram/highlight` — Fetch one Story Highlight's content by id.
+- `GET /v1/instagram/search` — Search Instagram for accounts (generic topsearch).
+- `GET /v1/instagram/tagged` — Fetch the posts a profile has been tagged in.
+- `GET /v1/instagram/comments` — Fetch a post's comments by numeric media ID.
+- `GET /v1/instagram/profile-search` — Search Instagram's dedicated Profile Search surface.
+- `GET /v1/instagram/popular-search` — Search Instagram's topic/Explore results for a query.
+- `GET /v1/instagram/hashtag-search` — Search for hashtag names matching a query.
+- `GET /v1/instagram/reels-search` — Search Reels matching a query.
+- `GET /v1/instagram/reels-by-audio` — Fetch Reels using a given audio track.
+- `GET /v1/instagram/trending-reels` — Fetch Instagram's current trending Reels feed.
+- `GET /v1/instagram/hashtag-posts` — Fetch the posts within a hashtag.
+- `GET /v1/instagram/basic-profile` — Fetch a profile by numeric user ID.
+- `GET /v1/instagram/comment-replies` — Fetch the nested replies to a comment.
+- `GET /v1/instagram/reels` — List a profile's Reels.
+- `GET /v1/instagram/transcript` — Transcribe a post or Reel's video via OpenAI Whisper.
