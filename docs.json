@@ -182,6 +182,26 @@
             ]
           },
           {
+            "group": "Facebook",
+            "pages": [
+              "api-reference/facebook",
+              "api-reference/facebook/page",
+              "api-reference/facebook/posts",
+              "api-reference/facebook/photos",
+              "api-reference/facebook/reels",
+              "api-reference/facebook/post",
+              "api-reference/facebook/group",
+              "api-reference/facebook/group-posts",
+              "api-reference/facebook/event",
+              "api-reference/facebook/events-search",
+              "api-reference/facebook/marketplace-item",
+              "api-reference/facebook/marketplace-search",
+              "api-reference/facebook/ad-library-ad",
+              "api-reference/facebook/ad-library-search-ads",
+              "api-reference/facebook/ad-library-company-ads"
+            ]
+          },
+          {
             "group": "Hacker News",
             "pages": [
               "api-reference/hacker-news",

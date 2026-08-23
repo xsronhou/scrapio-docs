@@ -1,0 +1,45 @@
+---
+title: Facebook
+description: Fetch Facebook Pages, posts, photos, reels, Groups, events, Marketplace, and the Ad Library — 14 dedicated endpoints.
+---
+
+<Note>
+  Facebook endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+<Note>
+  `GET /v1/facebook/reels` is priced at 1,340 credits, not the standard 15 — its response is 10-30x larger than every other Facebook endpoint, and that bandwidth is real cost passed through directly. See the endpoint's own page for details.
+</Note>
+
+<Note>
+  The three `adLibrary/*` endpoints drive a real Chrome browser session and are slower than the rest of this API — Facebook's Ad Library serves a JS-execution challenge no other Facebook surface here requires.
+</Note>
+
+## Page
+
+- `GET /v1/facebook/page` — Fetch a Page by username or url.
+- `GET /v1/facebook/posts` — Fetch a Page's most recent feed post(s).
+- `GET /v1/facebook/photos` — Fetch a Page's photo grid.
+- `GET /v1/facebook/reels` — Fetch a Page's reels.
+- `GET /v1/facebook/post` — Fetch a single post/photo/reel by its permalink url.
+
+## Groups
+
+- `GET /v1/facebook/group` — Fetch a public Group by id or url.
+- `GET /v1/facebook/group/posts` — Fetch a Group's most recent feed post(s).
+
+## Events
+
+- `GET /v1/facebook/event` — Fetch an event by id or url.
+- `GET /v1/facebook/events/search` — Search events by keyword.
+
+## Marketplace
+
+- `GET /v1/facebook/marketplace/item` — Fetch a listing by id or url.
+- `GET /v1/facebook/marketplace/search` — Search listings by keyword and location.
+
+## Ad Library
+
+- `GET /v1/facebook/adLibrary/ad` — Fetch a single ad by its archive id.
+- `GET /v1/facebook/adLibrary/search/ads` — Search ads by keyword.
+- `GET /v1/facebook/adLibrary/company/ads` — Fetch every ad one advertiser has run.
