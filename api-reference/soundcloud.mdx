@@ -1,0 +1,14 @@
+---
+title: SoundCloud
+description: Fetch a SoundCloud artist's profile, their tracks, and single-track detail.
+---
+
+<Note>
+  SoundCloud endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/soundcloud/artist` — Fetch an artist's profile by handle or url.
+- `GET /v1/soundcloud/artist/tracks` — Fetch an artist's uploaded tracks.
+- `GET /v1/soundcloud/track` — Fetch a single track's detail by url.

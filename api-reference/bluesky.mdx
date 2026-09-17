@@ -1,0 +1,14 @@
+---
+title: Bluesky
+description: Fetch a Bluesky profile, its post feed, and single-post detail.
+---
+
+<Note>
+  Bluesky endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/bluesky/profile` — Fetch a profile's summary by handle or user id.
+- `GET /v1/bluesky/user/posts` — Fetch a user's current post feed.
+- `GET /v1/bluesky/post` — Fetch a single post's detail by url.

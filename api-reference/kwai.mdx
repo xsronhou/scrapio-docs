@@ -1,0 +1,14 @@
+---
+title: Kwai
+description: Fetch a Kwai profile, its post feed, and single-post detail.
+---
+
+<Note>
+  Kwai endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/kwai/profile` — Fetch a profile's summary by handle or url.
+- `GET /v1/kwai/user/posts` — Fetch a profile's current post feed.
+- `GET /v1/kwai/post` — Fetch a single post's detail by url.

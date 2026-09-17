@@ -1,0 +1,15 @@
+---
+title: Apple Music
+description: Fetch Apple Music artist, album, and track detail, plus catalog search.
+---
+
+<Note>
+  Apple Music endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/apple-music/artist` — Fetch an artist's profile by id or url.
+- `GET /v1/apple-music/album` — Fetch an album's detail and tracklist by id or url.
+- `GET /v1/apple-music/track` — Fetch a single track's metadata by id or url.
+- `GET /v1/apple-music/search` — Search the catalog by song, album, artist, or playlist.

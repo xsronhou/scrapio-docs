@@ -1,0 +1,13 @@
+---
+title: Telegram
+description: Fetch a public Telegram channel's summary and post feed.
+---
+
+<Note>
+  Telegram endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/telegram/channel` — Fetch a public channel's summary by username.
+- `GET /v1/telegram/channel/posts` — Fetch a public channel's current post feed.

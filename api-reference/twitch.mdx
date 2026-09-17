@@ -1,0 +1,15 @@
+---
+title: Twitch
+description: Fetch a Twitch channel's profile, VODs, stream schedule, and clip detail.
+---
+
+<Note>
+  Twitch endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/twitch/profile` — Fetch a channel's profile by username.
+- `GET /v1/twitch/user/videos` — Fetch a channel's recent VODs.
+- `GET /v1/twitch/user/schedule` — Fetch a channel's upcoming stream schedule.
+- `GET /v1/twitch/clip` — Fetch a single clip's detail by url.

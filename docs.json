@@ -63,6 +63,64 @@
           "api-reference/tiktok",
           "api-reference/apple-app-store",
           {
+            "group": "Telegram",
+            "pages": ["api-reference/telegram", "api-reference/telegram/channel", "api-reference/telegram/channel-posts"]
+          },
+          {
+            "group": "Rumble",
+            "pages": ["api-reference/rumble", "api-reference/rumble/search", "api-reference/rumble/channel-videos", "api-reference/rumble/video"]
+          },
+          {
+            "group": "TikTok Shop",
+            "pages": ["api-reference/tiktok-shop", "api-reference/tiktok-shop/search", "api-reference/tiktok-shop/product"]
+          },
+          {
+            "group": "Truth Social",
+            "pages": ["api-reference/truth-social", "api-reference/truth-social/profile", "api-reference/truth-social/user-posts", "api-reference/truth-social/post"]
+          },
+          {
+            "group": "Bluesky",
+            "pages": ["api-reference/bluesky", "api-reference/bluesky/profile", "api-reference/bluesky/user-posts", "api-reference/bluesky/post"]
+          },
+          {
+            "group": "Twitch",
+            "pages": ["api-reference/twitch", "api-reference/twitch/profile", "api-reference/twitch/user-videos", "api-reference/twitch/user-schedule", "api-reference/twitch/clip"]
+          },
+          {
+            "group": "Apple Music",
+            "pages": ["api-reference/apple-music", "api-reference/apple-music/artist", "api-reference/apple-music/album", "api-reference/apple-music/track", "api-reference/apple-music/search"]
+          },
+          {
+            "group": "Spotify",
+            "pages": ["api-reference/spotify", "api-reference/spotify/artist", "api-reference/spotify/track", "api-reference/spotify/album", "api-reference/spotify/playlist", "api-reference/spotify/podcast", "api-reference/spotify/search"]
+          },
+          {
+            "group": "SoundCloud",
+            "pages": ["api-reference/soundcloud", "api-reference/soundcloud/artist", "api-reference/soundcloud/artist-tracks", "api-reference/soundcloud/track"]
+          },
+          {
+            "group": "Kwai",
+            "pages": ["api-reference/kwai", "api-reference/kwai/profile", "api-reference/kwai/user-posts", "api-reference/kwai/post"]
+          },
+          "api-reference/kick",
+          {
+            "group": "Snapchat",
+            "pages": ["api-reference/snapchat", "api-reference/snapchat/profile", "api-reference/snapchat/spotlight"]
+          },
+          "api-reference/link-in-bio",
+          {
+            "group": "TikTok Ad Library",
+            "pages": ["api-reference/tiktok-ad-library", "api-reference/tiktok-ad-library/search", "api-reference/tiktok-ad-library/ad"]
+          },
+          {
+            "group": "Google Ad Library",
+            "pages": ["api-reference/google-ad-library", "api-reference/google-ad-library/search", "api-reference/google-ad-library/ad"]
+          },
+          {
+            "group": "LinkedIn Ad Library",
+            "pages": ["api-reference/linkedin-ad-library", "api-reference/linkedin-ad-library/search", "api-reference/linkedin-ad-library/ad"]
+          },
+          {
             "group": "Jobs",
             "pages": [
               "api-reference/jobs",

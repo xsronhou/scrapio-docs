@@ -1,0 +1,48 @@
+---
+title: Link in Bio
+description: Fetch a creator's Linktree, Komi, Pillar, Linkbio, or Linkme page as structured JSON.
+openapi: get /v1/link-in-bio/{provider}
+---
+
+<Note>
+  Link in Bio endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Providers
+
+The `provider` path parameter accepts one of five values, each resolving to that provider's own public page-URL format:
+
+- `linktree` — [linktr.ee](https://linktr.ee)
+- `komi` — [komi.io](https://komi.io)
+- `pillar` — [pillar.io](https://pillar.io)
+- `linkbio` — [lnk.bio](https://lnk.bio)
+- `linkme` — [link.me](https://link.me)
+
+<CodeGroup>
+
+```bash Linktree
+curl "https://api.scrapio.dev/v1/link-in-bio/linktree?username=spotify" \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+```bash Komi
+curl "https://api.scrapio.dev/v1/link-in-bio/komi?username=example" \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+```bash Pillar
+curl "https://api.scrapio.dev/v1/link-in-bio/pillar?username=example" \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+```bash Linkbio
+curl "https://api.scrapio.dev/v1/link-in-bio/linkbio?username=example" \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+```bash Linkme
+curl "https://api.scrapio.dev/v1/link-in-bio/linkme?username=example" \
+  -H "Authorization: Bearer $SCRAPIO_API_KEY"
+```
+
+</CodeGroup>

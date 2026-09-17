@@ -1,0 +1,13 @@
+---
+title: Snapchat
+description: Fetch a public Snapchat profile summary and Spotlight video detail.
+---
+
+<Note>
+  Snapchat endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/snapchat/profile` — Fetch a public profile's summary by username.
+- `GET /v1/snapchat/spotlight` — Fetch a single Spotlight video's detail by url.

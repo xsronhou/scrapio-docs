@@ -1,0 +1,14 @@
+---
+title: Rumble
+description: Search Rumble, fetch a channel's videos, and retrieve single-video detail.
+---
+
+<Note>
+  Rumble endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/rumble/search` — Search Rumble videos and shorts by keyword.
+- `GET /v1/rumble/channel/videos` — Fetch a channel's video and shorts feed.
+- `GET /v1/rumble/video` — Fetch a single video's detail by url.

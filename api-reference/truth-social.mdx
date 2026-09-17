@@ -1,0 +1,14 @@
+---
+title: Truth Social
+description: Fetch a Truth Social profile, its post feed, and single-post detail.
+---
+
+<Note>
+  Truth Social endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/truthsocial/profile` — Fetch an account's profile summary by username.
+- `GET /v1/truthsocial/user/posts` — Fetch an account's current post feed.
+- `GET /v1/truthsocial/post` — Fetch a single post's detail by url.

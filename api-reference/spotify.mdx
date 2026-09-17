@@ -1,0 +1,17 @@
+---
+title: Spotify
+description: Fetch Spotify artist, track, album, playlist, and podcast detail, plus search.
+---
+
+<Note>
+  Spotify endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/spotify/artist` — Fetch an artist's profile and top tracks by id or url.
+- `GET /v1/spotify/track` — Fetch a single track's metadata by id or url.
+- `GET /v1/spotify/album` — Fetch an album's detail and tracklist by id or url.
+- `GET /v1/spotify/playlist` — Fetch a playlist's detail and tracklist by id or url.
+- `GET /v1/spotify/podcast` — Fetch a podcast show's detail by id or url.
+- `GET /v1/spotify/search` — Search tracks, artists, albums, and playlists by keyword.
