@@ -1,0 +1,14 @@
+---
+title: LinkedIn
+description: Fetch a public LinkedIn Company Page's summary, post feed, and single-post detail.
+---
+
+<Note>
+  LinkedIn endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/linkedin/company` — Fetch a Company Page's public summary by vanity name or url.
+- `GET /v1/linkedin/company/posts` — Fetch a Company Page's current post feed.
+- `GET /v1/linkedin/post` — Fetch a single post's detail by url.

@@ -1,0 +1,14 @@
+---
+title: Threads
+description: Fetch a Threads profile, its post feed, and single-post detail.
+---
+
+<Note>
+  Threads endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/threads/profile` — Fetch an account's profile summary by username or url.
+- `GET /v1/threads/posts` — Fetch an account's current post feed.
+- `GET /v1/threads/post` — Fetch a single post's detail by url.

@@ -240,6 +240,18 @@
             ]
           },
           {
+            "group": "LinkedIn",
+            "pages": ["api-reference/linkedin", "api-reference/linkedin/company", "api-reference/linkedin/company-posts", "api-reference/linkedin/post"]
+          },
+          {
+            "group": "Pinterest",
+            "pages": ["api-reference/pinterest", "api-reference/pinterest/profile", "api-reference/pinterest/pins", "api-reference/pinterest/pin", "api-reference/pinterest/search"]
+          },
+          {
+            "group": "Threads",
+            "pages": ["api-reference/threads", "api-reference/threads/profile", "api-reference/threads/posts", "api-reference/threads/post"]
+          },
+          {
             "group": "Facebook",
             "pages": [
               "api-reference/facebook",

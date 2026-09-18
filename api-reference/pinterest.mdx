@@ -1,0 +1,15 @@
+---
+title: Pinterest
+description: Fetch a Pinterest profile, an account's pins, single-pin detail, and search results.
+---
+
+<Note>
+  Pinterest endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/pinterest/profile` — Fetch an account's profile summary by username or url.
+- `GET /v1/pinterest/pins` — Fetch an account's current pins.
+- `GET /v1/pinterest/pin` — Fetch a single pin's detail by url.
+- `GET /v1/pinterest/search` — Search pins by keyword.
