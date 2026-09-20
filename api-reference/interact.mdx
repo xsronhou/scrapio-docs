@@ -25,7 +25,7 @@ curl -X POST https://api.scrapio.dev/v1/interact \
 
 `prompt` and `actions` are mutually exclusive — send one or the other, never both. Everything else (`url`, `device`, `output`, `timeout_ms`) works the same as the `actions`-based request.
 
-For targets that block non-residential traffic, add `"use_proxy": true` to launch the session through a residential proxy instead of the default direct connection. Requires a paid plan (Starter or higher) and adds a 65-credit surcharge on top of the base 25 (90 total) — see [Rate Limits & Credits](/rate-limits).
+For targets that block non-residential traffic, add `"proxy": "stealth"` (or the deprecated `"use_proxy": true`) to launch the session through a residential proxy instead of the default direct connection. Requires a paid plan (Starter or higher) and adds a 65-credit surcharge on top of the base 25 (90 total) — see [Rate Limits & Credits](/rate-limits).
 
 The response carries the model's own text answer alongside a step-by-step record of what it actually did:
 

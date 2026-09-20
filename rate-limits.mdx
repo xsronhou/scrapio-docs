@@ -21,6 +21,7 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 | Map | 2 per URL mapped | Same base price and surcharge behavior as Crawl (billed under the `crawl` surface) |
 | Interact | 3 | Per interaction session. Not subject to the proxy-tier surcharge below |
 | Interact — prompt mode | 25 | Per session, using `prompt` instead of `actions` (see [Interact](/api-reference/interact#prompt-mode)). Flat regardless of how many steps the task takes |
+| Interact — prompt mode residential proxy surcharge | +65 | Added on top of the base 25 when `proxy: "stealth"` (or the deprecated `use_proxy: true`) is set. Requires a paid plan. Flat per session, not per step |
 | Search (no fetch) | 15 | Google SERP only |
 | Search + fetch results | 15 + normal Fetch cost (1 or 5) per fetched result | Each result is fetched via the standard Fetch surface, not a flat +1 |
 | Fast Search | 15 | Organic results only, no HTML capture. Requires a Starter plan or higher |
@@ -46,19 +47,38 @@ Your balance resets monthly, at the start of your billing cycle. Credits do not 
 
 `GET /v1/walmart/product` was re-enabled on 2026-08-03, now backed primarily by our dedicated `walmart_product` target (with the generic browser-render path retained as a fallback) — this replaced the generic-only path that had been hitting frequent PerimeterX-related blocks on individual product pages.
 
-### Proxy-tier surcharge on Fetch, Crawl, and Map
+### Proxy tiers and the `proxy` parameter on Fetch, Crawl, and Map
 
-`Fetch`, `Crawl`, and `Map` all escalate through an access-tier ladder automatically — direct HTTP, stealth browser, then a residential proxy if needed — to get past anti-bot defenses. Each surface's base credit price only covers the direct/stealth tiers. If a specific request (or, for Crawl/Map, a specific page/URL) needs the residential proxy to succeed, a surcharge is added on top, billed off whichever tier actually served that request, not a flat rate applied to every call:
+`Fetch`, `Crawl`, and `Map` accept an optional `proxy` field that controls how far a request may escalate to get past anti-bot defenses:
 
-- **+65 credits** if the request needed the residential proxy (typically hardened, anti-bot-defended targets like sites behind PerimeterX-class defenses).
+| `proxy` | What it does | Plans |
+|---|---|---|
+| `"basic"` | No proxy at all. If the target blocks it, the request fails with `proxy_required` and tells you to retry with `"auto"`. Billed at the base price. | All plans (the Free plan is always `"basic"`) |
+| `"auto"` | The default on paid plans. Tries the cheap steps first and escalates to residential proxies only when needed, billed by the step that served the request. | Starter and higher |
+| `"stealth"` | Skips straight to the strongest tier: a hardened browser behind a residential proxy. Use it when you already know a target needs it. The default `timeout_ms` is 20000 (10000 for the other modes) because this browser needs longer on heavy pages. | Starter and higher |
 
-Most requests never touch the proxy tier and are billed at the base price only. For Crawl/Map, the surcharge applies per page/URL — a 10-page crawl where 2 pages needed the residential proxy bills `8 × 2 + 2 × (2 + 65) = 150` credits, not a flat `10 × 2 = 20`. `Interact` is billed at its flat per-session price regardless of access tier and is not affected by this surcharge.
+When every access attempt only times out, the response is `504 timeout` (not `502 target_blocked`) and asks for a larger `timeout_ms`; a `timeout_ms` above your plan's inline limit runs as an async job.
 
-### `use_proxy`: skip straight to the strongest tier
+`use_proxy: true` is a deprecated alias for `proxy: "stealth"`. Sending `use_proxy: true` together with a different `proxy` value returns `400 invalid_request`. On the Free plan, `"auto"` and `"stealth"` return `402 plan_upgrade_required`.
 
-`Fetch`, `Crawl`, `Map`, and `Interact` all accept an optional `use_proxy: true` field. By default these surfaces escalate through the access-tier ladder automatically, cheapest tier first, only advancing when a cheaper tier gets blocked. If you already know a target needs the strongest tier — e.g. you're hitting a hardened site and expect to be blocked on anything cheaper — setting `use_proxy: true` skips the wasted cheap-tier attempts and goes straight there, which also reduces the chance of hitting `timeout_ms` mid-escalation on a tight budget.
+Every Fetch response reports what the request cost in `usage`, for example `{ "credits": 15, "base": 5, "surcharge": 10, "tier": "proxy_browser" }`. The surcharge depends on the tier that actually served the request, not a flat rate:
 
-`use_proxy` requires a paid plan (Starter or higher) and returns `402 plan_upgrade_required` immediately if set on the Free plan, since Free never reaches that tier regardless. Billing is unaffected by the flag itself — you're still billed by whichever tier the request actually lands on (see the surcharge table above), not a separate rate for using `use_proxy`.
+| `usage.tier` | What served it | Surcharge |
+|---|---|---:|
+| `standard` | No proxy | +0 |
+| `proxy` | Browser-less request through a residential proxy (no JavaScript) | +4 |
+| `proxy_browser` | Real browser through a residential proxy | +10 |
+| `stealth` | Hardened browser through a residential proxy | +65 |
+| `cloudflare` | Cloudflare challenge solved with a real browser | +65 |
+
+For Crawl and Map the surcharge applies per page/URL on top of the flat 2 credits: a 10-page crawl where 8 pages were served with no proxy and 2 needed the hardened browser bills `8 × 2 + 2 × (2 + 65) = 150` credits. `Interact` is billed at its flat per-session price and is not affected.
+
+`Interact` accepts the same `proxy` field, with two modes depending on how you call it:
+
+- **Prompt mode** (`prompt`): a single browser session with no ladder to escalate through, so it accepts `"basic"` (no proxy, the default) or `"stealth"` (residential proxy, +65 credits on top of the base 25). `"auto"` returns `400 invalid_request`.
+- **Actions mode** (`actions`): `"auto"` (default on paid plans) uses the usual escalation ladder, `"basic"` never uses a proxy and skips the Cloudflare solver, and `"stealth"` goes straight to the hardened browser behind a residential proxy. A blocked `"basic"` request fails with `proxy_required`. Interact keeps its flat per-session price in every mode.
+
+`use_proxy: true` also still works on Interact as an alias for `proxy: "stealth"`.
 
 ### Crawl and Map auto-promote to an async job on large requests
 
@@ -70,7 +90,7 @@ Most requests never touch the proxy tier and are billed at the base price only. 
 
 Poll `GET /v1/jobs/{job_id}` for the result, same as any other async job. Small/default requests are unaffected and stay synchronous — you can also opt into async explicitly at any size via `POST /v1/jobs` with `{ "kind": "crawl" | "map", "input": {...} }`.
 
-If a request times out before the ladder would have reached its strongest tier, the `504 timeout` error includes a hint suggesting `use_proxy` or a higher `timeout_ms`, unless the request already had `use_proxy` set or is on the Free plan (where the hint wouldn't apply).
+If a request times out before the ladder would have reached its strongest tier, the `504 timeout` error includes a hint suggesting `proxy: "stealth"` or a higher `timeout_ms`, unless the request already set `proxy` to `"stealth"` or `"basic"` or is on the Free plan (where the hint wouldn't apply).
 
 ## Plan limits
 
