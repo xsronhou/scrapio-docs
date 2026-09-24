@@ -1,0 +1,16 @@
+---
+title: ZipRecruiter
+description: Search ZipRecruiter job listings by keywords, with an optional free-text location.
+---
+
+<Note>
+  ZipRecruiter endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+<Note>
+  Every page of ZipRecruiter results requires a full browser session on ZipRecruiter's side (page 1 mints cleanly, but every later page hard-challenges a lightweight replay). Because of this, pagination on this endpoint costs more credits per page than most other job-board endpoints -- see [Pricing](/pricing) for the exact credit cost.
+</Note>
+
+## Endpoints
+
+- `GET /v1/ziprecruiter/jobs` — Search job listings by keywords, with an optional free-text location. Cursor-paginated.

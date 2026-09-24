@@ -165,6 +165,56 @@
             ]
           },
           {
+            "group": "Glassdoor",
+            "pages": [
+              "api-reference/glassdoor",
+              "api-reference/glassdoor/jobs",
+              "api-reference/glassdoor/job"
+            ]
+          },
+          {
+            "group": "Trustpilot",
+            "pages": [
+              "api-reference/trustpilot",
+              "api-reference/trustpilot/reviews"
+            ]
+          },
+          {
+            "group": "ZipRecruiter",
+            "pages": [
+              "api-reference/ziprecruiter",
+              "api-reference/ziprecruiter/jobs"
+            ]
+          },
+          {
+            "group": "Dice",
+            "pages": [
+              "api-reference/dice",
+              "api-reference/dice/jobs"
+            ]
+          },
+          {
+            "group": "SimplyHired",
+            "pages": [
+              "api-reference/simplyhired",
+              "api-reference/simplyhired/jobs"
+            ]
+          },
+          {
+            "group": "Built In",
+            "pages": [
+              "api-reference/builtin",
+              "api-reference/builtin/jobs"
+            ]
+          },
+          {
+            "group": "Wellfound",
+            "pages": [
+              "api-reference/wellfound",
+              "api-reference/wellfound/jobs"
+            ]
+          },
+          {
             "group": "Booking.com",
             "pages": [
               "api-reference/booking",

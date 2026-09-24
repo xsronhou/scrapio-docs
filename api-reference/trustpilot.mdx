@@ -1,0 +1,12 @@
+---
+title: Trustpilot
+description: Fetch Trustpilot reviews for a business domain, with rating/language/verified filters.
+---
+
+<Note>
+  Trustpilot endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/trustpilot/reviews` — Fetch reviews for a business domain, with optional star-rating, language, and verified-only filters. Returns a business summary plus reviews, cursor-paginated.

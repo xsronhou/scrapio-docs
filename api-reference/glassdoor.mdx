@@ -1,0 +1,13 @@
+---
+title: Glassdoor
+description: Search Glassdoor job listings and fetch full job detail, including salary and company ratings.
+---
+
+<Note>
+  Glassdoor endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/glassdoor/jobs` — Search job listings by keywords, with an optional free-text location (city, state, or omitted for a nationwide search). Returns salary percentiles, company ratings, and cursor-based pagination.
+- `GET /v1/glassdoor/job` — Fetch full detail for a single job listing by `job_id`: full HTML/plain-text description and a company ratings breakdown (career opportunities, compensation, culture, management, work/life balance, recommend-to-friend, CEO approval).

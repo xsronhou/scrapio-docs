@@ -1,0 +1,12 @@
+---
+title: Wellfound
+description: Search Wellfound (formerly AngelList Talent) startup job listings by role.
+---
+
+<Note>
+  Wellfound endpoints require a paid plan (Starter or higher). Without one, these endpoints return `402 plan_upgrade_required`. See [Pricing](/pricing) for details.
+</Note>
+
+## Endpoints
+
+- `GET /v1/wellfound/jobs` — Search startup job listings by role slug (e.g. `software-engineer`). Returns full job descriptions, compensation text, and company info; cursor-paginated.
