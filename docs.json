@@ -190,21 +190,24 @@
             "group": "Dice",
             "pages": [
               "api-reference/dice",
-              "api-reference/dice/jobs"
+              "api-reference/dice/jobs",
+              "api-reference/dice/job"
             ]
           },
           {
             "group": "SimplyHired",
             "pages": [
               "api-reference/simplyhired",
-              "api-reference/simplyhired/jobs"
+              "api-reference/simplyhired/jobs",
+              "api-reference/simplyhired/job"
             ]
           },
           {
             "group": "Built In",
             "pages": [
               "api-reference/builtin",
-              "api-reference/builtin/jobs"
+              "api-reference/builtin/jobs",
+              "api-reference/builtin/job"
             ]
           },
           {

@@ -1405,6 +1405,16 @@
               }
             }
           },
+          "404": {
+            "description": "The requested job could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "429": {
             "description": "Daily credit cap exceeded.",
             "content": {
@@ -1416,7 +1426,7 @@
             }
           },
           "502": {
-            "description": "Glassdoor upstream failed, re-challenged, or the job could not be found.",
+            "description": "Glassdoor upstream failed or re-challenged.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1868,6 +1878,117 @@
         ]
       }
     },
+    "/v1/dice/job": {
+      "get": {
+        "tags": [
+          "Dice"
+        ],
+        "summary": "Get a Dice job's detail",
+        "description": "Fetches full detail for a single Dice job listing by job_id (from a /v1/dice/jobs response): full HTML/plain-text description, salary, and company info. Requires a Starter plan or higher.",
+        "operationId": "getDiceJobDetail",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "A job_id from a /v1/dice/jobs response"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full Dice job detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiceJobDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid job_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Dice dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested job could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Dice upstream failed or returned an unusable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dice execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/dice/job?job_id=bba4ebb5-9b44-4f34-b325-7cf129466ac7\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/simplyhired/jobs": {
       "get": {
         "tags": [
@@ -2001,6 +2122,117 @@
         ]
       }
     },
+    "/v1/simplyhired/job": {
+      "get": {
+        "tags": [
+          "SimplyHired"
+        ],
+        "summary": "Get a SimplyHired job's detail",
+        "description": "Fetches full detail for a single SimplyHired job listing by job_id (from a /v1/simplyhired/jobs response): full HTML/plain-text description, salary, and company info. Requires a Starter plan or higher.",
+        "operationId": "getSimplyHiredJobDetail",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "A job_id from a /v1/simplyhired/jobs response"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full SimplyHired job detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimplyHiredJobDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid job_id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "SimplyHired dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested job could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "SimplyHired upstream failed or returned an unusable page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "SimplyHired execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/simplyhired/job?job_id=J3Y47WmwrrnwPOfwMLf-2D449n7htnfG1OLPGeWvpYH6vtApNwhBnA\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
     "/v1/builtin/jobs": {
       "get": {
         "tags": [
@@ -2120,6 +2352,117 @@
             "lang": "cURL",
             "label": "cURL",
             "source": "curl \"https://api.scrapio.dev/v1/builtin/jobs?query=software%20engineer&limit=25\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
+          }
+        ]
+      }
+    },
+    "/v1/builtin/job": {
+      "get": {
+        "tags": [
+          "Built In"
+        ],
+        "summary": "Get a Built In job's detail",
+        "description": "Fetches full detail for a single Built In job listing by url (the full job URL from a /v1/builtin/jobs response -- Built In requires the real slug, not just an id): full HTML/plain-text description, salary, benefits, and company info. Requires a Starter plan or higher.",
+        "operationId": "getBuiltInJobDetail",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "description": "The full job URL from a /v1/builtin/jobs response's url field (builtin.com requires the real slug, not just the job_id)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full Built In job detail.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuiltInJobDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid url.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Built In dedicated endpoints require a Starter plan or higher.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested job could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily credit cap exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Built In upstream failed or re-challenged.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Built In execution backend unavailable or unconfigured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl \"https://api.scrapio.dev/v1/builtin/job?url=https%3A%2F%2Fbuiltin.com%2Fjob%2Fsoftware-engineer%2F11056045\" \\\n  -H \"Authorization: Bearer $SCRAPIO_API_KEY\""
           }
         ]
       }
@@ -28028,6 +28371,266 @@
         ],
         "additionalProperties": false
       },
+      "DiceJobDetailQuery": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A job_id from a /v1/dice/jobs response"
+          }
+        },
+        "required": [
+          "job_id"
+        ],
+        "additionalProperties": false
+      },
+      "DiceJobDetailResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "dice"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_logo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "locality": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "region": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "country": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "locality",
+              "region",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "remote": {
+            "type": "boolean"
+          },
+          "employment_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date_posted": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valid_through": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "salary": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unit": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "min": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "max": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "currency",
+                  "unit",
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "industry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description_html": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "job_id",
+          "title",
+          "url",
+          "company",
+          "company_url",
+          "company_logo",
+          "location",
+          "remote",
+          "employment_types",
+          "date_posted",
+          "valid_through",
+          "salary",
+          "industry",
+          "description_text",
+          "description_html"
+        ],
+        "additionalProperties": false
+      },
       "SimplyHiredJobsQuery": {
         "type": "object",
         "properties": {
@@ -28228,6 +28831,266 @@
         ],
         "additionalProperties": false
       },
+      "SimplyHiredJobDetailQuery": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A job_id from a /v1/simplyhired/jobs response"
+          }
+        },
+        "required": [
+          "job_id"
+        ],
+        "additionalProperties": false
+      },
+      "SimplyHiredJobDetailResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "simplyhired"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_logo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "locality": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "region": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "country": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "locality",
+              "region",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "remote": {
+            "type": "boolean"
+          },
+          "employment_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date_posted": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valid_through": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "salary": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unit": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "min": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "max": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "currency",
+                  "unit",
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "industry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description_html": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "job_id",
+          "title",
+          "url",
+          "company",
+          "company_url",
+          "company_logo",
+          "location",
+          "remote",
+          "employment_types",
+          "date_posted",
+          "valid_through",
+          "salary",
+          "industry",
+          "description_text",
+          "description_html"
+        ],
+        "additionalProperties": false
+      },
       "BuiltInJobsQuery": {
         "type": "object",
         "properties": {
@@ -28387,6 +29250,280 @@
           "query_context",
           "listings",
           "next_cursor"
+        ],
+        "additionalProperties": false
+      },
+      "BuiltInJobDetailQuery": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The full job URL from a /v1/builtin/jobs response's url field (builtin.com requires the real slug, not just the job_id)"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "BuiltInJobDetailResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "builtin"
+            ]
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "company_logo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "locality": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "region": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "country": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "locality",
+              "region",
+              "country"
+            ],
+            "additionalProperties": false
+          },
+          "remote": {
+            "type": "boolean"
+          },
+          "employment_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date_posted": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "valid_through": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "salary": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unit": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "min": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "max": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "currency",
+                  "unit",
+                  "min",
+                  "max"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "industry": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "benefits": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description_html": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "provider",
+          "request_id",
+          "job_id",
+          "title",
+          "url",
+          "company",
+          "company_url",
+          "company_logo",
+          "location",
+          "remote",
+          "employment_types",
+          "date_posted",
+          "valid_through",
+          "salary",
+          "industry",
+          "benefits",
+          "description_text",
+          "description_html"
         ],
         "additionalProperties": false
       },
